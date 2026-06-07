@@ -26,6 +26,7 @@ export function MessageBubble({
   sender,
   isMe,
   isMod,
+  currentUserId,
   reactions,
   onChanged,
   onReport,
@@ -34,6 +35,7 @@ export function MessageBubble({
   sender?: ProfileLite | null;
   isMe: boolean;
   isMod: boolean;
+  currentUserId: string;
   reactions: MessageReaction[];
   onChanged: () => void;
   onReport: (id: string) => void;
@@ -49,7 +51,7 @@ export function MessageBubble({
 
   const handleReact = async (t: MessageReactionType) => {
     try {
-      await toggleReaction(message.id, sender?.id ? sender.id : "", t);
+      await toggleReaction(message.id, currentUserId, t);
     } catch (e: any) {
       toast.error(e.message ?? "Failed to react");
     }
