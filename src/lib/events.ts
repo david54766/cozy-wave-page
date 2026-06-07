@@ -93,9 +93,8 @@ export function isLocked(e: Pick<EventRow, "access_level">) {
 }
 
 // Untyped client (events tables not yet in generated types)
-export const sbEvents = supabase as unknown as {
-  from: (t: string) => ReturnType<typeof supabase.from>;
-};
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export const sbEvents: any = supabase;
 
 export async function fetchEvents(filters?: {
   spaceId?: string;
