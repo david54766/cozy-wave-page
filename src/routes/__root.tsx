@@ -81,11 +81,15 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { title: "MemberHub — Community, courses, and connection" },
       { name: "description", content: "A private community for learning, connection, and growth." },
-      { property: "og:title", content: "MemberHub" },
+      { property: "og:title", content: "MemberHub — Community, courses, and connection" },
       { property: "og:description", content: "A private community for learning, connection, and growth." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
       { name: "twitter:site", content: "@Lovable" },
+      { name: "twitter:title", content: "MemberHub — Community, courses, and connection" },
+      { name: "twitter:description", content: "A private community for learning, connection, and growth." },
+      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/c52cbb1a-467c-45ef-a420-70fc7ebf5425/id-preview-748ad618--47ce8056-e3e0-4c1f-b8c4-fa6cb9c02138.lovable.app-1780815068792.png" },
+      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/c52cbb1a-467c-45ef-a420-70fc7ebf5425/id-preview-748ad618--47ce8056-e3e0-4c1f-b8c4-fa6cb9c02138.lovable.app-1780815068792.png" },
     ],
     links: [
       {
