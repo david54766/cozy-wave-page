@@ -19,6 +19,7 @@ import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticat
 import { Route as AuthenticatedSavedRouteImport } from './routes/_authenticated/saved'
 import { Route as AuthenticatedProfileRouteImport } from './routes/_authenticated/profile'
 import { Route as AuthenticatedNotificationsRouteImport } from './routes/_authenticated/notifications'
+import { Route as AuthenticatedLeaderboardRouteImport } from './routes/_authenticated/leaderboard'
 import { Route as AuthenticatedGettingStartedRouteImport } from './routes/_authenticated/getting-started'
 import { Route as AuthenticatedFollowingRouteImport } from './routes/_authenticated/following'
 import { Route as AuthenticatedFeedRouteImport } from './routes/_authenticated/feed'
@@ -26,6 +27,7 @@ import { Route as AuthenticatedEventsRouteImport } from './routes/_authenticated
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedChatRouteImport } from './routes/_authenticated/chat'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
+import { Route as AuthenticatedAchievementsRouteImport } from './routes/_authenticated/achievements'
 import { Route as AuthenticatedSpacesIndexRouteImport } from './routes/_authenticated/spaces.index'
 import { Route as AuthenticatedMembersIndexRouteImport } from './routes/_authenticated/members.index'
 import { Route as AuthenticatedCoursesIndexRouteImport } from './routes/_authenticated/courses.index'
@@ -102,6 +104,12 @@ const AuthenticatedNotificationsRoute =
     path: '/notifications',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedLeaderboardRoute =
+  AuthenticatedLeaderboardRouteImport.update({
+    id: '/leaderboard',
+    path: '/leaderboard',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedGettingStartedRoute =
   AuthenticatedGettingStartedRouteImport.update({
     id: '/getting-started',
@@ -138,6 +146,12 @@ const AuthenticatedAdminRoute = AuthenticatedAdminRouteImport.update({
   path: '/admin',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedAchievementsRoute =
+  AuthenticatedAchievementsRouteImport.update({
+    id: '/achievements',
+    path: '/achievements',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedSpacesIndexRoute =
   AuthenticatedSpacesIndexRouteImport.update({
     id: '/spaces/',
@@ -294,6 +308,7 @@ export interface FileRoutesByFullPath {
   '/forgot-password': typeof ForgotPasswordRoute
   '/onboarding': typeof OnboardingRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/achievements': typeof AuthenticatedAchievementsRoute
   '/admin': typeof AuthenticatedAdminRouteWithChildren
   '/chat': typeof AuthenticatedChatRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
@@ -301,6 +316,7 @@ export interface FileRoutesByFullPath {
   '/feed': typeof AuthenticatedFeedRoute
   '/following': typeof AuthenticatedFollowingRoute
   '/getting-started': typeof AuthenticatedGettingStartedRoute
+  '/leaderboard': typeof AuthenticatedLeaderboardRoute
   '/notifications': typeof AuthenticatedNotificationsRoute
   '/profile': typeof AuthenticatedProfileRoute
   '/saved': typeof AuthenticatedSavedRoute
@@ -337,6 +353,7 @@ export interface FileRoutesByTo {
   '/forgot-password': typeof ForgotPasswordRoute
   '/onboarding': typeof OnboardingRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/achievements': typeof AuthenticatedAchievementsRoute
   '/admin': typeof AuthenticatedAdminRouteWithChildren
   '/chat': typeof AuthenticatedChatRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
@@ -344,6 +361,7 @@ export interface FileRoutesByTo {
   '/feed': typeof AuthenticatedFeedRoute
   '/following': typeof AuthenticatedFollowingRoute
   '/getting-started': typeof AuthenticatedGettingStartedRoute
+  '/leaderboard': typeof AuthenticatedLeaderboardRoute
   '/notifications': typeof AuthenticatedNotificationsRoute
   '/profile': typeof AuthenticatedProfileRoute
   '/saved': typeof AuthenticatedSavedRoute
@@ -382,6 +400,7 @@ export interface FileRoutesById {
   '/forgot-password': typeof ForgotPasswordRoute
   '/onboarding': typeof OnboardingRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/_authenticated/achievements': typeof AuthenticatedAchievementsRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRouteWithChildren
   '/_authenticated/chat': typeof AuthenticatedChatRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
@@ -389,6 +408,7 @@ export interface FileRoutesById {
   '/_authenticated/feed': typeof AuthenticatedFeedRoute
   '/_authenticated/following': typeof AuthenticatedFollowingRoute
   '/_authenticated/getting-started': typeof AuthenticatedGettingStartedRoute
+  '/_authenticated/leaderboard': typeof AuthenticatedLeaderboardRoute
   '/_authenticated/notifications': typeof AuthenticatedNotificationsRoute
   '/_authenticated/profile': typeof AuthenticatedProfileRoute
   '/_authenticated/saved': typeof AuthenticatedSavedRoute
@@ -427,6 +447,7 @@ export interface FileRouteTypes {
     | '/forgot-password'
     | '/onboarding'
     | '/reset-password'
+    | '/achievements'
     | '/admin'
     | '/chat'
     | '/dashboard'
@@ -434,6 +455,7 @@ export interface FileRouteTypes {
     | '/feed'
     | '/following'
     | '/getting-started'
+    | '/leaderboard'
     | '/notifications'
     | '/profile'
     | '/saved'
@@ -470,6 +492,7 @@ export interface FileRouteTypes {
     | '/forgot-password'
     | '/onboarding'
     | '/reset-password'
+    | '/achievements'
     | '/admin'
     | '/chat'
     | '/dashboard'
@@ -477,6 +500,7 @@ export interface FileRouteTypes {
     | '/feed'
     | '/following'
     | '/getting-started'
+    | '/leaderboard'
     | '/notifications'
     | '/profile'
     | '/saved'
@@ -514,6 +538,7 @@ export interface FileRouteTypes {
     | '/forgot-password'
     | '/onboarding'
     | '/reset-password'
+    | '/_authenticated/achievements'
     | '/_authenticated/admin'
     | '/_authenticated/chat'
     | '/_authenticated/dashboard'
@@ -521,6 +546,7 @@ export interface FileRouteTypes {
     | '/_authenticated/feed'
     | '/_authenticated/following'
     | '/_authenticated/getting-started'
+    | '/_authenticated/leaderboard'
     | '/_authenticated/notifications'
     | '/_authenticated/profile'
     | '/_authenticated/saved'
@@ -633,6 +659,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedNotificationsRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/leaderboard': {
+      id: '/_authenticated/leaderboard'
+      path: '/leaderboard'
+      fullPath: '/leaderboard'
+      preLoaderRoute: typeof AuthenticatedLeaderboardRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/getting-started': {
       id: '/_authenticated/getting-started'
       path: '/getting-started'
@@ -680,6 +713,13 @@ declare module '@tanstack/react-router' {
       path: '/admin'
       fullPath: '/admin'
       preLoaderRoute: typeof AuthenticatedAdminRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/achievements': {
+      id: '/_authenticated/achievements'
+      path: '/achievements'
+      fullPath: '/achievements'
+      preLoaderRoute: typeof AuthenticatedAchievementsRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/spaces/': {
@@ -924,6 +964,7 @@ const AuthenticatedSettingsRouteWithChildren =
   )
 
 interface AuthenticatedRouteRouteChildren {
+  AuthenticatedAchievementsRoute: typeof AuthenticatedAchievementsRoute
   AuthenticatedAdminRoute: typeof AuthenticatedAdminRouteWithChildren
   AuthenticatedChatRoute: typeof AuthenticatedChatRoute
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
@@ -931,6 +972,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedFeedRoute: typeof AuthenticatedFeedRoute
   AuthenticatedFollowingRoute: typeof AuthenticatedFollowingRoute
   AuthenticatedGettingStartedRoute: typeof AuthenticatedGettingStartedRoute
+  AuthenticatedLeaderboardRoute: typeof AuthenticatedLeaderboardRoute
   AuthenticatedNotificationsRoute: typeof AuthenticatedNotificationsRoute
   AuthenticatedProfileRoute: typeof AuthenticatedProfileRoute
   AuthenticatedSavedRoute: typeof AuthenticatedSavedRoute
@@ -947,6 +989,7 @@ interface AuthenticatedRouteRouteChildren {
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedAchievementsRoute: AuthenticatedAchievementsRoute,
   AuthenticatedAdminRoute: AuthenticatedAdminRouteWithChildren,
   AuthenticatedChatRoute: AuthenticatedChatRoute,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
@@ -954,6 +997,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedFeedRoute: AuthenticatedFeedRoute,
   AuthenticatedFollowingRoute: AuthenticatedFollowingRoute,
   AuthenticatedGettingStartedRoute: AuthenticatedGettingStartedRoute,
+  AuthenticatedLeaderboardRoute: AuthenticatedLeaderboardRoute,
   AuthenticatedNotificationsRoute: AuthenticatedNotificationsRoute,
   AuthenticatedProfileRoute: AuthenticatedProfileRoute,
   AuthenticatedSavedRoute: AuthenticatedSavedRoute,
@@ -983,3 +1027,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
