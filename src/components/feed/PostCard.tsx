@@ -10,6 +10,7 @@ import { MessageSquare, MoreHorizontal, Pin, Star, Flag, EyeOff, Eye, Trash2, Al
 import { PostTypePill } from "./PostTypePill";
 import { ReactionBar } from "./ReactionBar";
 import { ReportModal } from "./ReportModal";
+import { SaveButton } from "@/components/onboarding/SaveButton";
 import { timeAgo, type Post, type Reaction } from "@/lib/feed";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
@@ -172,12 +173,15 @@ export function PostCard({
 
         <div className="flex items-center justify-between gap-3 pt-1">
           <ReactionBar targetType="post" targetId={post.id} reactions={reactions} onChange={onChange} />
-          <Button variant="ghost" size="sm" asChild className="h-7">
-            <Link to="/posts/$postId" params={{ postId: post.id }}>
-              <MessageSquare className="size-4 mr-1.5" />
-              {commentCount} {commentCount === 1 ? "comment" : "comments"}
-            </Link>
-          </Button>
+          <div className="flex items-center gap-1">
+            <SaveButton targetType="post" targetId={post.id} />
+            <Button variant="ghost" size="sm" asChild className="h-7">
+              <Link to="/posts/$postId" params={{ postId: post.id }}>
+                <MessageSquare className="size-4 mr-1.5" />
+                {commentCount} {commentCount === 1 ? "comment" : "comments"}
+              </Link>
+            </Button>
+          </div>
         </div>
       </CardContent>
       <ReportModal open={reportOpen} onOpenChange={setReportOpen} targetType="post" targetId={post.id} />
