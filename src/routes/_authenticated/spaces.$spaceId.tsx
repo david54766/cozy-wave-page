@@ -30,9 +30,13 @@ function SpaceDetail() {
     if (!sp) { setSpace(null); setLoading(false); return; }
     setSpace(sp as Space);
 
-    const tasks: Promise<unknown>[] = [];
+    const tasks: Array<Promise<unknown>> = [];
     if (sp.collection_id) {
-      tasks.push(supabase.from("collections").select("*").eq("id", sp.collection_id).maybeSingle().then(({ data }) => setCollection(data as Collection)));
+      tasks.push(
+        Promise.resolve(
+          supabase.from("collections").select("*").eq("id", sp.collection_id).maybeSingle()
+        ).then(({ data }) => setCollection(data as Collection | null))
+      );
     } else setCollection(null);
 
     tasks.push((async () => {
