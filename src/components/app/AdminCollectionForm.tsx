@@ -26,14 +26,6 @@ export function AdminCollectionForm({
   const [sortOrder, setSortOrder] = useState(String(initial?.sort_order ?? 0));
   const [busy, setBusy] = useState(false);
 
-  // Reset when opening with a different initial
-  useState(() => {
-    setName(initial?.name ?? "");
-    setDescription(initial?.description ?? "");
-    setIcon(initial?.icon ?? "Folder");
-    setSortOrder(String(initial?.sort_order ?? 0));
-  });
-
   const save = async () => {
     if (!name.trim()) return toast.error("Name is required");
     setBusy(true);
