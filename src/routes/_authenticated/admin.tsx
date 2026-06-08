@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { AdminStatCard, DashboardCard, EmptyState } from "@/components/app/DashboardCard";
-import { Users, UserPlus, Activity, Settings, Users2, GraduationCap, Calendar, CreditCard, Bot, Sparkles, FolderTree, Plus, ArrowRight, MessageSquare, Shield, CalendarCheck, UserX, BarChart3, ShieldAlert, ListChecks, Award, Trophy, Star, Tag, Clock } from "lucide-react";
+import { Users, UserPlus, Activity, Settings, Users2, GraduationCap, Calendar, CreditCard, Bot, Sparkles, FolderTree, Plus, ArrowRight, MessageSquare, Shield, CalendarCheck, UserX, BarChart3, ShieldAlert, ListChecks, Award, Trophy, Star, Tag, Clock, Zap, AlertTriangle, FileText } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { getIcon, type Space } from "@/lib/spaces";
@@ -15,7 +15,7 @@ export const Route = createFileRoute("/_authenticated/admin")({
 function AdminPage() {
   const { isAdmin, loading } = useAuth();
   const navigate = useNavigate();
-  const [stats, setStats] = useState({ total: 0, newWeek: 0, active: 0, spaces: 0, collections: 0, events: 0, upcomingEvents: 0, rsvps: 0, suspended: 0, newMonth: 0, openReports: 0, totalPlans: 0, activePlans: 0, featuredPlan: "—", billingConfigured: false });
+  const [stats, setStats] = useState({ total: 0, newWeek: 0, active: 0, spaces: 0, collections: 0, events: 0, upcomingEvents: 0, rsvps: 0, suspended: 0, newMonth: 0, openReports: 0, totalPlans: 0, activePlans: 0, featuredPlan: "—", billingConfigured: false, totalAutomations: 0, activeAutomations: 0, failedLogs: 0 });
   const [recent, setRecent] = useState<Space[]>([]);
 
   useEffect(() => {
@@ -28,7 +28,7 @@ function AdminPage() {
       const weekAgo = new Date(Date.now() - 7 * 86400_000).toISOString();
       const monthAgo = new Date(Date.now() - 30 * 86400_000).toISOString();
       const nowIso = new Date().toISOString();
-      const [{ count: total }, { count: newWeek }, { count: active }, { count: spacesCount }, { count: collectionsCount }, { data: recentSpaces }, { count: eventsCount }, { count: upcomingCount }, { count: rsvpCount }, { count: suspended }, { count: newMonth }, { count: openReports }, { data: plansData }, { data: billingData }] = await Promise.all([
+      const [{ count: total }, { count: newWeek }, { count: active }, { count: spacesCount }, { count: collectionsCount }, { data: recentSpaces }, { count: eventsCount }, { count: upcomingCount }, { count: rsvpCount }, { count: suspended }, { count: newMonth }, { count: openReports }, { data: plansData }, { data: billingData }, { count: totalAutomations }, { count: activeAutomations }, { count: failedLogs }] = await Promise.all([
         supabase.from("profiles").select("*", { count: "exact", head: true }),
         supabase.from("profiles").select("*", { count: "exact", head: true }).gte("created_at", weekAgo),
         supabase.from("profiles").select("*", { count: "exact", head: true }).gte("last_active_at", weekAgo),
@@ -43,6 +43,9 @@ function AdminPage() {
         supabase.from("reports").select("*", { count: "exact", head: true }).in("status", ["open", "under_review", "pending"]),
         (supabase as any).from("plans").select("name,active,featured"),
         (supabase as any).from("billing_settings").select("stripe_publishable_key").limit(1).maybeSingle(),
+        (supabase as any).from("automations").select("*", { count: "exact", head: true }),
+        (supabase as any).from("automations").select("*", { count: "exact", head: true }).eq("active", true),
+        (supabase as any).from("automation_logs").select("*", { count: "exact", head: true }).eq("status", "failed"),
       ]);
       const plans = (plansData ?? []) as { name: string; active: boolean; featured: boolean }[];
       setStats({
@@ -61,6 +64,9 @@ function AdminPage() {
         activePlans: plans.filter((p) => p.active).length,
         featuredPlan: plans.find((p) => p.featured)?.name ?? "—",
         billingConfigured: !!billingData?.stripe_publishable_key,
+        totalAutomations: totalAutomations ?? 0,
+        activeAutomations: activeAutomations ?? 0,
+        failedLogs: failedLogs ?? 0,
       });
       setRecent((recentSpaces ?? []) as Space[]);
     })();
@@ -96,6 +102,9 @@ function AdminPage() {
           <Button variant="outline" asChild><Link to="/admin/coupons"><Tag className="size-4 mr-2" />Coupons</Link></Button>
           <Button variant="outline" asChild><Link to="/admin/trials"><Clock className="size-4 mr-2" />Trials</Link></Button>
           <Button variant="outline" asChild><Link to="/admin/revenue"><BarChart3 className="size-4 mr-2" />Revenue</Link></Button>
+          <Button variant="outline" asChild><Link to="/admin/automations"><Zap className="size-4 mr-2" />Automations</Link></Button>
+          <Button variant="outline" asChild><Link to="/admin/automation-logs"><FileText className="size-4 mr-2" />Automation Logs</Link></Button>
+          <Button asChild><Link to="/admin/automations/new"><Plus className="size-4 mr-1.5" />Create Automation</Link></Button>
           <Button variant="outline" asChild><Link to="/admin/settings"><Settings className="size-4 mr-2" />Settings</Link></Button>
         </div>
       </header>
@@ -114,6 +123,9 @@ function AdminPage() {
         <AdminStatCard label="Active Plans" value={stats.activePlans} icon={<CreditCard className="size-4 text-muted-foreground" />} />
         <AdminStatCard label="Featured Plan" value={stats.featuredPlan} icon={<Star className="size-4 text-muted-foreground" />} />
         <AdminStatCard label="Billing Setup" value={stats.billingConfigured ? "Ready" : "Pending"} icon={<CreditCard className="size-4 text-muted-foreground" />} />
+        <AdminStatCard label="Total Automations" value={stats.totalAutomations} icon={<Zap className="size-4 text-muted-foreground" />} />
+        <AdminStatCard label="Active Automations" value={stats.activeAutomations} icon={<Zap className="size-4 text-muted-foreground" />} />
+        <AdminStatCard label="Failed Automation Logs" value={stats.failedLogs} icon={<AlertTriangle className="size-4 text-muted-foreground" />} />
       </div>
 
       <section className="space-y-3">
