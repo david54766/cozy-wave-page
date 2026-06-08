@@ -50,6 +50,7 @@ import { Route as AuthenticatedAdminSubscribersRouteImport } from './routes/_aut
 import { Route as AuthenticatedAdminSettingsRouteImport } from './routes/_authenticated/admin.settings'
 import { Route as AuthenticatedAdminPostsRouteImport } from './routes/_authenticated/admin.posts'
 import { Route as AuthenticatedAdminPointsRouteImport } from './routes/_authenticated/admin.points'
+import { Route as AuthenticatedAdminPaymentEventsRouteImport } from './routes/_authenticated/admin.payment-events'
 import { Route as AuthenticatedAdminModerationRouteImport } from './routes/_authenticated/admin.moderation'
 import { Route as AuthenticatedAdminCollectionsRouteImport } from './routes/_authenticated/admin.collections'
 import { Route as AuthenticatedAdminChecklistRouteImport } from './routes/_authenticated/admin.checklist'
@@ -291,6 +292,12 @@ const AuthenticatedAdminPointsRoute =
     path: '/points',
     getParentRoute: () => AuthenticatedAdminRoute,
   } as any)
+const AuthenticatedAdminPaymentEventsRoute =
+  AuthenticatedAdminPaymentEventsRouteImport.update({
+    id: '/payment-events',
+    path: '/payment-events',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
 const AuthenticatedAdminModerationRoute =
   AuthenticatedAdminModerationRouteImport.update({
     id: '/moderation',
@@ -418,6 +425,7 @@ export interface FileRoutesByFullPath {
   '/admin/checklist': typeof AuthenticatedAdminChecklistRoute
   '/admin/collections': typeof AuthenticatedAdminCollectionsRoute
   '/admin/moderation': typeof AuthenticatedAdminModerationRoute
+  '/admin/payment-events': typeof AuthenticatedAdminPaymentEventsRoute
   '/admin/points': typeof AuthenticatedAdminPointsRoute
   '/admin/posts': typeof AuthenticatedAdminPostsRoute
   '/admin/settings': typeof AuthenticatedAdminSettingsRoute
@@ -476,6 +484,7 @@ export interface FileRoutesByTo {
   '/admin/checklist': typeof AuthenticatedAdminChecklistRoute
   '/admin/collections': typeof AuthenticatedAdminCollectionsRoute
   '/admin/moderation': typeof AuthenticatedAdminModerationRoute
+  '/admin/payment-events': typeof AuthenticatedAdminPaymentEventsRoute
   '/admin/points': typeof AuthenticatedAdminPointsRoute
   '/admin/posts': typeof AuthenticatedAdminPostsRoute
   '/admin/settings': typeof AuthenticatedAdminSettingsRoute
@@ -536,6 +545,7 @@ export interface FileRoutesById {
   '/_authenticated/admin/checklist': typeof AuthenticatedAdminChecklistRoute
   '/_authenticated/admin/collections': typeof AuthenticatedAdminCollectionsRoute
   '/_authenticated/admin/moderation': typeof AuthenticatedAdminModerationRoute
+  '/_authenticated/admin/payment-events': typeof AuthenticatedAdminPaymentEventsRoute
   '/_authenticated/admin/points': typeof AuthenticatedAdminPointsRoute
   '/_authenticated/admin/posts': typeof AuthenticatedAdminPostsRoute
   '/_authenticated/admin/settings': typeof AuthenticatedAdminSettingsRoute
@@ -596,6 +606,7 @@ export interface FileRouteTypes {
     | '/admin/checklist'
     | '/admin/collections'
     | '/admin/moderation'
+    | '/admin/payment-events'
     | '/admin/points'
     | '/admin/posts'
     | '/admin/settings'
@@ -654,6 +665,7 @@ export interface FileRouteTypes {
     | '/admin/checklist'
     | '/admin/collections'
     | '/admin/moderation'
+    | '/admin/payment-events'
     | '/admin/points'
     | '/admin/posts'
     | '/admin/settings'
@@ -713,6 +725,7 @@ export interface FileRouteTypes {
     | '/_authenticated/admin/checklist'
     | '/_authenticated/admin/collections'
     | '/_authenticated/admin/moderation'
+    | '/_authenticated/admin/payment-events'
     | '/_authenticated/admin/points'
     | '/_authenticated/admin/posts'
     | '/_authenticated/admin/settings'
@@ -1043,6 +1056,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminPointsRouteImport
       parentRoute: typeof AuthenticatedAdminRoute
     }
+    '/_authenticated/admin/payment-events': {
+      id: '/_authenticated/admin/payment-events'
+      path: '/payment-events'
+      fullPath: '/admin/payment-events'
+      preLoaderRoute: typeof AuthenticatedAdminPaymentEventsRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
     '/_authenticated/admin/moderation': {
       id: '/_authenticated/admin/moderation'
       path: '/moderation'
@@ -1165,6 +1185,7 @@ interface AuthenticatedAdminRouteChildren {
   AuthenticatedAdminChecklistRoute: typeof AuthenticatedAdminChecklistRoute
   AuthenticatedAdminCollectionsRoute: typeof AuthenticatedAdminCollectionsRoute
   AuthenticatedAdminModerationRoute: typeof AuthenticatedAdminModerationRoute
+  AuthenticatedAdminPaymentEventsRoute: typeof AuthenticatedAdminPaymentEventsRoute
   AuthenticatedAdminPointsRoute: typeof AuthenticatedAdminPointsRoute
   AuthenticatedAdminPostsRoute: typeof AuthenticatedAdminPostsRoute
   AuthenticatedAdminSettingsRoute: typeof AuthenticatedAdminSettingsRoute
@@ -1190,6 +1211,7 @@ const AuthenticatedAdminRouteChildren: AuthenticatedAdminRouteChildren = {
   AuthenticatedAdminChecklistRoute: AuthenticatedAdminChecklistRoute,
   AuthenticatedAdminCollectionsRoute: AuthenticatedAdminCollectionsRoute,
   AuthenticatedAdminModerationRoute: AuthenticatedAdminModerationRoute,
+  AuthenticatedAdminPaymentEventsRoute: AuthenticatedAdminPaymentEventsRoute,
   AuthenticatedAdminPointsRoute: AuthenticatedAdminPointsRoute,
   AuthenticatedAdminPostsRoute: AuthenticatedAdminPostsRoute,
   AuthenticatedAdminSettingsRoute: AuthenticatedAdminSettingsRoute,
