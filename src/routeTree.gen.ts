@@ -62,6 +62,7 @@ import { Route as AuthenticatedAdminCollectionsRouteImport } from './routes/_aut
 import { Route as AuthenticatedAdminChecklistRouteImport } from './routes/_authenticated/admin.checklist'
 import { Route as AuthenticatedAdminBillingSettingsRouteImport } from './routes/_authenticated/admin.billing-settings'
 import { Route as AuthenticatedAdminBadgesRouteImport } from './routes/_authenticated/admin.badges'
+import { Route as AuthenticatedAdminAutomationLogsRouteImport } from './routes/_authenticated/admin.automation-logs'
 import { Route as AuthenticatedAdminAnalyticsRouteImport } from './routes/_authenticated/admin.analytics'
 import { Route as AuthenticatedAdminAccessRouteImport } from './routes/_authenticated/admin.access'
 import { Route as AuthenticatedAdminSpacesIndexRouteImport } from './routes/_authenticated/admin.spaces.index'
@@ -70,12 +71,16 @@ import { Route as AuthenticatedAdminMembersIndexRouteImport } from './routes/_au
 import { Route as AuthenticatedAdminEventsIndexRouteImport } from './routes/_authenticated/admin.events.index'
 import { Route as AuthenticatedAdminCoursesIndexRouteImport } from './routes/_authenticated/admin.courses.index'
 import { Route as AuthenticatedAdminBundlesIndexRouteImport } from './routes/_authenticated/admin.bundles.index'
+import { Route as AuthenticatedAdminAutomationsIndexRouteImport } from './routes/_authenticated/admin.automations.index'
 import { Route as AuthenticatedAdminSpacesSpaceIdRouteImport } from './routes/_authenticated/admin.spaces.$spaceId'
 import { Route as AuthenticatedAdminPlansPlanIdRouteImport } from './routes/_authenticated/admin.plans.$planId'
 import { Route as AuthenticatedAdminMembersUserIdRouteImport } from './routes/_authenticated/admin.members.$userId'
 import { Route as AuthenticatedAdminEventsEventIdRouteImport } from './routes/_authenticated/admin.events.$eventId'
 import { Route as AuthenticatedAdminCoursesCourseIdRouteImport } from './routes/_authenticated/admin.courses.$courseId'
 import { Route as AuthenticatedAdminBundlesBundleIdRouteImport } from './routes/_authenticated/admin.bundles.$bundleId'
+import { Route as AuthenticatedAdminAutomationsNewRouteImport } from './routes/_authenticated/admin.automations.new'
+import { Route as AuthenticatedAdminAutomationsAutomationIdRouteImport } from './routes/_authenticated/admin.automations.$automationId'
+import { Route as AuthenticatedAdminAutomationsAutomationIdEditRouteImport } from './routes/_authenticated/admin.automations.$automationId.edit'
 
 const ResetPasswordRoute = ResetPasswordRouteImport.update({
   id: '/reset-password',
@@ -370,6 +375,12 @@ const AuthenticatedAdminBadgesRoute =
     path: '/badges',
     getParentRoute: () => AuthenticatedAdminRoute,
   } as any)
+const AuthenticatedAdminAutomationLogsRoute =
+  AuthenticatedAdminAutomationLogsRouteImport.update({
+    id: '/automation-logs',
+    path: '/automation-logs',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
 const AuthenticatedAdminAnalyticsRoute =
   AuthenticatedAdminAnalyticsRouteImport.update({
     id: '/analytics',
@@ -418,6 +429,12 @@ const AuthenticatedAdminBundlesIndexRoute =
     path: '/bundles/',
     getParentRoute: () => AuthenticatedAdminRoute,
   } as any)
+const AuthenticatedAdminAutomationsIndexRoute =
+  AuthenticatedAdminAutomationsIndexRouteImport.update({
+    id: '/automations/',
+    path: '/automations/',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
 const AuthenticatedAdminSpacesSpaceIdRoute =
   AuthenticatedAdminSpacesSpaceIdRouteImport.update({
     id: '/spaces/$spaceId',
@@ -454,6 +471,24 @@ const AuthenticatedAdminBundlesBundleIdRoute =
     path: '/bundles/$bundleId',
     getParentRoute: () => AuthenticatedAdminRoute,
   } as any)
+const AuthenticatedAdminAutomationsNewRoute =
+  AuthenticatedAdminAutomationsNewRouteImport.update({
+    id: '/automations/new',
+    path: '/automations/new',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
+const AuthenticatedAdminAutomationsAutomationIdRoute =
+  AuthenticatedAdminAutomationsAutomationIdRouteImport.update({
+    id: '/automations/$automationId',
+    path: '/automations/$automationId',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
+const AuthenticatedAdminAutomationsAutomationIdEditRoute =
+  AuthenticatedAdminAutomationsAutomationIdEditRouteImport.update({
+    id: '/edit',
+    path: '/edit',
+    getParentRoute: () => AuthenticatedAdminAutomationsAutomationIdRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -483,6 +518,7 @@ export interface FileRoutesByFullPath {
   '/checkout/success': typeof CheckoutSuccessRoute
   '/admin/access': typeof AuthenticatedAdminAccessRoute
   '/admin/analytics': typeof AuthenticatedAdminAnalyticsRoute
+  '/admin/automation-logs': typeof AuthenticatedAdminAutomationLogsRoute
   '/admin/badges': typeof AuthenticatedAdminBadgesRoute
   '/admin/billing-settings': typeof AuthenticatedAdminBillingSettingsRoute
   '/admin/checklist': typeof AuthenticatedAdminChecklistRoute
@@ -510,18 +546,22 @@ export interface FileRoutesByFullPath {
   '/courses/': typeof AuthenticatedCoursesIndexRoute
   '/members/': typeof AuthenticatedMembersIndexRoute
   '/spaces/': typeof AuthenticatedSpacesIndexRoute
+  '/admin/automations/$automationId': typeof AuthenticatedAdminAutomationsAutomationIdRouteWithChildren
+  '/admin/automations/new': typeof AuthenticatedAdminAutomationsNewRoute
   '/admin/bundles/$bundleId': typeof AuthenticatedAdminBundlesBundleIdRoute
   '/admin/courses/$courseId': typeof AuthenticatedAdminCoursesCourseIdRoute
   '/admin/events/$eventId': typeof AuthenticatedAdminEventsEventIdRoute
   '/admin/members/$userId': typeof AuthenticatedAdminMembersUserIdRoute
   '/admin/plans/$planId': typeof AuthenticatedAdminPlansPlanIdRoute
   '/admin/spaces/$spaceId': typeof AuthenticatedAdminSpacesSpaceIdRoute
+  '/admin/automations/': typeof AuthenticatedAdminAutomationsIndexRoute
   '/admin/bundles/': typeof AuthenticatedAdminBundlesIndexRoute
   '/admin/courses/': typeof AuthenticatedAdminCoursesIndexRoute
   '/admin/events/': typeof AuthenticatedAdminEventsIndexRoute
   '/admin/members/': typeof AuthenticatedAdminMembersIndexRoute
   '/admin/plans/': typeof AuthenticatedAdminPlansIndexRoute
   '/admin/spaces/': typeof AuthenticatedAdminSpacesIndexRoute
+  '/admin/automations/$automationId/edit': typeof AuthenticatedAdminAutomationsAutomationIdEditRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -551,6 +591,7 @@ export interface FileRoutesByTo {
   '/checkout/success': typeof CheckoutSuccessRoute
   '/admin/access': typeof AuthenticatedAdminAccessRoute
   '/admin/analytics': typeof AuthenticatedAdminAnalyticsRoute
+  '/admin/automation-logs': typeof AuthenticatedAdminAutomationLogsRoute
   '/admin/badges': typeof AuthenticatedAdminBadgesRoute
   '/admin/billing-settings': typeof AuthenticatedAdminBillingSettingsRoute
   '/admin/checklist': typeof AuthenticatedAdminChecklistRoute
@@ -578,18 +619,22 @@ export interface FileRoutesByTo {
   '/courses': typeof AuthenticatedCoursesIndexRoute
   '/members': typeof AuthenticatedMembersIndexRoute
   '/spaces': typeof AuthenticatedSpacesIndexRoute
+  '/admin/automations/$automationId': typeof AuthenticatedAdminAutomationsAutomationIdRouteWithChildren
+  '/admin/automations/new': typeof AuthenticatedAdminAutomationsNewRoute
   '/admin/bundles/$bundleId': typeof AuthenticatedAdminBundlesBundleIdRoute
   '/admin/courses/$courseId': typeof AuthenticatedAdminCoursesCourseIdRoute
   '/admin/events/$eventId': typeof AuthenticatedAdminEventsEventIdRoute
   '/admin/members/$userId': typeof AuthenticatedAdminMembersUserIdRoute
   '/admin/plans/$planId': typeof AuthenticatedAdminPlansPlanIdRoute
   '/admin/spaces/$spaceId': typeof AuthenticatedAdminSpacesSpaceIdRoute
+  '/admin/automations': typeof AuthenticatedAdminAutomationsIndexRoute
   '/admin/bundles': typeof AuthenticatedAdminBundlesIndexRoute
   '/admin/courses': typeof AuthenticatedAdminCoursesIndexRoute
   '/admin/events': typeof AuthenticatedAdminEventsIndexRoute
   '/admin/members': typeof AuthenticatedAdminMembersIndexRoute
   '/admin/plans': typeof AuthenticatedAdminPlansIndexRoute
   '/admin/spaces': typeof AuthenticatedAdminSpacesIndexRoute
+  '/admin/automations/$automationId/edit': typeof AuthenticatedAdminAutomationsAutomationIdEditRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -621,6 +666,7 @@ export interface FileRoutesById {
   '/checkout/success': typeof CheckoutSuccessRoute
   '/_authenticated/admin/access': typeof AuthenticatedAdminAccessRoute
   '/_authenticated/admin/analytics': typeof AuthenticatedAdminAnalyticsRoute
+  '/_authenticated/admin/automation-logs': typeof AuthenticatedAdminAutomationLogsRoute
   '/_authenticated/admin/badges': typeof AuthenticatedAdminBadgesRoute
   '/_authenticated/admin/billing-settings': typeof AuthenticatedAdminBillingSettingsRoute
   '/_authenticated/admin/checklist': typeof AuthenticatedAdminChecklistRoute
@@ -648,18 +694,22 @@ export interface FileRoutesById {
   '/_authenticated/courses/': typeof AuthenticatedCoursesIndexRoute
   '/_authenticated/members/': typeof AuthenticatedMembersIndexRoute
   '/_authenticated/spaces/': typeof AuthenticatedSpacesIndexRoute
+  '/_authenticated/admin/automations/$automationId': typeof AuthenticatedAdminAutomationsAutomationIdRouteWithChildren
+  '/_authenticated/admin/automations/new': typeof AuthenticatedAdminAutomationsNewRoute
   '/_authenticated/admin/bundles/$bundleId': typeof AuthenticatedAdminBundlesBundleIdRoute
   '/_authenticated/admin/courses/$courseId': typeof AuthenticatedAdminCoursesCourseIdRoute
   '/_authenticated/admin/events/$eventId': typeof AuthenticatedAdminEventsEventIdRoute
   '/_authenticated/admin/members/$userId': typeof AuthenticatedAdminMembersUserIdRoute
   '/_authenticated/admin/plans/$planId': typeof AuthenticatedAdminPlansPlanIdRoute
   '/_authenticated/admin/spaces/$spaceId': typeof AuthenticatedAdminSpacesSpaceIdRoute
+  '/_authenticated/admin/automations/': typeof AuthenticatedAdminAutomationsIndexRoute
   '/_authenticated/admin/bundles/': typeof AuthenticatedAdminBundlesIndexRoute
   '/_authenticated/admin/courses/': typeof AuthenticatedAdminCoursesIndexRoute
   '/_authenticated/admin/events/': typeof AuthenticatedAdminEventsIndexRoute
   '/_authenticated/admin/members/': typeof AuthenticatedAdminMembersIndexRoute
   '/_authenticated/admin/plans/': typeof AuthenticatedAdminPlansIndexRoute
   '/_authenticated/admin/spaces/': typeof AuthenticatedAdminSpacesIndexRoute
+  '/_authenticated/admin/automations/$automationId/edit': typeof AuthenticatedAdminAutomationsAutomationIdEditRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -691,6 +741,7 @@ export interface FileRouteTypes {
     | '/checkout/success'
     | '/admin/access'
     | '/admin/analytics'
+    | '/admin/automation-logs'
     | '/admin/badges'
     | '/admin/billing-settings'
     | '/admin/checklist'
@@ -718,18 +769,22 @@ export interface FileRouteTypes {
     | '/courses/'
     | '/members/'
     | '/spaces/'
+    | '/admin/automations/$automationId'
+    | '/admin/automations/new'
     | '/admin/bundles/$bundleId'
     | '/admin/courses/$courseId'
     | '/admin/events/$eventId'
     | '/admin/members/$userId'
     | '/admin/plans/$planId'
     | '/admin/spaces/$spaceId'
+    | '/admin/automations/'
     | '/admin/bundles/'
     | '/admin/courses/'
     | '/admin/events/'
     | '/admin/members/'
     | '/admin/plans/'
     | '/admin/spaces/'
+    | '/admin/automations/$automationId/edit'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -759,6 +814,7 @@ export interface FileRouteTypes {
     | '/checkout/success'
     | '/admin/access'
     | '/admin/analytics'
+    | '/admin/automation-logs'
     | '/admin/badges'
     | '/admin/billing-settings'
     | '/admin/checklist'
@@ -786,18 +842,22 @@ export interface FileRouteTypes {
     | '/courses'
     | '/members'
     | '/spaces'
+    | '/admin/automations/$automationId'
+    | '/admin/automations/new'
     | '/admin/bundles/$bundleId'
     | '/admin/courses/$courseId'
     | '/admin/events/$eventId'
     | '/admin/members/$userId'
     | '/admin/plans/$planId'
     | '/admin/spaces/$spaceId'
+    | '/admin/automations'
     | '/admin/bundles'
     | '/admin/courses'
     | '/admin/events'
     | '/admin/members'
     | '/admin/plans'
     | '/admin/spaces'
+    | '/admin/automations/$automationId/edit'
   id:
     | '__root__'
     | '/'
@@ -828,6 +888,7 @@ export interface FileRouteTypes {
     | '/checkout/success'
     | '/_authenticated/admin/access'
     | '/_authenticated/admin/analytics'
+    | '/_authenticated/admin/automation-logs'
     | '/_authenticated/admin/badges'
     | '/_authenticated/admin/billing-settings'
     | '/_authenticated/admin/checklist'
@@ -855,18 +916,22 @@ export interface FileRouteTypes {
     | '/_authenticated/courses/'
     | '/_authenticated/members/'
     | '/_authenticated/spaces/'
+    | '/_authenticated/admin/automations/$automationId'
+    | '/_authenticated/admin/automations/new'
     | '/_authenticated/admin/bundles/$bundleId'
     | '/_authenticated/admin/courses/$courseId'
     | '/_authenticated/admin/events/$eventId'
     | '/_authenticated/admin/members/$userId'
     | '/_authenticated/admin/plans/$planId'
     | '/_authenticated/admin/spaces/$spaceId'
+    | '/_authenticated/admin/automations/'
     | '/_authenticated/admin/bundles/'
     | '/_authenticated/admin/courses/'
     | '/_authenticated/admin/events/'
     | '/_authenticated/admin/members/'
     | '/_authenticated/admin/plans/'
     | '/_authenticated/admin/spaces/'
+    | '/_authenticated/admin/automations/$automationId/edit'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -1256,6 +1321,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminBadgesRouteImport
       parentRoute: typeof AuthenticatedAdminRoute
     }
+    '/_authenticated/admin/automation-logs': {
+      id: '/_authenticated/admin/automation-logs'
+      path: '/automation-logs'
+      fullPath: '/admin/automation-logs'
+      preLoaderRoute: typeof AuthenticatedAdminAutomationLogsRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
     '/_authenticated/admin/analytics': {
       id: '/_authenticated/admin/analytics'
       path: '/analytics'
@@ -1312,6 +1384,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminBundlesIndexRouteImport
       parentRoute: typeof AuthenticatedAdminRoute
     }
+    '/_authenticated/admin/automations/': {
+      id: '/_authenticated/admin/automations/'
+      path: '/automations'
+      fullPath: '/admin/automations/'
+      preLoaderRoute: typeof AuthenticatedAdminAutomationsIndexRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
     '/_authenticated/admin/spaces/$spaceId': {
       id: '/_authenticated/admin/spaces/$spaceId'
       path: '/spaces/$spaceId'
@@ -1354,12 +1433,49 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminBundlesBundleIdRouteImport
       parentRoute: typeof AuthenticatedAdminRoute
     }
+    '/_authenticated/admin/automations/new': {
+      id: '/_authenticated/admin/automations/new'
+      path: '/automations/new'
+      fullPath: '/admin/automations/new'
+      preLoaderRoute: typeof AuthenticatedAdminAutomationsNewRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/automations/$automationId': {
+      id: '/_authenticated/admin/automations/$automationId'
+      path: '/automations/$automationId'
+      fullPath: '/admin/automations/$automationId'
+      preLoaderRoute: typeof AuthenticatedAdminAutomationsAutomationIdRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/automations/$automationId/edit': {
+      id: '/_authenticated/admin/automations/$automationId/edit'
+      path: '/edit'
+      fullPath: '/admin/automations/$automationId/edit'
+      preLoaderRoute: typeof AuthenticatedAdminAutomationsAutomationIdEditRouteImport
+      parentRoute: typeof AuthenticatedAdminAutomationsAutomationIdRoute
+    }
   }
 }
+
+interface AuthenticatedAdminAutomationsAutomationIdRouteChildren {
+  AuthenticatedAdminAutomationsAutomationIdEditRoute: typeof AuthenticatedAdminAutomationsAutomationIdEditRoute
+}
+
+const AuthenticatedAdminAutomationsAutomationIdRouteChildren: AuthenticatedAdminAutomationsAutomationIdRouteChildren =
+  {
+    AuthenticatedAdminAutomationsAutomationIdEditRoute:
+      AuthenticatedAdminAutomationsAutomationIdEditRoute,
+  }
+
+const AuthenticatedAdminAutomationsAutomationIdRouteWithChildren =
+  AuthenticatedAdminAutomationsAutomationIdRoute._addFileChildren(
+    AuthenticatedAdminAutomationsAutomationIdRouteChildren,
+  )
 
 interface AuthenticatedAdminRouteChildren {
   AuthenticatedAdminAccessRoute: typeof AuthenticatedAdminAccessRoute
   AuthenticatedAdminAnalyticsRoute: typeof AuthenticatedAdminAnalyticsRoute
+  AuthenticatedAdminAutomationLogsRoute: typeof AuthenticatedAdminAutomationLogsRoute
   AuthenticatedAdminBadgesRoute: typeof AuthenticatedAdminBadgesRoute
   AuthenticatedAdminBillingSettingsRoute: typeof AuthenticatedAdminBillingSettingsRoute
   AuthenticatedAdminChecklistRoute: typeof AuthenticatedAdminChecklistRoute
@@ -1374,12 +1490,15 @@ interface AuthenticatedAdminRouteChildren {
   AuthenticatedAdminSubscribersRoute: typeof AuthenticatedAdminSubscribersRoute
   AuthenticatedAdminTransactionsRoute: typeof AuthenticatedAdminTransactionsRoute
   AuthenticatedAdminTrialsRoute: typeof AuthenticatedAdminTrialsRoute
+  AuthenticatedAdminAutomationsAutomationIdRoute: typeof AuthenticatedAdminAutomationsAutomationIdRouteWithChildren
+  AuthenticatedAdminAutomationsNewRoute: typeof AuthenticatedAdminAutomationsNewRoute
   AuthenticatedAdminBundlesBundleIdRoute: typeof AuthenticatedAdminBundlesBundleIdRoute
   AuthenticatedAdminCoursesCourseIdRoute: typeof AuthenticatedAdminCoursesCourseIdRoute
   AuthenticatedAdminEventsEventIdRoute: typeof AuthenticatedAdminEventsEventIdRoute
   AuthenticatedAdminMembersUserIdRoute: typeof AuthenticatedAdminMembersUserIdRoute
   AuthenticatedAdminPlansPlanIdRoute: typeof AuthenticatedAdminPlansPlanIdRoute
   AuthenticatedAdminSpacesSpaceIdRoute: typeof AuthenticatedAdminSpacesSpaceIdRoute
+  AuthenticatedAdminAutomationsIndexRoute: typeof AuthenticatedAdminAutomationsIndexRoute
   AuthenticatedAdminBundlesIndexRoute: typeof AuthenticatedAdminBundlesIndexRoute
   AuthenticatedAdminCoursesIndexRoute: typeof AuthenticatedAdminCoursesIndexRoute
   AuthenticatedAdminEventsIndexRoute: typeof AuthenticatedAdminEventsIndexRoute
@@ -1391,6 +1510,7 @@ interface AuthenticatedAdminRouteChildren {
 const AuthenticatedAdminRouteChildren: AuthenticatedAdminRouteChildren = {
   AuthenticatedAdminAccessRoute: AuthenticatedAdminAccessRoute,
   AuthenticatedAdminAnalyticsRoute: AuthenticatedAdminAnalyticsRoute,
+  AuthenticatedAdminAutomationLogsRoute: AuthenticatedAdminAutomationLogsRoute,
   AuthenticatedAdminBadgesRoute: AuthenticatedAdminBadgesRoute,
   AuthenticatedAdminBillingSettingsRoute:
     AuthenticatedAdminBillingSettingsRoute,
@@ -1406,6 +1526,9 @@ const AuthenticatedAdminRouteChildren: AuthenticatedAdminRouteChildren = {
   AuthenticatedAdminSubscribersRoute: AuthenticatedAdminSubscribersRoute,
   AuthenticatedAdminTransactionsRoute: AuthenticatedAdminTransactionsRoute,
   AuthenticatedAdminTrialsRoute: AuthenticatedAdminTrialsRoute,
+  AuthenticatedAdminAutomationsAutomationIdRoute:
+    AuthenticatedAdminAutomationsAutomationIdRouteWithChildren,
+  AuthenticatedAdminAutomationsNewRoute: AuthenticatedAdminAutomationsNewRoute,
   AuthenticatedAdminBundlesBundleIdRoute:
     AuthenticatedAdminBundlesBundleIdRoute,
   AuthenticatedAdminCoursesCourseIdRoute:
@@ -1414,6 +1537,8 @@ const AuthenticatedAdminRouteChildren: AuthenticatedAdminRouteChildren = {
   AuthenticatedAdminMembersUserIdRoute: AuthenticatedAdminMembersUserIdRoute,
   AuthenticatedAdminPlansPlanIdRoute: AuthenticatedAdminPlansPlanIdRoute,
   AuthenticatedAdminSpacesSpaceIdRoute: AuthenticatedAdminSpacesSpaceIdRoute,
+  AuthenticatedAdminAutomationsIndexRoute:
+    AuthenticatedAdminAutomationsIndexRoute,
   AuthenticatedAdminBundlesIndexRoute: AuthenticatedAdminBundlesIndexRoute,
   AuthenticatedAdminCoursesIndexRoute: AuthenticatedAdminCoursesIndexRoute,
   AuthenticatedAdminEventsIndexRoute: AuthenticatedAdminEventsIndexRoute,
