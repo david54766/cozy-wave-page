@@ -85,6 +85,7 @@ import { Route as AuthenticatedAdminBundlesBundleIdRouteImport } from './routes/
 import { Route as AuthenticatedAdminAutomationsNewRouteImport } from './routes/_authenticated/admin.automations.new'
 import { Route as AuthenticatedAdminAutomationsAutomationIdRouteImport } from './routes/_authenticated/admin.automations.$automationId'
 import { Route as AuthenticatedAdminAnnouncementsNewRouteImport } from './routes/_authenticated/admin.announcements.new'
+import { Route as AuthenticatedAdminAnnouncementsAnnouncementIdRouteImport } from './routes/_authenticated/admin.announcements.$announcementId'
 import { Route as AuthenticatedAdminSegmentsSegmentIdEditRouteImport } from './routes/_authenticated/admin.segments.$segmentId.edit'
 import { Route as AuthenticatedAdminAutomationsAutomationIdEditRouteImport } from './routes/_authenticated/admin.automations.$automationId.edit'
 
@@ -519,6 +520,12 @@ const AuthenticatedAdminAnnouncementsNewRoute =
     path: '/announcements/new',
     getParentRoute: () => AuthenticatedAdminRoute,
   } as any)
+const AuthenticatedAdminAnnouncementsAnnouncementIdRoute =
+  AuthenticatedAdminAnnouncementsAnnouncementIdRouteImport.update({
+    id: '/announcements/$announcementId',
+    path: '/announcements/$announcementId',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
 const AuthenticatedAdminSegmentsSegmentIdEditRoute =
   AuthenticatedAdminSegmentsSegmentIdEditRouteImport.update({
     id: '/edit',
@@ -588,6 +595,7 @@ export interface FileRoutesByFullPath {
   '/courses/': typeof AuthenticatedCoursesIndexRoute
   '/members/': typeof AuthenticatedMembersIndexRoute
   '/spaces/': typeof AuthenticatedSpacesIndexRoute
+  '/admin/announcements/$announcementId': typeof AuthenticatedAdminAnnouncementsAnnouncementIdRoute
   '/admin/announcements/new': typeof AuthenticatedAdminAnnouncementsNewRoute
   '/admin/automations/$automationId': typeof AuthenticatedAdminAutomationsAutomationIdRouteWithChildren
   '/admin/automations/new': typeof AuthenticatedAdminAutomationsNewRoute
@@ -667,6 +675,7 @@ export interface FileRoutesByTo {
   '/courses': typeof AuthenticatedCoursesIndexRoute
   '/members': typeof AuthenticatedMembersIndexRoute
   '/spaces': typeof AuthenticatedSpacesIndexRoute
+  '/admin/announcements/$announcementId': typeof AuthenticatedAdminAnnouncementsAnnouncementIdRoute
   '/admin/announcements/new': typeof AuthenticatedAdminAnnouncementsNewRoute
   '/admin/automations/$automationId': typeof AuthenticatedAdminAutomationsAutomationIdRouteWithChildren
   '/admin/automations/new': typeof AuthenticatedAdminAutomationsNewRoute
@@ -748,6 +757,7 @@ export interface FileRoutesById {
   '/_authenticated/courses/': typeof AuthenticatedCoursesIndexRoute
   '/_authenticated/members/': typeof AuthenticatedMembersIndexRoute
   '/_authenticated/spaces/': typeof AuthenticatedSpacesIndexRoute
+  '/_authenticated/admin/announcements/$announcementId': typeof AuthenticatedAdminAnnouncementsAnnouncementIdRoute
   '/_authenticated/admin/announcements/new': typeof AuthenticatedAdminAnnouncementsNewRoute
   '/_authenticated/admin/automations/$automationId': typeof AuthenticatedAdminAutomationsAutomationIdRouteWithChildren
   '/_authenticated/admin/automations/new': typeof AuthenticatedAdminAutomationsNewRoute
@@ -829,6 +839,7 @@ export interface FileRouteTypes {
     | '/courses/'
     | '/members/'
     | '/spaces/'
+    | '/admin/announcements/$announcementId'
     | '/admin/announcements/new'
     | '/admin/automations/$automationId'
     | '/admin/automations/new'
@@ -908,6 +919,7 @@ export interface FileRouteTypes {
     | '/courses'
     | '/members'
     | '/spaces'
+    | '/admin/announcements/$announcementId'
     | '/admin/announcements/new'
     | '/admin/automations/$automationId'
     | '/admin/automations/new'
@@ -988,6 +1000,7 @@ export interface FileRouteTypes {
     | '/_authenticated/courses/'
     | '/_authenticated/members/'
     | '/_authenticated/spaces/'
+    | '/_authenticated/admin/announcements/$announcementId'
     | '/_authenticated/admin/announcements/new'
     | '/_authenticated/admin/automations/$automationId'
     | '/_authenticated/admin/automations/new'
@@ -1560,6 +1573,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminAnnouncementsNewRouteImport
       parentRoute: typeof AuthenticatedAdminRoute
     }
+    '/_authenticated/admin/announcements/$announcementId': {
+      id: '/_authenticated/admin/announcements/$announcementId'
+      path: '/announcements/$announcementId'
+      fullPath: '/admin/announcements/$announcementId'
+      preLoaderRoute: typeof AuthenticatedAdminAnnouncementsAnnouncementIdRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
     '/_authenticated/admin/segments/$segmentId/edit': {
       id: '/_authenticated/admin/segments/$segmentId/edit'
       path: '/edit'
@@ -1625,6 +1645,7 @@ interface AuthenticatedAdminRouteChildren {
   AuthenticatedAdminSubscribersRoute: typeof AuthenticatedAdminSubscribersRoute
   AuthenticatedAdminTransactionsRoute: typeof AuthenticatedAdminTransactionsRoute
   AuthenticatedAdminTrialsRoute: typeof AuthenticatedAdminTrialsRoute
+  AuthenticatedAdminAnnouncementsAnnouncementIdRoute: typeof AuthenticatedAdminAnnouncementsAnnouncementIdRoute
   AuthenticatedAdminAnnouncementsNewRoute: typeof AuthenticatedAdminAnnouncementsNewRoute
   AuthenticatedAdminAutomationsAutomationIdRoute: typeof AuthenticatedAdminAutomationsAutomationIdRouteWithChildren
   AuthenticatedAdminAutomationsNewRoute: typeof AuthenticatedAdminAutomationsNewRoute
@@ -1666,6 +1687,8 @@ const AuthenticatedAdminRouteChildren: AuthenticatedAdminRouteChildren = {
   AuthenticatedAdminSubscribersRoute: AuthenticatedAdminSubscribersRoute,
   AuthenticatedAdminTransactionsRoute: AuthenticatedAdminTransactionsRoute,
   AuthenticatedAdminTrialsRoute: AuthenticatedAdminTrialsRoute,
+  AuthenticatedAdminAnnouncementsAnnouncementIdRoute:
+    AuthenticatedAdminAnnouncementsAnnouncementIdRoute,
   AuthenticatedAdminAnnouncementsNewRoute:
     AuthenticatedAdminAnnouncementsNewRoute,
   AuthenticatedAdminAutomationsAutomationIdRoute:
