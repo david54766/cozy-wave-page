@@ -246,22 +246,31 @@ function AdvancedAnalyticsSection() {
       <div className="flex flex-wrap items-center justify-between gap-2 pt-4">
         <h2 className="text-xl font-semibold tracking-tight">Advanced</h2>
         <div className="flex flex-wrap gap-2">
-          <_ExportButtons />
+          <ExportButtonPlaceholder kind="members" />
+          <ExportButtonPlaceholder kind="posts" />
+          <ExportButtonPlaceholder kind="course_progress" label="Export progress" />
+          <ExportButtonPlaceholder kind="rsvps" />
+          <ExportButtonPlaceholder kind="revenue" />
         </div>
       </div>
 
       <div className="grid gap-4 lg:grid-cols-2">
-        <_RiskCard />
-        <_AdvancedMetricsCard />
+        <Card className="rounded-2xl">
+          <CardHeader><CardTitle className="text-base flex items-center gap-2"><AlertTriangle className="size-4" /> At-risk members</CardTitle></CardHeader>
+          <CardContent><AtRiskMemberTable /></CardContent>
+        </Card>
+        <Card className="rounded-2xl">
+          <CardHeader><CardTitle className="text-base flex items-center gap-2"><History className="size-4" /> Recent admin activity</CardTitle></CardHeader>
+          <CardContent><AuditLogTable limit={10} /></CardContent>
+        </Card>
       </div>
 
       <div className="grid gap-4 lg:grid-cols-2">
-        <_ChartA title="Member growth over time" />
-        <_ChartA title="Daily active members" />
-        <_ChartA title="Posts over time" />
-        <_ChartA title="Revenue over time" />
+        <AnalyticsChartPlaceholder title="Member growth over time" />
+        <AnalyticsChartPlaceholder title="Daily active members" />
+        <AnalyticsChartPlaceholder title="Posts over time" />
+        <AnalyticsChartPlaceholder title="Revenue over time" />
       </div>
     </>
   );
-}
 }
