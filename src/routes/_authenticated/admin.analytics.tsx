@@ -9,8 +9,12 @@ import { Button } from "@/components/ui/button";
 import {
   Users, UserPlus, Users2, MessageSquare, MessageCircle, Heart,
   GraduationCap, BookOpen, CheckCircle2, Calendar, CalendarCheck,
-  ShieldAlert, ArrowRight, BarChart3,
+  ShieldAlert, ArrowRight, BarChart3, AlertTriangle, History as HistoryIcon,
 } from "lucide-react";
+import { ExportButtonPlaceholder } from "@/components/analytics/ExportButtonPlaceholder";
+import { AtRiskMemberTable } from "@/components/analytics/AtRiskMemberTable";
+import { AnalyticsChartPlaceholder } from "@/components/analytics/AnalyticsChartPlaceholder";
+import { AuditLogTable } from "@/components/audit/AuditLogTable";
 
 export const Route = createFileRoute("/_authenticated/admin/analytics")({
   component: AnalyticsPage,
@@ -259,8 +263,8 @@ function AdvancedAnalyticsSection() {
           <CardHeader><CardTitle className="text-base flex items-center gap-2"><AlertTriangle className="size-4" /> At-risk members</CardTitle></CardHeader>
           <CardContent><AtRiskMemberTable /></CardContent>
         </Card>
-        <Card className="rounded-2xl">
-          <CardHeader><CardTitle className="text-base flex items-center gap-2"><History className="size-4" /> Recent admin activity</CardTitle></CardHeader>
+          <Card className="rounded-2xl">
+          <CardHeader><CardTitle className="text-base flex items-center gap-2"><HistoryIcon className="size-4" /> Recent admin activity</CardTitle></CardHeader>
           <CardContent><AuditLogTable limit={10} /></CardContent>
         </Card>
       </div>
