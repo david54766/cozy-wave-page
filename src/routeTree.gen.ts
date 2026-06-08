@@ -45,6 +45,8 @@ import { Route as AuthenticatedHashtagsTagRouteImport } from './routes/_authenti
 import { Route as AuthenticatedEventsEventIdRouteImport } from './routes/_authenticated/events.$eventId'
 import { Route as AuthenticatedCoursesCourseIdRouteImport } from './routes/_authenticated/courses.$courseId'
 import { Route as AuthenticatedComingSoonAreaRouteImport } from './routes/_authenticated/coming-soon.$area'
+import { Route as AuthenticatedAdminTransactionsRouteImport } from './routes/_authenticated/admin.transactions'
+import { Route as AuthenticatedAdminSubscribersRouteImport } from './routes/_authenticated/admin.subscribers'
 import { Route as AuthenticatedAdminSettingsRouteImport } from './routes/_authenticated/admin.settings'
 import { Route as AuthenticatedAdminPostsRouteImport } from './routes/_authenticated/admin.posts'
 import { Route as AuthenticatedAdminPointsRouteImport } from './routes/_authenticated/admin.points'
@@ -260,6 +262,18 @@ const AuthenticatedComingSoonAreaRoute =
     path: '/coming-soon/$area',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedAdminTransactionsRoute =
+  AuthenticatedAdminTransactionsRouteImport.update({
+    id: '/transactions',
+    path: '/transactions',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
+const AuthenticatedAdminSubscribersRoute =
+  AuthenticatedAdminSubscribersRouteImport.update({
+    id: '/subscribers',
+    path: '/subscribers',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
 const AuthenticatedAdminSettingsRoute =
   AuthenticatedAdminSettingsRouteImport.update({
     id: '/settings',
@@ -407,6 +421,8 @@ export interface FileRoutesByFullPath {
   '/admin/points': typeof AuthenticatedAdminPointsRoute
   '/admin/posts': typeof AuthenticatedAdminPostsRoute
   '/admin/settings': typeof AuthenticatedAdminSettingsRoute
+  '/admin/subscribers': typeof AuthenticatedAdminSubscribersRoute
+  '/admin/transactions': typeof AuthenticatedAdminTransactionsRoute
   '/coming-soon/$area': typeof AuthenticatedComingSoonAreaRoute
   '/courses/$courseId': typeof AuthenticatedCoursesCourseIdRoute
   '/events/$eventId': typeof AuthenticatedEventsEventIdRoute
@@ -463,6 +479,8 @@ export interface FileRoutesByTo {
   '/admin/points': typeof AuthenticatedAdminPointsRoute
   '/admin/posts': typeof AuthenticatedAdminPostsRoute
   '/admin/settings': typeof AuthenticatedAdminSettingsRoute
+  '/admin/subscribers': typeof AuthenticatedAdminSubscribersRoute
+  '/admin/transactions': typeof AuthenticatedAdminTransactionsRoute
   '/coming-soon/$area': typeof AuthenticatedComingSoonAreaRoute
   '/courses/$courseId': typeof AuthenticatedCoursesCourseIdRoute
   '/events/$eventId': typeof AuthenticatedEventsEventIdRoute
@@ -521,6 +539,8 @@ export interface FileRoutesById {
   '/_authenticated/admin/points': typeof AuthenticatedAdminPointsRoute
   '/_authenticated/admin/posts': typeof AuthenticatedAdminPostsRoute
   '/_authenticated/admin/settings': typeof AuthenticatedAdminSettingsRoute
+  '/_authenticated/admin/subscribers': typeof AuthenticatedAdminSubscribersRoute
+  '/_authenticated/admin/transactions': typeof AuthenticatedAdminTransactionsRoute
   '/_authenticated/coming-soon/$area': typeof AuthenticatedComingSoonAreaRoute
   '/_authenticated/courses/$courseId': typeof AuthenticatedCoursesCourseIdRoute
   '/_authenticated/events/$eventId': typeof AuthenticatedEventsEventIdRoute
@@ -579,6 +599,8 @@ export interface FileRouteTypes {
     | '/admin/points'
     | '/admin/posts'
     | '/admin/settings'
+    | '/admin/subscribers'
+    | '/admin/transactions'
     | '/coming-soon/$area'
     | '/courses/$courseId'
     | '/events/$eventId'
@@ -635,6 +657,8 @@ export interface FileRouteTypes {
     | '/admin/points'
     | '/admin/posts'
     | '/admin/settings'
+    | '/admin/subscribers'
+    | '/admin/transactions'
     | '/coming-soon/$area'
     | '/courses/$courseId'
     | '/events/$eventId'
@@ -692,6 +716,8 @@ export interface FileRouteTypes {
     | '/_authenticated/admin/points'
     | '/_authenticated/admin/posts'
     | '/_authenticated/admin/settings'
+    | '/_authenticated/admin/subscribers'
+    | '/_authenticated/admin/transactions'
     | '/_authenticated/coming-soon/$area'
     | '/_authenticated/courses/$courseId'
     | '/_authenticated/events/$eventId'
@@ -982,6 +1008,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedComingSoonAreaRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/admin/transactions': {
+      id: '/_authenticated/admin/transactions'
+      path: '/transactions'
+      fullPath: '/admin/transactions'
+      preLoaderRoute: typeof AuthenticatedAdminTransactionsRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/subscribers': {
+      id: '/_authenticated/admin/subscribers'
+      path: '/subscribers'
+      fullPath: '/admin/subscribers'
+      preLoaderRoute: typeof AuthenticatedAdminSubscribersRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
     '/_authenticated/admin/settings': {
       id: '/_authenticated/admin/settings'
       path: '/settings'
@@ -1128,6 +1168,8 @@ interface AuthenticatedAdminRouteChildren {
   AuthenticatedAdminPointsRoute: typeof AuthenticatedAdminPointsRoute
   AuthenticatedAdminPostsRoute: typeof AuthenticatedAdminPostsRoute
   AuthenticatedAdminSettingsRoute: typeof AuthenticatedAdminSettingsRoute
+  AuthenticatedAdminSubscribersRoute: typeof AuthenticatedAdminSubscribersRoute
+  AuthenticatedAdminTransactionsRoute: typeof AuthenticatedAdminTransactionsRoute
   AuthenticatedAdminCoursesCourseIdRoute: typeof AuthenticatedAdminCoursesCourseIdRoute
   AuthenticatedAdminEventsEventIdRoute: typeof AuthenticatedAdminEventsEventIdRoute
   AuthenticatedAdminMembersUserIdRoute: typeof AuthenticatedAdminMembersUserIdRoute
@@ -1151,6 +1193,8 @@ const AuthenticatedAdminRouteChildren: AuthenticatedAdminRouteChildren = {
   AuthenticatedAdminPointsRoute: AuthenticatedAdminPointsRoute,
   AuthenticatedAdminPostsRoute: AuthenticatedAdminPostsRoute,
   AuthenticatedAdminSettingsRoute: AuthenticatedAdminSettingsRoute,
+  AuthenticatedAdminSubscribersRoute: AuthenticatedAdminSubscribersRoute,
+  AuthenticatedAdminTransactionsRoute: AuthenticatedAdminTransactionsRoute,
   AuthenticatedAdminCoursesCourseIdRoute:
     AuthenticatedAdminCoursesCourseIdRoute,
   AuthenticatedAdminEventsEventIdRoute: AuthenticatedAdminEventsEventIdRoute,
@@ -1265,3 +1309,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
