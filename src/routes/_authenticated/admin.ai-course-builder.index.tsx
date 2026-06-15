@@ -12,7 +12,8 @@ import { AIQuizGeneratorForm } from "@/components/ai/AIQuizGeneratorForm";
 import { AIQuizPreview } from "@/components/ai/AIQuizPreview";
 import { AIAssignmentGenerator } from "@/components/ai/AIAssignmentGenerator";
 import { MockModeNotice } from "@/components/ai/MockModeNotice";
-import { createCourseGeneration, createLessonGeneration, createQuizGeneration, getAISettingsIsMock, type LessonGenerationContent, type QuizContent } from "@/lib/aiCourses";
+import { createCourseGeneration, createLessonGeneration, createQuizGeneration, type LessonGenerationContent, type QuizContent } from "@/lib/aiCourses";
+import { getAISettings, isMockMode } from "@/lib/ai";
 
 export const Route = createFileRoute("/_authenticated/admin/ai-course-builder/")({
   component: AICourseBuilderPage,
@@ -26,7 +27,7 @@ function AICourseBuilderPage() {
   const [lastQuiz, setLastQuiz] = useState<QuizContent | null>(null);
 
   useEffect(() => { if (!loading && !isAdmin) navigate({ to: "/dashboard" }); }, [loading, isAdmin, navigate]);
-  useEffect(() => { getAISettingsIsMock().then(setMock); }, []);
+  useEffect(() => { getAISettings().then((s) => setMock(isMockMode(s))); }, []);
 
   if (!isAdmin) return null;
 

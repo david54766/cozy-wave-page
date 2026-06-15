@@ -67,6 +67,7 @@ import { Route as AuthenticatedAdminAutomationLogsRouteImport } from './routes/_
 import { Route as AuthenticatedAdminAuditLogsRouteImport } from './routes/_authenticated/admin.audit-logs'
 import { Route as AuthenticatedAdminAnalyticsRouteImport } from './routes/_authenticated/admin.analytics'
 import { Route as AuthenticatedAdminAiSettingsRouteImport } from './routes/_authenticated/admin.ai-settings'
+import { Route as AuthenticatedAdminAiCourseGenerationsRouteImport } from './routes/_authenticated/admin.ai-course-generations'
 import { Route as AuthenticatedAdminAiAssistantRouteImport } from './routes/_authenticated/admin.ai-assistant'
 import { Route as AuthenticatedAdminAccessRouteImport } from './routes/_authenticated/admin.access'
 import { Route as AuthenticatedAdminSpacesIndexRouteImport } from './routes/_authenticated/admin.spaces.index'
@@ -79,6 +80,7 @@ import { Route as AuthenticatedAdminBundlesIndexRouteImport } from './routes/_au
 import { Route as AuthenticatedAdminAutomationsIndexRouteImport } from './routes/_authenticated/admin.automations.index'
 import { Route as AuthenticatedAdminAnnouncementsIndexRouteImport } from './routes/_authenticated/admin.announcements.index'
 import { Route as AuthenticatedAdminAiDraftsIndexRouteImport } from './routes/_authenticated/admin.ai-drafts.index'
+import { Route as AuthenticatedAdminAiCourseBuilderIndexRouteImport } from './routes/_authenticated/admin.ai-course-builder.index'
 import { Route as AuthenticatedAdminSpacesSpaceIdRouteImport } from './routes/_authenticated/admin.spaces.$spaceId'
 import { Route as AuthenticatedAdminSegmentsNewRouteImport } from './routes/_authenticated/admin.segments.new'
 import { Route as AuthenticatedAdminSegmentsSegmentIdRouteImport } from './routes/_authenticated/admin.segments.$segmentId'
@@ -92,6 +94,7 @@ import { Route as AuthenticatedAdminAutomationsAutomationIdRouteImport } from '.
 import { Route as AuthenticatedAdminAnnouncementsNewRouteImport } from './routes/_authenticated/admin.announcements.new'
 import { Route as AuthenticatedAdminAnnouncementsAnnouncementIdRouteImport } from './routes/_authenticated/admin.announcements.$announcementId'
 import { Route as AuthenticatedAdminAiDraftsDraftIdRouteImport } from './routes/_authenticated/admin.ai-drafts.$draftId'
+import { Route as AuthenticatedAdminAiCourseBuilderGenerationIdRouteImport } from './routes/_authenticated/admin.ai-course-builder.$generationId'
 import { Route as AuthenticatedAdminSegmentsSegmentIdEditRouteImport } from './routes/_authenticated/admin.segments.$segmentId.edit'
 import { Route as AuthenticatedAdminAutomationsAutomationIdEditRouteImport } from './routes/_authenticated/admin.automations.$automationId.edit'
 import { Route as AuthenticatedAdminAnnouncementsAnnouncementIdEditRouteImport } from './routes/_authenticated/admin.announcements.$announcementId.edit'
@@ -419,6 +422,12 @@ const AuthenticatedAdminAiSettingsRoute =
     path: '/ai-settings',
     getParentRoute: () => AuthenticatedAdminRoute,
   } as any)
+const AuthenticatedAdminAiCourseGenerationsRoute =
+  AuthenticatedAdminAiCourseGenerationsRouteImport.update({
+    id: '/ai-course-generations',
+    path: '/ai-course-generations',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
 const AuthenticatedAdminAiAssistantRoute =
   AuthenticatedAdminAiAssistantRouteImport.update({
     id: '/ai-assistant',
@@ -489,6 +498,12 @@ const AuthenticatedAdminAiDraftsIndexRoute =
   AuthenticatedAdminAiDraftsIndexRouteImport.update({
     id: '/ai-drafts/',
     path: '/ai-drafts/',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
+const AuthenticatedAdminAiCourseBuilderIndexRoute =
+  AuthenticatedAdminAiCourseBuilderIndexRouteImport.update({
+    id: '/ai-course-builder/',
+    path: '/ai-course-builder/',
     getParentRoute: () => AuthenticatedAdminRoute,
   } as any)
 const AuthenticatedAdminSpacesSpaceIdRoute =
@@ -569,6 +584,12 @@ const AuthenticatedAdminAiDraftsDraftIdRoute =
     path: '/ai-drafts/$draftId',
     getParentRoute: () => AuthenticatedAdminRoute,
   } as any)
+const AuthenticatedAdminAiCourseBuilderGenerationIdRoute =
+  AuthenticatedAdminAiCourseBuilderGenerationIdRouteImport.update({
+    id: '/ai-course-builder/$generationId',
+    path: '/ai-course-builder/$generationId',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
 const AuthenticatedAdminSegmentsSegmentIdEditRoute =
   AuthenticatedAdminSegmentsSegmentIdEditRouteImport.update({
     id: '/edit',
@@ -616,6 +637,7 @@ export interface FileRoutesByFullPath {
   '/checkout/success': typeof CheckoutSuccessRoute
   '/admin/access': typeof AuthenticatedAdminAccessRoute
   '/admin/ai-assistant': typeof AuthenticatedAdminAiAssistantRoute
+  '/admin/ai-course-generations': typeof AuthenticatedAdminAiCourseGenerationsRoute
   '/admin/ai-settings': typeof AuthenticatedAdminAiSettingsRoute
   '/admin/analytics': typeof AuthenticatedAdminAnalyticsRoute
   '/admin/audit-logs': typeof AuthenticatedAdminAuditLogsRoute
@@ -648,6 +670,7 @@ export interface FileRoutesByFullPath {
   '/courses/': typeof AuthenticatedCoursesIndexRoute
   '/members/': typeof AuthenticatedMembersIndexRoute
   '/spaces/': typeof AuthenticatedSpacesIndexRoute
+  '/admin/ai-course-builder/$generationId': typeof AuthenticatedAdminAiCourseBuilderGenerationIdRoute
   '/admin/ai-drafts/$draftId': typeof AuthenticatedAdminAiDraftsDraftIdRoute
   '/admin/announcements/$announcementId': typeof AuthenticatedAdminAnnouncementsAnnouncementIdRouteWithChildren
   '/admin/announcements/new': typeof AuthenticatedAdminAnnouncementsNewRoute
@@ -661,6 +684,7 @@ export interface FileRoutesByFullPath {
   '/admin/segments/$segmentId': typeof AuthenticatedAdminSegmentsSegmentIdRouteWithChildren
   '/admin/segments/new': typeof AuthenticatedAdminSegmentsNewRoute
   '/admin/spaces/$spaceId': typeof AuthenticatedAdminSpacesSpaceIdRoute
+  '/admin/ai-course-builder/': typeof AuthenticatedAdminAiCourseBuilderIndexRoute
   '/admin/ai-drafts/': typeof AuthenticatedAdminAiDraftsIndexRoute
   '/admin/announcements/': typeof AuthenticatedAdminAnnouncementsIndexRoute
   '/admin/automations/': typeof AuthenticatedAdminAutomationsIndexRoute
@@ -703,6 +727,7 @@ export interface FileRoutesByTo {
   '/checkout/success': typeof CheckoutSuccessRoute
   '/admin/access': typeof AuthenticatedAdminAccessRoute
   '/admin/ai-assistant': typeof AuthenticatedAdminAiAssistantRoute
+  '/admin/ai-course-generations': typeof AuthenticatedAdminAiCourseGenerationsRoute
   '/admin/ai-settings': typeof AuthenticatedAdminAiSettingsRoute
   '/admin/analytics': typeof AuthenticatedAdminAnalyticsRoute
   '/admin/audit-logs': typeof AuthenticatedAdminAuditLogsRoute
@@ -735,6 +760,7 @@ export interface FileRoutesByTo {
   '/courses': typeof AuthenticatedCoursesIndexRoute
   '/members': typeof AuthenticatedMembersIndexRoute
   '/spaces': typeof AuthenticatedSpacesIndexRoute
+  '/admin/ai-course-builder/$generationId': typeof AuthenticatedAdminAiCourseBuilderGenerationIdRoute
   '/admin/ai-drafts/$draftId': typeof AuthenticatedAdminAiDraftsDraftIdRoute
   '/admin/announcements/$announcementId': typeof AuthenticatedAdminAnnouncementsAnnouncementIdRouteWithChildren
   '/admin/announcements/new': typeof AuthenticatedAdminAnnouncementsNewRoute
@@ -748,6 +774,7 @@ export interface FileRoutesByTo {
   '/admin/segments/$segmentId': typeof AuthenticatedAdminSegmentsSegmentIdRouteWithChildren
   '/admin/segments/new': typeof AuthenticatedAdminSegmentsNewRoute
   '/admin/spaces/$spaceId': typeof AuthenticatedAdminSpacesSpaceIdRoute
+  '/admin/ai-course-builder': typeof AuthenticatedAdminAiCourseBuilderIndexRoute
   '/admin/ai-drafts': typeof AuthenticatedAdminAiDraftsIndexRoute
   '/admin/announcements': typeof AuthenticatedAdminAnnouncementsIndexRoute
   '/admin/automations': typeof AuthenticatedAdminAutomationsIndexRoute
@@ -792,6 +819,7 @@ export interface FileRoutesById {
   '/checkout/success': typeof CheckoutSuccessRoute
   '/_authenticated/admin/access': typeof AuthenticatedAdminAccessRoute
   '/_authenticated/admin/ai-assistant': typeof AuthenticatedAdminAiAssistantRoute
+  '/_authenticated/admin/ai-course-generations': typeof AuthenticatedAdminAiCourseGenerationsRoute
   '/_authenticated/admin/ai-settings': typeof AuthenticatedAdminAiSettingsRoute
   '/_authenticated/admin/analytics': typeof AuthenticatedAdminAnalyticsRoute
   '/_authenticated/admin/audit-logs': typeof AuthenticatedAdminAuditLogsRoute
@@ -824,6 +852,7 @@ export interface FileRoutesById {
   '/_authenticated/courses/': typeof AuthenticatedCoursesIndexRoute
   '/_authenticated/members/': typeof AuthenticatedMembersIndexRoute
   '/_authenticated/spaces/': typeof AuthenticatedSpacesIndexRoute
+  '/_authenticated/admin/ai-course-builder/$generationId': typeof AuthenticatedAdminAiCourseBuilderGenerationIdRoute
   '/_authenticated/admin/ai-drafts/$draftId': typeof AuthenticatedAdminAiDraftsDraftIdRoute
   '/_authenticated/admin/announcements/$announcementId': typeof AuthenticatedAdminAnnouncementsAnnouncementIdRouteWithChildren
   '/_authenticated/admin/announcements/new': typeof AuthenticatedAdminAnnouncementsNewRoute
@@ -837,6 +866,7 @@ export interface FileRoutesById {
   '/_authenticated/admin/segments/$segmentId': typeof AuthenticatedAdminSegmentsSegmentIdRouteWithChildren
   '/_authenticated/admin/segments/new': typeof AuthenticatedAdminSegmentsNewRoute
   '/_authenticated/admin/spaces/$spaceId': typeof AuthenticatedAdminSpacesSpaceIdRoute
+  '/_authenticated/admin/ai-course-builder/': typeof AuthenticatedAdminAiCourseBuilderIndexRoute
   '/_authenticated/admin/ai-drafts/': typeof AuthenticatedAdminAiDraftsIndexRoute
   '/_authenticated/admin/announcements/': typeof AuthenticatedAdminAnnouncementsIndexRoute
   '/_authenticated/admin/automations/': typeof AuthenticatedAdminAutomationsIndexRoute
@@ -881,6 +911,7 @@ export interface FileRouteTypes {
     | '/checkout/success'
     | '/admin/access'
     | '/admin/ai-assistant'
+    | '/admin/ai-course-generations'
     | '/admin/ai-settings'
     | '/admin/analytics'
     | '/admin/audit-logs'
@@ -913,6 +944,7 @@ export interface FileRouteTypes {
     | '/courses/'
     | '/members/'
     | '/spaces/'
+    | '/admin/ai-course-builder/$generationId'
     | '/admin/ai-drafts/$draftId'
     | '/admin/announcements/$announcementId'
     | '/admin/announcements/new'
@@ -926,6 +958,7 @@ export interface FileRouteTypes {
     | '/admin/segments/$segmentId'
     | '/admin/segments/new'
     | '/admin/spaces/$spaceId'
+    | '/admin/ai-course-builder/'
     | '/admin/ai-drafts/'
     | '/admin/announcements/'
     | '/admin/automations/'
@@ -968,6 +1001,7 @@ export interface FileRouteTypes {
     | '/checkout/success'
     | '/admin/access'
     | '/admin/ai-assistant'
+    | '/admin/ai-course-generations'
     | '/admin/ai-settings'
     | '/admin/analytics'
     | '/admin/audit-logs'
@@ -1000,6 +1034,7 @@ export interface FileRouteTypes {
     | '/courses'
     | '/members'
     | '/spaces'
+    | '/admin/ai-course-builder/$generationId'
     | '/admin/ai-drafts/$draftId'
     | '/admin/announcements/$announcementId'
     | '/admin/announcements/new'
@@ -1013,6 +1048,7 @@ export interface FileRouteTypes {
     | '/admin/segments/$segmentId'
     | '/admin/segments/new'
     | '/admin/spaces/$spaceId'
+    | '/admin/ai-course-builder'
     | '/admin/ai-drafts'
     | '/admin/announcements'
     | '/admin/automations'
@@ -1056,6 +1092,7 @@ export interface FileRouteTypes {
     | '/checkout/success'
     | '/_authenticated/admin/access'
     | '/_authenticated/admin/ai-assistant'
+    | '/_authenticated/admin/ai-course-generations'
     | '/_authenticated/admin/ai-settings'
     | '/_authenticated/admin/analytics'
     | '/_authenticated/admin/audit-logs'
@@ -1088,6 +1125,7 @@ export interface FileRouteTypes {
     | '/_authenticated/courses/'
     | '/_authenticated/members/'
     | '/_authenticated/spaces/'
+    | '/_authenticated/admin/ai-course-builder/$generationId'
     | '/_authenticated/admin/ai-drafts/$draftId'
     | '/_authenticated/admin/announcements/$announcementId'
     | '/_authenticated/admin/announcements/new'
@@ -1101,6 +1139,7 @@ export interface FileRouteTypes {
     | '/_authenticated/admin/segments/$segmentId'
     | '/_authenticated/admin/segments/new'
     | '/_authenticated/admin/spaces/$spaceId'
+    | '/_authenticated/admin/ai-course-builder/'
     | '/_authenticated/admin/ai-drafts/'
     | '/_authenticated/admin/announcements/'
     | '/_authenticated/admin/automations/'
@@ -1538,6 +1577,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminAiSettingsRouteImport
       parentRoute: typeof AuthenticatedAdminRoute
     }
+    '/_authenticated/admin/ai-course-generations': {
+      id: '/_authenticated/admin/ai-course-generations'
+      path: '/ai-course-generations'
+      fullPath: '/admin/ai-course-generations'
+      preLoaderRoute: typeof AuthenticatedAdminAiCourseGenerationsRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
     '/_authenticated/admin/ai-assistant': {
       id: '/_authenticated/admin/ai-assistant'
       path: '/ai-assistant'
@@ -1620,6 +1666,13 @@ declare module '@tanstack/react-router' {
       path: '/ai-drafts'
       fullPath: '/admin/ai-drafts/'
       preLoaderRoute: typeof AuthenticatedAdminAiDraftsIndexRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/ai-course-builder/': {
+      id: '/_authenticated/admin/ai-course-builder/'
+      path: '/ai-course-builder'
+      fullPath: '/admin/ai-course-builder/'
+      preLoaderRoute: typeof AuthenticatedAdminAiCourseBuilderIndexRouteImport
       parentRoute: typeof AuthenticatedAdminRoute
     }
     '/_authenticated/admin/spaces/$spaceId': {
@@ -1713,6 +1766,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminAiDraftsDraftIdRouteImport
       parentRoute: typeof AuthenticatedAdminRoute
     }
+    '/_authenticated/admin/ai-course-builder/$generationId': {
+      id: '/_authenticated/admin/ai-course-builder/$generationId'
+      path: '/ai-course-builder/$generationId'
+      fullPath: '/admin/ai-course-builder/$generationId'
+      preLoaderRoute: typeof AuthenticatedAdminAiCourseBuilderGenerationIdRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
     '/_authenticated/admin/segments/$segmentId/edit': {
       id: '/_authenticated/admin/segments/$segmentId/edit'
       path: '/edit'
@@ -1785,6 +1845,7 @@ const AuthenticatedAdminSegmentsSegmentIdRouteWithChildren =
 interface AuthenticatedAdminRouteChildren {
   AuthenticatedAdminAccessRoute: typeof AuthenticatedAdminAccessRoute
   AuthenticatedAdminAiAssistantRoute: typeof AuthenticatedAdminAiAssistantRoute
+  AuthenticatedAdminAiCourseGenerationsRoute: typeof AuthenticatedAdminAiCourseGenerationsRoute
   AuthenticatedAdminAiSettingsRoute: typeof AuthenticatedAdminAiSettingsRoute
   AuthenticatedAdminAnalyticsRoute: typeof AuthenticatedAdminAnalyticsRoute
   AuthenticatedAdminAuditLogsRoute: typeof AuthenticatedAdminAuditLogsRoute
@@ -1803,6 +1864,7 @@ interface AuthenticatedAdminRouteChildren {
   AuthenticatedAdminSubscribersRoute: typeof AuthenticatedAdminSubscribersRoute
   AuthenticatedAdminTransactionsRoute: typeof AuthenticatedAdminTransactionsRoute
   AuthenticatedAdminTrialsRoute: typeof AuthenticatedAdminTrialsRoute
+  AuthenticatedAdminAiCourseBuilderGenerationIdRoute: typeof AuthenticatedAdminAiCourseBuilderGenerationIdRoute
   AuthenticatedAdminAiDraftsDraftIdRoute: typeof AuthenticatedAdminAiDraftsDraftIdRoute
   AuthenticatedAdminAnnouncementsAnnouncementIdRoute: typeof AuthenticatedAdminAnnouncementsAnnouncementIdRouteWithChildren
   AuthenticatedAdminAnnouncementsNewRoute: typeof AuthenticatedAdminAnnouncementsNewRoute
@@ -1816,6 +1878,7 @@ interface AuthenticatedAdminRouteChildren {
   AuthenticatedAdminSegmentsSegmentIdRoute: typeof AuthenticatedAdminSegmentsSegmentIdRouteWithChildren
   AuthenticatedAdminSegmentsNewRoute: typeof AuthenticatedAdminSegmentsNewRoute
   AuthenticatedAdminSpacesSpaceIdRoute: typeof AuthenticatedAdminSpacesSpaceIdRoute
+  AuthenticatedAdminAiCourseBuilderIndexRoute: typeof AuthenticatedAdminAiCourseBuilderIndexRoute
   AuthenticatedAdminAiDraftsIndexRoute: typeof AuthenticatedAdminAiDraftsIndexRoute
   AuthenticatedAdminAnnouncementsIndexRoute: typeof AuthenticatedAdminAnnouncementsIndexRoute
   AuthenticatedAdminAutomationsIndexRoute: typeof AuthenticatedAdminAutomationsIndexRoute
@@ -1831,6 +1894,8 @@ interface AuthenticatedAdminRouteChildren {
 const AuthenticatedAdminRouteChildren: AuthenticatedAdminRouteChildren = {
   AuthenticatedAdminAccessRoute: AuthenticatedAdminAccessRoute,
   AuthenticatedAdminAiAssistantRoute: AuthenticatedAdminAiAssistantRoute,
+  AuthenticatedAdminAiCourseGenerationsRoute:
+    AuthenticatedAdminAiCourseGenerationsRoute,
   AuthenticatedAdminAiSettingsRoute: AuthenticatedAdminAiSettingsRoute,
   AuthenticatedAdminAnalyticsRoute: AuthenticatedAdminAnalyticsRoute,
   AuthenticatedAdminAuditLogsRoute: AuthenticatedAdminAuditLogsRoute,
@@ -1850,6 +1915,8 @@ const AuthenticatedAdminRouteChildren: AuthenticatedAdminRouteChildren = {
   AuthenticatedAdminSubscribersRoute: AuthenticatedAdminSubscribersRoute,
   AuthenticatedAdminTransactionsRoute: AuthenticatedAdminTransactionsRoute,
   AuthenticatedAdminTrialsRoute: AuthenticatedAdminTrialsRoute,
+  AuthenticatedAdminAiCourseBuilderGenerationIdRoute:
+    AuthenticatedAdminAiCourseBuilderGenerationIdRoute,
   AuthenticatedAdminAiDraftsDraftIdRoute:
     AuthenticatedAdminAiDraftsDraftIdRoute,
   AuthenticatedAdminAnnouncementsAnnouncementIdRoute:
@@ -1870,6 +1937,8 @@ const AuthenticatedAdminRouteChildren: AuthenticatedAdminRouteChildren = {
     AuthenticatedAdminSegmentsSegmentIdRouteWithChildren,
   AuthenticatedAdminSegmentsNewRoute: AuthenticatedAdminSegmentsNewRoute,
   AuthenticatedAdminSpacesSpaceIdRoute: AuthenticatedAdminSpacesSpaceIdRoute,
+  AuthenticatedAdminAiCourseBuilderIndexRoute:
+    AuthenticatedAdminAiCourseBuilderIndexRoute,
   AuthenticatedAdminAiDraftsIndexRoute: AuthenticatedAdminAiDraftsIndexRoute,
   AuthenticatedAdminAnnouncementsIndexRoute:
     AuthenticatedAdminAnnouncementsIndexRoute,
