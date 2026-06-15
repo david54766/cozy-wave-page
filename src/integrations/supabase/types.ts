@@ -137,6 +137,63 @@ export type Database = {
         }
         Relationships: []
       }
+      ai_course_generations: {
+        Row: {
+          additional_instructions: string | null
+          audience: string | null
+          created_at: string
+          created_course_id: string | null
+          desired_outcome: string | null
+          generated_outline_json: Json
+          id: string
+          lessons_per_section: number
+          sections_count: number
+          skill_level: string | null
+          status: Database["public"]["Enums"]["ai_generation_status"]
+          title: string
+          tone: string | null
+          topic: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          additional_instructions?: string | null
+          audience?: string | null
+          created_at?: string
+          created_course_id?: string | null
+          desired_outcome?: string | null
+          generated_outline_json?: Json
+          id?: string
+          lessons_per_section?: number
+          sections_count?: number
+          skill_level?: string | null
+          status?: Database["public"]["Enums"]["ai_generation_status"]
+          title?: string
+          tone?: string | null
+          topic: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          additional_instructions?: string | null
+          audience?: string | null
+          created_at?: string
+          created_course_id?: string | null
+          desired_outcome?: string | null
+          generated_outline_json?: Json
+          id?: string
+          lessons_per_section?: number
+          sections_count?: number
+          skill_level?: string | null
+          status?: Database["public"]["Enums"]["ai_generation_status"]
+          title?: string
+          tone?: string | null
+          topic?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       ai_generated_content: {
         Row: {
           body: string
@@ -179,6 +236,66 @@ export type Database = {
         }
         Relationships: []
       }
+      ai_lesson_generations: {
+        Row: {
+          audience: string | null
+          call_to_action: string | null
+          course_id: string | null
+          created_at: string
+          desired_length: string | null
+          generated_content: Json
+          id: string
+          include_quiz: boolean
+          include_summary: boolean
+          key_points: string | null
+          lesson_id: string | null
+          section_id: string | null
+          status: Database["public"]["Enums"]["ai_generation_status"]
+          tone: string | null
+          topic: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          audience?: string | null
+          call_to_action?: string | null
+          course_id?: string | null
+          created_at?: string
+          desired_length?: string | null
+          generated_content?: Json
+          id?: string
+          include_quiz?: boolean
+          include_summary?: boolean
+          key_points?: string | null
+          lesson_id?: string | null
+          section_id?: string | null
+          status?: Database["public"]["Enums"]["ai_generation_status"]
+          tone?: string | null
+          topic: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          audience?: string | null
+          call_to_action?: string | null
+          course_id?: string | null
+          created_at?: string
+          desired_length?: string | null
+          generated_content?: Json
+          id?: string
+          include_quiz?: boolean
+          include_summary?: boolean
+          key_points?: string | null
+          lesson_id?: string | null
+          section_id?: string | null
+          status?: Database["public"]["Enums"]["ai_generation_status"]
+          tone?: string | null
+          topic?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       ai_messages: {
         Row: {
           content: string
@@ -213,6 +330,51 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      ai_quiz_generations: {
+        Row: {
+          course_id: string | null
+          created_at: string
+          difficulty: string
+          generated_quiz_json: Json
+          id: string
+          lesson_id: string | null
+          multiple_choice: boolean
+          question_count: number
+          status: Database["public"]["Enums"]["ai_generation_status"]
+          topic: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          course_id?: string | null
+          created_at?: string
+          difficulty?: string
+          generated_quiz_json?: Json
+          id?: string
+          lesson_id?: string | null
+          multiple_choice?: boolean
+          question_count?: number
+          status?: Database["public"]["Enums"]["ai_generation_status"]
+          topic: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          course_id?: string | null
+          created_at?: string
+          difficulty?: string
+          generated_quiz_json?: Json
+          id?: string
+          lesson_id?: string | null
+          multiple_choice?: boolean
+          question_count?: number
+          status?: Database["public"]["Enums"]["ai_generation_status"]
+          topic?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
       }
       ai_settings: {
         Row: {
@@ -3030,6 +3192,12 @@ export type Database = {
         | "bundle"
         | "manual"
         | "admin_override"
+      ai_generation_status:
+        | "draft"
+        | "generated"
+        | "converted"
+        | "archived"
+        | "failed"
       announcement_display_type:
         | "banner"
         | "feed_post"
@@ -3408,6 +3576,13 @@ export const Constants = {
         "bundle",
         "manual",
         "admin_override",
+      ],
+      ai_generation_status: [
+        "draft",
+        "generated",
+        "converted",
+        "archived",
+        "failed",
       ],
       announcement_display_type: [
         "banner",
