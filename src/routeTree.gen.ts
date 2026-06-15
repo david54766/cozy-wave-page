@@ -33,6 +33,7 @@ import { Route as AuthenticatedEventsRouteImport } from './routes/_authenticated
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedChatRouteImport } from './routes/_authenticated/chat'
 import { Route as AuthenticatedBillingRouteImport } from './routes/_authenticated/billing'
+import { Route as AuthenticatedAiHelperRouteImport } from './routes/_authenticated/ai-helper'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
 import { Route as AuthenticatedAchievementsRouteImport } from './routes/_authenticated/achievements'
 import { Route as AuthenticatedSpacesIndexRouteImport } from './routes/_authenticated/spaces.index'
@@ -67,7 +68,10 @@ import { Route as AuthenticatedAdminAutomationLogsRouteImport } from './routes/_
 import { Route as AuthenticatedAdminAuditLogsRouteImport } from './routes/_authenticated/admin.audit-logs'
 import { Route as AuthenticatedAdminAnalyticsRouteImport } from './routes/_authenticated/admin.analytics'
 import { Route as AuthenticatedAdminAiSettingsRouteImport } from './routes/_authenticated/admin.ai-settings'
+import { Route as AuthenticatedAdminAiMemberInsightsRouteImport } from './routes/_authenticated/admin.ai-member-insights'
+import { Route as AuthenticatedAdminAiHelperSettingsRouteImport } from './routes/_authenticated/admin.ai-helper-settings'
 import { Route as AuthenticatedAdminAiCourseGenerationsRouteImport } from './routes/_authenticated/admin.ai-course-generations'
+import { Route as AuthenticatedAdminAiContentSourcesRouteImport } from './routes/_authenticated/admin.ai-content-sources'
 import { Route as AuthenticatedAdminAiAssistantRouteImport } from './routes/_authenticated/admin.ai-assistant'
 import { Route as AuthenticatedAdminAccessRouteImport } from './routes/_authenticated/admin.access'
 import { Route as AuthenticatedAdminSpacesIndexRouteImport } from './routes/_authenticated/admin.spaces.index'
@@ -219,6 +223,11 @@ const AuthenticatedChatRoute = AuthenticatedChatRouteImport.update({
 const AuthenticatedBillingRoute = AuthenticatedBillingRouteImport.update({
   id: '/billing',
   path: '/billing',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedAiHelperRoute = AuthenticatedAiHelperRouteImport.update({
+  id: '/ai-helper',
+  path: '/ai-helper',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedAdminRoute = AuthenticatedAdminRouteImport.update({
@@ -422,10 +431,28 @@ const AuthenticatedAdminAiSettingsRoute =
     path: '/ai-settings',
     getParentRoute: () => AuthenticatedAdminRoute,
   } as any)
+const AuthenticatedAdminAiMemberInsightsRoute =
+  AuthenticatedAdminAiMemberInsightsRouteImport.update({
+    id: '/ai-member-insights',
+    path: '/ai-member-insights',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
+const AuthenticatedAdminAiHelperSettingsRoute =
+  AuthenticatedAdminAiHelperSettingsRouteImport.update({
+    id: '/ai-helper-settings',
+    path: '/ai-helper-settings',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
 const AuthenticatedAdminAiCourseGenerationsRoute =
   AuthenticatedAdminAiCourseGenerationsRouteImport.update({
     id: '/ai-course-generations',
     path: '/ai-course-generations',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
+const AuthenticatedAdminAiContentSourcesRoute =
+  AuthenticatedAdminAiContentSourcesRouteImport.update({
+    id: '/ai-content-sources',
+    path: '/ai-content-sources',
     getParentRoute: () => AuthenticatedAdminRoute,
   } as any)
 const AuthenticatedAdminAiAssistantRoute =
@@ -619,6 +646,7 @@ export interface FileRoutesByFullPath {
   '/reset-password': typeof ResetPasswordRoute
   '/achievements': typeof AuthenticatedAchievementsRoute
   '/admin': typeof AuthenticatedAdminRouteWithChildren
+  '/ai-helper': typeof AuthenticatedAiHelperRoute
   '/billing': typeof AuthenticatedBillingRoute
   '/chat': typeof AuthenticatedChatRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
@@ -637,7 +665,10 @@ export interface FileRoutesByFullPath {
   '/checkout/success': typeof CheckoutSuccessRoute
   '/admin/access': typeof AuthenticatedAdminAccessRoute
   '/admin/ai-assistant': typeof AuthenticatedAdminAiAssistantRoute
+  '/admin/ai-content-sources': typeof AuthenticatedAdminAiContentSourcesRoute
   '/admin/ai-course-generations': typeof AuthenticatedAdminAiCourseGenerationsRoute
+  '/admin/ai-helper-settings': typeof AuthenticatedAdminAiHelperSettingsRoute
+  '/admin/ai-member-insights': typeof AuthenticatedAdminAiMemberInsightsRoute
   '/admin/ai-settings': typeof AuthenticatedAdminAiSettingsRoute
   '/admin/analytics': typeof AuthenticatedAdminAnalyticsRoute
   '/admin/audit-logs': typeof AuthenticatedAdminAuditLogsRoute
@@ -709,6 +740,7 @@ export interface FileRoutesByTo {
   '/reset-password': typeof ResetPasswordRoute
   '/achievements': typeof AuthenticatedAchievementsRoute
   '/admin': typeof AuthenticatedAdminRouteWithChildren
+  '/ai-helper': typeof AuthenticatedAiHelperRoute
   '/billing': typeof AuthenticatedBillingRoute
   '/chat': typeof AuthenticatedChatRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
@@ -727,7 +759,10 @@ export interface FileRoutesByTo {
   '/checkout/success': typeof CheckoutSuccessRoute
   '/admin/access': typeof AuthenticatedAdminAccessRoute
   '/admin/ai-assistant': typeof AuthenticatedAdminAiAssistantRoute
+  '/admin/ai-content-sources': typeof AuthenticatedAdminAiContentSourcesRoute
   '/admin/ai-course-generations': typeof AuthenticatedAdminAiCourseGenerationsRoute
+  '/admin/ai-helper-settings': typeof AuthenticatedAdminAiHelperSettingsRoute
+  '/admin/ai-member-insights': typeof AuthenticatedAdminAiMemberInsightsRoute
   '/admin/ai-settings': typeof AuthenticatedAdminAiSettingsRoute
   '/admin/analytics': typeof AuthenticatedAdminAnalyticsRoute
   '/admin/audit-logs': typeof AuthenticatedAdminAuditLogsRoute
@@ -801,6 +836,7 @@ export interface FileRoutesById {
   '/reset-password': typeof ResetPasswordRoute
   '/_authenticated/achievements': typeof AuthenticatedAchievementsRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRouteWithChildren
+  '/_authenticated/ai-helper': typeof AuthenticatedAiHelperRoute
   '/_authenticated/billing': typeof AuthenticatedBillingRoute
   '/_authenticated/chat': typeof AuthenticatedChatRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
@@ -819,7 +855,10 @@ export interface FileRoutesById {
   '/checkout/success': typeof CheckoutSuccessRoute
   '/_authenticated/admin/access': typeof AuthenticatedAdminAccessRoute
   '/_authenticated/admin/ai-assistant': typeof AuthenticatedAdminAiAssistantRoute
+  '/_authenticated/admin/ai-content-sources': typeof AuthenticatedAdminAiContentSourcesRoute
   '/_authenticated/admin/ai-course-generations': typeof AuthenticatedAdminAiCourseGenerationsRoute
+  '/_authenticated/admin/ai-helper-settings': typeof AuthenticatedAdminAiHelperSettingsRoute
+  '/_authenticated/admin/ai-member-insights': typeof AuthenticatedAdminAiMemberInsightsRoute
   '/_authenticated/admin/ai-settings': typeof AuthenticatedAdminAiSettingsRoute
   '/_authenticated/admin/analytics': typeof AuthenticatedAdminAnalyticsRoute
   '/_authenticated/admin/audit-logs': typeof AuthenticatedAdminAuditLogsRoute
@@ -893,6 +932,7 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/achievements'
     | '/admin'
+    | '/ai-helper'
     | '/billing'
     | '/chat'
     | '/dashboard'
@@ -911,7 +951,10 @@ export interface FileRouteTypes {
     | '/checkout/success'
     | '/admin/access'
     | '/admin/ai-assistant'
+    | '/admin/ai-content-sources'
     | '/admin/ai-course-generations'
+    | '/admin/ai-helper-settings'
+    | '/admin/ai-member-insights'
     | '/admin/ai-settings'
     | '/admin/analytics'
     | '/admin/audit-logs'
@@ -983,6 +1026,7 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/achievements'
     | '/admin'
+    | '/ai-helper'
     | '/billing'
     | '/chat'
     | '/dashboard'
@@ -1001,7 +1045,10 @@ export interface FileRouteTypes {
     | '/checkout/success'
     | '/admin/access'
     | '/admin/ai-assistant'
+    | '/admin/ai-content-sources'
     | '/admin/ai-course-generations'
+    | '/admin/ai-helper-settings'
+    | '/admin/ai-member-insights'
     | '/admin/ai-settings'
     | '/admin/analytics'
     | '/admin/audit-logs'
@@ -1074,6 +1121,7 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/_authenticated/achievements'
     | '/_authenticated/admin'
+    | '/_authenticated/ai-helper'
     | '/_authenticated/billing'
     | '/_authenticated/chat'
     | '/_authenticated/dashboard'
@@ -1092,7 +1140,10 @@ export interface FileRouteTypes {
     | '/checkout/success'
     | '/_authenticated/admin/access'
     | '/_authenticated/admin/ai-assistant'
+    | '/_authenticated/admin/ai-content-sources'
     | '/_authenticated/admin/ai-course-generations'
+    | '/_authenticated/admin/ai-helper-settings'
+    | '/_authenticated/admin/ai-member-insights'
     | '/_authenticated/admin/ai-settings'
     | '/_authenticated/admin/analytics'
     | '/_authenticated/admin/audit-logs'
@@ -1339,6 +1390,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedBillingRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/ai-helper': {
+      id: '/_authenticated/ai-helper'
+      path: '/ai-helper'
+      fullPath: '/ai-helper'
+      preLoaderRoute: typeof AuthenticatedAiHelperRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/admin': {
       id: '/_authenticated/admin'
       path: '/admin'
@@ -1577,11 +1635,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminAiSettingsRouteImport
       parentRoute: typeof AuthenticatedAdminRoute
     }
+    '/_authenticated/admin/ai-member-insights': {
+      id: '/_authenticated/admin/ai-member-insights'
+      path: '/ai-member-insights'
+      fullPath: '/admin/ai-member-insights'
+      preLoaderRoute: typeof AuthenticatedAdminAiMemberInsightsRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/ai-helper-settings': {
+      id: '/_authenticated/admin/ai-helper-settings'
+      path: '/ai-helper-settings'
+      fullPath: '/admin/ai-helper-settings'
+      preLoaderRoute: typeof AuthenticatedAdminAiHelperSettingsRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
     '/_authenticated/admin/ai-course-generations': {
       id: '/_authenticated/admin/ai-course-generations'
       path: '/ai-course-generations'
       fullPath: '/admin/ai-course-generations'
       preLoaderRoute: typeof AuthenticatedAdminAiCourseGenerationsRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
+    '/_authenticated/admin/ai-content-sources': {
+      id: '/_authenticated/admin/ai-content-sources'
+      path: '/ai-content-sources'
+      fullPath: '/admin/ai-content-sources'
+      preLoaderRoute: typeof AuthenticatedAdminAiContentSourcesRouteImport
       parentRoute: typeof AuthenticatedAdminRoute
     }
     '/_authenticated/admin/ai-assistant': {
@@ -1845,7 +1924,10 @@ const AuthenticatedAdminSegmentsSegmentIdRouteWithChildren =
 interface AuthenticatedAdminRouteChildren {
   AuthenticatedAdminAccessRoute: typeof AuthenticatedAdminAccessRoute
   AuthenticatedAdminAiAssistantRoute: typeof AuthenticatedAdminAiAssistantRoute
+  AuthenticatedAdminAiContentSourcesRoute: typeof AuthenticatedAdminAiContentSourcesRoute
   AuthenticatedAdminAiCourseGenerationsRoute: typeof AuthenticatedAdminAiCourseGenerationsRoute
+  AuthenticatedAdminAiHelperSettingsRoute: typeof AuthenticatedAdminAiHelperSettingsRoute
+  AuthenticatedAdminAiMemberInsightsRoute: typeof AuthenticatedAdminAiMemberInsightsRoute
   AuthenticatedAdminAiSettingsRoute: typeof AuthenticatedAdminAiSettingsRoute
   AuthenticatedAdminAnalyticsRoute: typeof AuthenticatedAdminAnalyticsRoute
   AuthenticatedAdminAuditLogsRoute: typeof AuthenticatedAdminAuditLogsRoute
@@ -1894,8 +1976,14 @@ interface AuthenticatedAdminRouteChildren {
 const AuthenticatedAdminRouteChildren: AuthenticatedAdminRouteChildren = {
   AuthenticatedAdminAccessRoute: AuthenticatedAdminAccessRoute,
   AuthenticatedAdminAiAssistantRoute: AuthenticatedAdminAiAssistantRoute,
+  AuthenticatedAdminAiContentSourcesRoute:
+    AuthenticatedAdminAiContentSourcesRoute,
   AuthenticatedAdminAiCourseGenerationsRoute:
     AuthenticatedAdminAiCourseGenerationsRoute,
+  AuthenticatedAdminAiHelperSettingsRoute:
+    AuthenticatedAdminAiHelperSettingsRoute,
+  AuthenticatedAdminAiMemberInsightsRoute:
+    AuthenticatedAdminAiMemberInsightsRoute,
   AuthenticatedAdminAiSettingsRoute: AuthenticatedAdminAiSettingsRoute,
   AuthenticatedAdminAnalyticsRoute: AuthenticatedAdminAnalyticsRoute,
   AuthenticatedAdminAuditLogsRoute: AuthenticatedAdminAuditLogsRoute,
@@ -1984,6 +2072,7 @@ const AuthenticatedSettingsRouteWithChildren =
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedAchievementsRoute: typeof AuthenticatedAchievementsRoute
   AuthenticatedAdminRoute: typeof AuthenticatedAdminRouteWithChildren
+  AuthenticatedAiHelperRoute: typeof AuthenticatedAiHelperRoute
   AuthenticatedBillingRoute: typeof AuthenticatedBillingRoute
   AuthenticatedChatRoute: typeof AuthenticatedChatRoute
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
@@ -2014,6 +2103,7 @@ interface AuthenticatedRouteRouteChildren {
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAchievementsRoute: AuthenticatedAchievementsRoute,
   AuthenticatedAdminRoute: AuthenticatedAdminRouteWithChildren,
+  AuthenticatedAiHelperRoute: AuthenticatedAiHelperRoute,
   AuthenticatedBillingRoute: AuthenticatedBillingRoute,
   AuthenticatedChatRoute: AuthenticatedChatRoute,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
