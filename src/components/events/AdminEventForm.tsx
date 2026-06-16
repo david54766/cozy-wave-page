@@ -5,9 +5,10 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
-import { sbEvents, EVENT_TYPE_LABELS, EVENT_STATUS_LABELS, VISIBILITY_LABELS, ACCESS_LABELS, type EventRow, type EventType, type EventVisibility, type EventAccess, type EventStatus } from "@/lib/events";
+import { sbEvents, EVENT_TYPE_LABELS, EVENT_STATUS_LABELS, VISIBILITY_LABELS, ACCESS_LABELS, LIVESTREAM_PROVIDER_LABELS, isLivestreamLike, type EventRow, type EventType, type EventVisibility, type EventAccess, type EventStatus, type LivestreamProvider } from "@/lib/events";
 import type { Space } from "@/lib/spaces";
 import { AccessStateSelect } from "@/components/access/AccessStateSelect";
+import { Switch } from "@/components/ui/switch";
 
 type Draft = Partial<EventRow>;
 
@@ -69,6 +70,23 @@ export function AdminEventForm({
     }
   };
 
+  const showLive = isLivestreamLike((draft.event_type ?? "community_call") as EventType) || draft.event_type === "livestream";
+
+  const agendaText = (draft.event_agenda_json ?? [])
+    .map((a) => `${a.time ?? ""} | ${a.title}${a.description ? " | " + a.description : ""}`)
+    .join("\n");
+
+  const parseAgenda = (text: string) => {
+    return text
+      .split("\n")
+      .map((l) => l.trim())
+      .filter(Boolean)
+      .map((line) => {
+        const parts = line.split("|").map((s) => s.trim());
+        return { time: parts[0] || undefined, title: parts[1] || parts[0] || "Item", description: parts[2] };
+      });
+  };
+
   return (
     <div className="space-y-4">
       <div className="grid gap-4 sm:grid-cols-2">
@@ -120,6 +138,63 @@ export function AdminEventForm({
       <div className="flex justify-end">
         <Button onClick={submit} disabled={saving}>{saving ? "Saving…" : initial ? "Save changes" : "Create event"}</Button>
       </div>
+
+      {showLive && (
+        <div className="space-y-4 rounded-2xl border border-dashed p-4">
+          <h3 className="text-sm font-semibold">Livestream & webinar settings</h3>
+          <div className="grid gap-4 sm:grid-cols-2">
+            <Field label="Provider">
+              <Select
+                value={(draft.livestream_provider as string) ?? ""}
+                onValueChange={(v) => set("livestream_provider", v as LivestreamProvider)}
+              >
+                <SelectTrigger><SelectValue placeholder="Select provider" /></SelectTrigger>
+                <SelectContent>
+                  {(Object.keys(LIVESTREAM_PROVIDER_LABELS) as LivestreamProvider[]).map((p) => (
+                    <SelectItem key={p} value={p}>{LIVESTREAM_PROVIDER_LABELS[p]}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </Field>
+            <Field label="Add to calendar URL">
+              <Input value={draft.calendar_url_placeholder ?? ""} onChange={(e) => set("calendar_url_placeholder", e.target.value)} placeholder="https://…" />
+            </Field>
+            <Field label="Join URL (required to join)">
+              <Input value={draft.livestream_join_url ?? ""} onChange={(e) => set("livestream_join_url", e.target.value)} placeholder="https://…" />
+            </Field>
+            <Field label="Embed URL (optional)">
+              <Input value={draft.livestream_embed_url ?? ""} onChange={(e) => set("livestream_embed_url", e.target.value)} placeholder="https://…" />
+            </Field>
+            <Field label="Replay URL (shown after event)">
+              <Input value={draft.replay_url ?? ""} onChange={(e) => set("replay_url", e.target.value)} placeholder="https://…" />
+            </Field>
+          </div>
+          <Field label="Agenda (one item per line — time | title | description)">
+            <Textarea
+              rows={4}
+              defaultValue={agendaText}
+              onBlur={(e) => set("event_agenda_json", parseAgenda(e.target.value))}
+              placeholder="10:00 | Welcome | Intro from the host"
+            />
+          </Field>
+          <div className="flex flex-wrap gap-6">
+            <label className="flex items-center gap-2 text-sm">
+              <Switch
+                checked={!!draft.live_chat_enabled}
+                onCheckedChange={(v) => set("live_chat_enabled", v)}
+              />
+              Enable live chat tab
+            </label>
+            <label className="flex items-center gap-2 text-sm">
+              <Switch
+                checked={!!draft.attendance_tracking_enabled}
+                onCheckedChange={(v) => set("attendance_tracking_enabled", v)}
+              />
+              Enable attendance tracking
+            </label>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
