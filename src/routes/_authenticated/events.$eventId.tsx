@@ -10,6 +10,8 @@ import {
 } from "@/lib/events";
 import { RSVPButton } from "@/components/events/RSVPButton";
 import { AttendeeList, type Attendee } from "@/components/events/AttendeeList";
+import { EventCountdown } from "@/components/events/EventCountdown";
+import { LivestreamPanel } from "@/components/events/LivestreamPanel";
 import { LockedContentCard } from "@/components/courses/LockedContentCard";
 import { LockedContentPage } from "@/components/access/LockedContentCard";
 import { hasAccess } from "@/lib/access";
@@ -74,6 +76,13 @@ function EventDetail() {
   const goingCount = rsvps.filter((r) => r.status === "going").length;
   const locked = isLocked(event);
   const past = isPast(event);
+  const now = Date.now();
+  const isLive = now >= new Date(event.start_time).getTime() && now < new Date(event.end_time).getTime();
+  const isLivestreamLike =
+    event.event_type === "livestream" ||
+    event.event_type === "webinar" ||
+    event.event_type === "virtual";
+  const canJoinStream = !!myRsvp && myRsvp.status === "going" && !locked;
 
   if (locked && !allowed) {
     return (
@@ -139,6 +148,11 @@ function EventDetail() {
 
       {event.event_type === "livestream_placeholder" ? (
         <LockedContentCard title="Livestream support coming later" description="Live streaming will be available in a future release." />
+      ) : isLivestreamLike && (event.livestream_embed_url || event.livestream_join_url || event.replay_url || event.live_chat_enabled || event.event_agenda_json?.length) ? (
+        <>
+          {!past && <EventCountdown startTime={event.start_time} endTime={event.end_time} />}
+          <LivestreamPanel event={event} canJoin={canJoinStream} isLive={isLive} isPast={past} />
+        </>
       ) : locked ? (
         <LockedContentCard title="Paid event — coming soon" description="Paid event support will be available in a future phase." />
       ) : event.virtual_link ? (
