@@ -69,6 +69,7 @@ import { Route as AuthenticatedAdminInvitationsRouteImport } from './routes/_aut
 import { Route as AuthenticatedAdminCouponsRouteImport } from './routes/_authenticated/admin.coupons'
 import { Route as AuthenticatedAdminCollectionsRouteImport } from './routes/_authenticated/admin.collections'
 import { Route as AuthenticatedAdminChecklistRouteImport } from './routes/_authenticated/admin.checklist'
+import { Route as AuthenticatedAdminCertificatesRouteImport } from './routes/_authenticated/admin.certificates'
 import { Route as AuthenticatedAdminBillingSettingsRouteImport } from './routes/_authenticated/admin.billing-settings'
 import { Route as AuthenticatedAdminBadgesRouteImport } from './routes/_authenticated/admin.badges'
 import { Route as AuthenticatedAdminAutomationLogsRouteImport } from './routes/_authenticated/admin.automation-logs'
@@ -443,6 +444,12 @@ const AuthenticatedAdminChecklistRoute =
     path: '/checklist',
     getParentRoute: () => AuthenticatedAdminRoute,
   } as any)
+const AuthenticatedAdminCertificatesRoute =
+  AuthenticatedAdminCertificatesRouteImport.update({
+    id: '/certificates',
+    path: '/certificates',
+    getParentRoute: () => AuthenticatedAdminRoute,
+  } as any)
 const AuthenticatedAdminBillingSettingsRoute =
   AuthenticatedAdminBillingSettingsRouteImport.update({
     id: '/billing-settings',
@@ -731,6 +738,7 @@ export interface FileRoutesByFullPath {
   '/admin/automation-logs': typeof AuthenticatedAdminAutomationLogsRoute
   '/admin/badges': typeof AuthenticatedAdminBadgesRoute
   '/admin/billing-settings': typeof AuthenticatedAdminBillingSettingsRoute
+  '/admin/certificates': typeof AuthenticatedAdminCertificatesRoute
   '/admin/checklist': typeof AuthenticatedAdminChecklistRoute
   '/admin/collections': typeof AuthenticatedAdminCollectionsRoute
   '/admin/coupons': typeof AuthenticatedAdminCouponsRoute
@@ -833,6 +841,7 @@ export interface FileRoutesByTo {
   '/admin/automation-logs': typeof AuthenticatedAdminAutomationLogsRoute
   '/admin/badges': typeof AuthenticatedAdminBadgesRoute
   '/admin/billing-settings': typeof AuthenticatedAdminBillingSettingsRoute
+  '/admin/certificates': typeof AuthenticatedAdminCertificatesRoute
   '/admin/checklist': typeof AuthenticatedAdminChecklistRoute
   '/admin/collections': typeof AuthenticatedAdminCollectionsRoute
   '/admin/coupons': typeof AuthenticatedAdminCouponsRoute
@@ -937,6 +946,7 @@ export interface FileRoutesById {
   '/_authenticated/admin/automation-logs': typeof AuthenticatedAdminAutomationLogsRoute
   '/_authenticated/admin/badges': typeof AuthenticatedAdminBadgesRoute
   '/_authenticated/admin/billing-settings': typeof AuthenticatedAdminBillingSettingsRoute
+  '/_authenticated/admin/certificates': typeof AuthenticatedAdminCertificatesRoute
   '/_authenticated/admin/checklist': typeof AuthenticatedAdminChecklistRoute
   '/_authenticated/admin/collections': typeof AuthenticatedAdminCollectionsRoute
   '/_authenticated/admin/coupons': typeof AuthenticatedAdminCouponsRoute
@@ -1041,6 +1051,7 @@ export interface FileRouteTypes {
     | '/admin/automation-logs'
     | '/admin/badges'
     | '/admin/billing-settings'
+    | '/admin/certificates'
     | '/admin/checklist'
     | '/admin/collections'
     | '/admin/coupons'
@@ -1143,6 +1154,7 @@ export interface FileRouteTypes {
     | '/admin/automation-logs'
     | '/admin/badges'
     | '/admin/billing-settings'
+    | '/admin/certificates'
     | '/admin/checklist'
     | '/admin/collections'
     | '/admin/coupons'
@@ -1246,6 +1258,7 @@ export interface FileRouteTypes {
     | '/_authenticated/admin/automation-logs'
     | '/_authenticated/admin/badges'
     | '/_authenticated/admin/billing-settings'
+    | '/_authenticated/admin/certificates'
     | '/_authenticated/admin/checklist'
     | '/_authenticated/admin/collections'
     | '/_authenticated/admin/coupons'
@@ -1745,6 +1758,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminChecklistRouteImport
       parentRoute: typeof AuthenticatedAdminRoute
     }
+    '/_authenticated/admin/certificates': {
+      id: '/_authenticated/admin/certificates'
+      path: '/certificates'
+      fullPath: '/admin/certificates'
+      preLoaderRoute: typeof AuthenticatedAdminCertificatesRouteImport
+      parentRoute: typeof AuthenticatedAdminRoute
+    }
     '/_authenticated/admin/billing-settings': {
       id: '/_authenticated/admin/billing-settings'
       path: '/billing-settings'
@@ -2093,6 +2113,7 @@ interface AuthenticatedAdminRouteChildren {
   AuthenticatedAdminAutomationLogsRoute: typeof AuthenticatedAdminAutomationLogsRoute
   AuthenticatedAdminBadgesRoute: typeof AuthenticatedAdminBadgesRoute
   AuthenticatedAdminBillingSettingsRoute: typeof AuthenticatedAdminBillingSettingsRoute
+  AuthenticatedAdminCertificatesRoute: typeof AuthenticatedAdminCertificatesRoute
   AuthenticatedAdminChecklistRoute: typeof AuthenticatedAdminChecklistRoute
   AuthenticatedAdminCollectionsRoute: typeof AuthenticatedAdminCollectionsRoute
   AuthenticatedAdminCouponsRoute: typeof AuthenticatedAdminCouponsRoute
@@ -2153,6 +2174,7 @@ const AuthenticatedAdminRouteChildren: AuthenticatedAdminRouteChildren = {
   AuthenticatedAdminBadgesRoute: AuthenticatedAdminBadgesRoute,
   AuthenticatedAdminBillingSettingsRoute:
     AuthenticatedAdminBillingSettingsRoute,
+  AuthenticatedAdminCertificatesRoute: AuthenticatedAdminCertificatesRoute,
   AuthenticatedAdminChecklistRoute: AuthenticatedAdminChecklistRoute,
   AuthenticatedAdminCollectionsRoute: AuthenticatedAdminCollectionsRoute,
   AuthenticatedAdminCouponsRoute: AuthenticatedAdminCouponsRoute,
