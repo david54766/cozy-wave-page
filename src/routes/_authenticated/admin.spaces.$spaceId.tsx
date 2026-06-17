@@ -26,7 +26,7 @@ interface MemberRow {
   user_id: string;
   role: SpaceMemberRole;
   joined_at: string;
-  profile: { full_name: string | null; email: string | null; avatar_url: string | null } | null;
+  profile: { full_name: string | null; avatar_url: string | null } | null;
 }
 
 function AdminSpaceDetail() {
@@ -62,7 +62,7 @@ function AdminSpaceDetail() {
     const ids = (rows ?? []).map((r) => r.user_id);
     const { data: profs } = ids.length
       ? await supabase.from("profiles").select("id,full_name,avatar_url").in("id", ids)
-      : { data: [] as { id: string; full_name: string | null; email: string | null; avatar_url: string | null }[] };
+      : { data: [] as { id: string; full_name: string | null; avatar_url: string | null }[] };
     const pmap = new Map((profs ?? []).map((p) => [p.id, p]));
     setMembers((rows ?? []).map((r) => ({
       id: r.id,
