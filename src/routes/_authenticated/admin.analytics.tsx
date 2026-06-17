@@ -79,7 +79,7 @@ function AnalyticsPage() {
         supabase.from("posts").select("id,title,body").eq("status", "active").order("created_at", { ascending: false }).limit(50),
         supabase.from("reactions").select("target_id,target_type").eq("target_type", "post"),
         supabase.from("comments").select("post_id").eq("status", "active"),
-        supabase.from("profiles").select("id,full_name,email,last_active_at").order("last_active_at", { ascending: false, nullsFirst: false }).limit(8),
+        supabase.from("profiles").select("id,full_name,last_active_at").order("last_active_at", { ascending: false, nullsFirst: false }).limit(8),
       ]);
 
       // Top spaces by member count

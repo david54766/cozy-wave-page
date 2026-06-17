@@ -31,7 +31,7 @@ function FollowingPage() {
       if (!ids.length) { setPosts([]); return; }
       const { data: ps } = await supabase.from("posts").select("*").in("author_id", ids).eq("status", "active").order("created_at", { ascending: false }).limit(30);
       setPosts((ps ?? []) as Post[]);
-      const { data: profs } = await supabase.from("profiles").select("id,full_name,email,avatar_url").in("id", ids);
+      const { data: profs } = await supabase.from("profiles").select("id,full_name,avatar_url").in("id", ids);
       setAuthors(new Map((profs ?? []).map((p: any) => [p.id, p])));
     })();
   }, [user]);

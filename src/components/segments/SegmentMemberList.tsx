@@ -14,7 +14,7 @@ export function SegmentMemberList({ segmentId }: { segmentId: string }) {
       const ids = members.map((m) => m.user_id);
       let profiles: any[] = [];
       if (ids.length) {
-        const { data } = await supabase.from("profiles").select("id,full_name,email").in("id", ids);
+        const { data } = await supabase.from("profiles").select("id,full_name").in("id", ids);
         profiles = data ?? [];
       }
       const map = new Map(profiles.map((p) => [p.id, p]));

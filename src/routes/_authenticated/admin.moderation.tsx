@@ -62,8 +62,8 @@ function ModerationPage() {
     const [postsRes, commentsRes, profsRes, usersRes, eventsRes, coursesRes, lessonsRes, messagesRes] = await Promise.all([
       postIds.length ? supabase.from("posts").select("id,title,body").in("id", postIds) : Promise.resolve({ data: [] as any[] }),
       commentIds.length ? supabase.from("comments").select("id,post_id,body").in("id", commentIds) : Promise.resolve({ data: [] as any[] }),
-      reporterIds.length ? supabase.from("profiles").select("id,full_name,email").in("id", reporterIds) : Promise.resolve({ data: [] as any[] }),
-      userIds.length ? supabase.from("profiles").select("id,full_name,email").in("id", userIds) : Promise.resolve({ data: [] as any[] }),
+      reporterIds.length ? supabase.from("profiles").select("id,full_name").in("id", reporterIds) : Promise.resolve({ data: [] as any[] }),
+      userIds.length ? supabase.from("profiles").select("id,full_name").in("id", userIds) : Promise.resolve({ data: [] as any[] }),
       eventIds.length ? sb.from("events").select("id,title").in("id", eventIds) : Promise.resolve({ data: [] }),
       courseIds.length ? supabase.from("courses").select("id,title").in("id", courseIds) : Promise.resolve({ data: [] as any[] }),
       lessonIds.length ? supabase.from("lessons").select("id,title").in("id", lessonIds) : Promise.resolve({ data: [] as any[] }),

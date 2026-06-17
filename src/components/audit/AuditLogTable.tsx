@@ -16,7 +16,7 @@ export function AuditLogTable({ filters, limit = 100 }: { filters?: AuditFilters
       setRows(r);
       const ids = Array.from(new Set(r.map((x) => x.actor_id).filter(Boolean) as string[]));
       if (ids.length) {
-        const { data } = await supabase.from("profiles").select("id,full_name,email").in("id", ids);
+        const { data } = await supabase.from("profiles").select("id,full_name").in("id", ids);
         setActors(new Map((data ?? []).map((p: any) => [p.id, p.full_name || p.email || "—"])));
       }
     }).catch(() => setRows([]));

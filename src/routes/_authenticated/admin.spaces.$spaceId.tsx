@@ -61,7 +61,7 @@ function AdminSpaceDetail() {
       .order("joined_at", { ascending: false });
     const ids = (rows ?? []).map((r) => r.user_id);
     const { data: profs } = ids.length
-      ? await supabase.from("profiles").select("id,full_name,email,avatar_url").in("id", ids)
+      ? await supabase.from("profiles").select("id,full_name,avatar_url").in("id", ids)
       : { data: [] as { id: string; full_name: string | null; email: string | null; avatar_url: string | null }[] };
     const pmap = new Map((profs ?? []).map((p) => [p.id, p]));
     setMembers((rows ?? []).map((r) => ({

@@ -27,7 +27,7 @@ function Page() {
       setPurchases(p); setSessions(s); setInvoices(i);
       const ids = Array.from(new Set([...p, ...s, ...i].map((x) => x.user_id)));
       if (ids.length) {
-        const { data } = await supabase.from("profiles").select("id,email,full_name").in("id", ids);
+        const { data } = await supabase.from("profiles").select("id,full_name").in("id", ids);
         const map: Record<string, string> = {};
         (data ?? []).forEach((r: any) => { map[r.id] = r.full_name || r.email || "—"; });
         setProfiles(map);

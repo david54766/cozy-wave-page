@@ -24,7 +24,7 @@ export function AdminAccessTable() {
 
   const load = async () => {
     const [{ data: profs }, g] = await Promise.all([
-      db.from("profiles").select("id, full_name, email").order("full_name").limit(500),
+      db.from("profiles").select("id, full_name").order("full_name").limit(500),
       fetchAllGrants(),
     ]);
     setMembers((profs ?? []) as MemberRow[]);

@@ -25,7 +25,7 @@ function CertificateDetailPage() {
       const [{ data: cs }, { data: ts }, { data: ps }] = await Promise.all([
         supabase.from("courses").select("title").eq("id", u.course_id).maybeSingle(),
         (supabase as any).from("certificates").select("title,description").eq("id", u.certificate_id).maybeSingle(),
-        supabase.from("profiles").select("full_name,email").eq("id", u.user_id).maybeSingle(),
+        supabase.from("profiles").select("full_name").eq("id", u.user_id).maybeSingle(),
       ]);
       setInfo({
         courseTitle: (cs as any)?.title,
