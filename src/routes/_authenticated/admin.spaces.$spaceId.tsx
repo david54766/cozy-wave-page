@@ -79,9 +79,10 @@ function AdminSpaceDetail() {
   const addMember = async () => {
     if (!addEmail.trim()) return;
     setAdding(true);
-    const { data: prof } = await supabase.from("profiles").select("id").eq("email", addEmail.trim()).maybeSingle();
-    if (!prof) { setAdding(false); return toast.error("No member with that email"); }
-    const { error } = await supabase.from("space_members").insert({ space_id: spaceId, user_id: prof.id, role: "member" });
+    const { lookupProfileIdByEmail } = await import("@/lib/adminEmails");
+    const profId = await lookupProfileIdByEmail(addEmail.trim());
+    if (!profId) { setAdding(false); return toast.error("No member with that email"); }
+    const { error } = await supabase.from("space_members").insert({ space_id: spaceId, user_id: profId, role: "member" });
     setAdding(false);
     if (error) return toast.error(error.message);
     setAddEmail("");
