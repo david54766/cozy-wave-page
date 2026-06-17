@@ -74,8 +74,8 @@ function PlatformSettingsPage() {
             <Field label="Cover image URL"><Input value={row.cover_image_url ?? ""} onChange={(e) => set("cover_image_url", e.target.value)} /></Field>
           </div>
           <div className="grid sm:grid-cols-2 gap-4">
-            <Field label="Primary color"><Input type="color" value={row.primary_color ?? "#6366f1"} onChange={(e) => set("primary_color", e.target.value)} /></Field>
-            <Field label="Secondary color"><Input type="color" value={row.secondary_color ?? "#0ea5e9"} onChange={(e) => set("secondary_color", e.target.value)} /></Field>
+            <Field label="Primary color"><Input type="color" value={row.primary_color ?? "#4E89C4"} onChange={(e) => set("primary_color", e.target.value)} /></Field>
+            <Field label="Secondary color"><Input type="color" value={row.secondary_color ?? "#FFC2D9"} onChange={(e) => set("secondary_color", e.target.value)} /></Field>
           </div>
           <div className="grid sm:grid-cols-2 gap-4">
             <Field label="Favicon URL (placeholder)"><Input value={row.favicon_url ?? ""} onChange={(e) => set("favicon_url", e.target.value)} placeholder="https://…" /></Field>
@@ -122,9 +122,9 @@ function PlatformSettingsPage() {
           <div className="rounded-xl border bg-muted/30 p-4">
             <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-muted-foreground">Branding preview</p>
             <div className="flex flex-wrap items-center gap-3">
-              <div className="size-12 rounded-xl border" style={{ background: row.primary_color ?? "#6366f1" }} aria-label="Primary" />
-              <div className="size-12 rounded-xl border" style={{ background: row.secondary_color ?? "#0ea5e9" }} aria-label="Secondary" />
-              <div className="rounded-lg border px-3 py-1.5 text-sm font-medium" style={{ background: row.primary_color ?? "#6366f1", color: "white" }}>
+              <div className="size-12 rounded-xl border" style={{ background: row.primary_color ?? "#4E89C4" }} aria-label="Primary" />
+              <div className="size-12 rounded-xl border" style={{ background: row.secondary_color ?? "#FFC2D9" }} aria-label="Secondary" />
+              <div className="rounded-lg border px-3 py-1.5 text-sm font-medium" style={{ background: row.primary_color ?? "#4E89C4", color: "white" }}>
                 {row.platform_name || "MemberHub"}
               </div>
               <span className="text-xs text-muted-foreground">{row.button_style ?? "rounded"} buttons · {row.card_style ?? "rounded"} cards · {row.sidebar_style ?? "default"} sidebar</span>
