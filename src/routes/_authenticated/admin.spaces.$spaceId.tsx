@@ -26,7 +26,7 @@ interface MemberRow {
   user_id: string;
   role: SpaceMemberRole;
   joined_at: string;
-  profile: { full_name: string | null; email: string | null; avatar_url: string | null } | null;
+  profile: { full_name: string | null; avatar_url: string | null } | null;
 }
 
 function AdminSpaceDetail() {
@@ -61,8 +61,8 @@ function AdminSpaceDetail() {
       .order("joined_at", { ascending: false });
     const ids = (rows ?? []).map((r) => r.user_id);
     const { data: profs } = ids.length
-      ? await supabase.from("profiles").select("id,full_name,email,avatar_url").in("id", ids)
-      : { data: [] as { id: string; full_name: string | null; email: string | null; avatar_url: string | null }[] };
+      ? await supabase.from("profiles").select("id,full_name,avatar_url").in("id", ids)
+      : { data: [] as { id: string; full_name: string | null; avatar_url: string | null }[] };
     const pmap = new Map((profs ?? []).map((p) => [p.id, p]));
     setMembers((rows ?? []).map((r) => ({
       id: r.id,
@@ -79,9 +79,10 @@ function AdminSpaceDetail() {
   const addMember = async () => {
     if (!addEmail.trim()) return;
     setAdding(true);
-    const { data: prof } = await supabase.from("profiles").select("id").eq("email", addEmail.trim()).maybeSingle();
-    if (!prof) { setAdding(false); return toast.error("No member with that email"); }
-    const { error } = await supabase.from("space_members").insert({ space_id: spaceId, user_id: prof.id, role: "member" });
+    const { lookupProfileIdByEmail } = await import("@/lib/adminEmails");
+    const profId = await lookupProfileIdByEmail(addEmail.trim());
+    if (!profId) { setAdding(false); return toast.error("No member with that email"); }
+    const { error } = await supabase.from("space_members").insert({ space_id: spaceId, user_id: profId, role: "member" });
     setAdding(false);
     if (error) return toast.error(error.message);
     setAddEmail("");

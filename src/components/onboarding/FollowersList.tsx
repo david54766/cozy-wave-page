@@ -14,7 +14,7 @@ export function FollowersList({ userIds, emptyTitle = "No followers yet", emptyD
   useEffect(() => {
     if (!userIds.length) return setProfiles([]);
     (async () => {
-      const { data } = await supabase.from("profiles").select("id,full_name,email,avatar_url,headline").in("id", userIds);
+      const { data } = await supabase.from("profiles").select("id,full_name,avatar_url,headline").in("id", userIds);
       setProfiles((data ?? []) as Profile[]);
     })();
   }, [userIds.join(",")]);

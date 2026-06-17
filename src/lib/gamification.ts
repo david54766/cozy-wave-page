@@ -198,7 +198,7 @@ export async function fetchLeaderboard(period: LeaderboardPeriod = "all_time", l
   const userIds = Array.from(totals.keys());
   if (userIds.length === 0) return [];
   const [{ data: profiles }, { data: badgeRows }] = await Promise.all([
-    sb.from("profiles").select("id, full_name, email, avatar_url, headline").in("id", userIds),
+    sb.from("profiles").select("id, full_name, avatar_url, headline").in("id", userIds),
     sb.from("user_badges").select("user_id").in("user_id", userIds),
   ]);
   const badgeCount = new Map<string, number>();

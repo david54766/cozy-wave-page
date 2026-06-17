@@ -59,7 +59,7 @@ export function useFeedData(opts: { spaceId?: string } = {}): FeedState {
         ? supabase.from("spaces").select("*").in("id", spaceIds)
         : Promise.resolve({ data: [] as Space[] }),
       authorIds.length
-        ? supabase.from("profiles").select("id,full_name,email,avatar_url").in("id", authorIds)
+        ? supabase.from("profiles").select("id,full_name,avatar_url").in("id", authorIds)
         : Promise.resolve({ data: [] as AuthorLite[] }),
       postIds.length
         ? supabase.from("reactions").select("*").eq("target_type", "post").in("target_id", postIds)

@@ -84,7 +84,7 @@ export async function searchAll(query: string, type: SearchType = "all", limit =
   }
   if (type === "all" || type === "members") {
     buckets.push(
-      db.from("profiles").select("id,full_name,email,bio,status").eq("status", "active")
+      db.from("profiles").select("id,full_name,bio,status").eq("status", "active")
         .or(`full_name.ilike.${pattern},email.ilike.${pattern},bio.ilike.${pattern}`).limit(limit)
         .then(({ data }: any) => (data ?? []).map((r: any) => ({
           id: r.id, type: "members" as const, title: r.full_name || r.email || "Member",

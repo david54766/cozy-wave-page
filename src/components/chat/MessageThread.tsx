@@ -32,7 +32,7 @@ export function MessageThread({
   const loadProfiles = useCallback(async (msgs: Message[]) => {
     const ids = Array.from(new Set(msgs.map((m) => m.sender_id))).filter((id) => !profiles.has(id));
     if (!ids.length) return;
-    const { data } = await supabase.from("profiles").select("id,full_name,email,avatar_url").in("id", ids);
+    const { data } = await supabase.from("profiles").select("id,full_name,avatar_url").in("id", ids);
     setProfiles((prev) => {
       const next = new Map(prev);
       (data ?? []).forEach((p: any) => next.set(p.id, p));

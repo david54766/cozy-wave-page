@@ -123,7 +123,7 @@ export async function listMyConversations(userId: string): Promise<ConversationS
   const userIds = Array.from(new Set((allMems ?? []).map((m: any) => m.user_id as string))) as string[];
   const profilesByUser = new Map<string, ProfileLite>();
   if (userIds.length) {
-    const { data: profs } = await supabase.from("profiles").select("id,full_name,email,avatar_url").in("id", userIds);
+    const { data: profs } = await supabase.from("profiles").select("id,full_name,avatar_url").in("id", userIds);
     (profs ?? []).forEach((p: any) => profilesByUser.set(p.id, p));
   }
 

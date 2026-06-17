@@ -35,9 +35,12 @@ function Page() {
       setSubs(s); setPlans(p);
       const ids = Array.from(new Set(s.map((x) => x.user_id)));
       if (ids.length) {
-        const { data } = await supabase.from("profiles").select("id,email,full_name").in("id", ids);
+        const [{ data }, emails] = await Promise.all([
+          supabase.from("profiles").select("id,full_name").in("id", ids),
+          (await import("@/lib/adminEmails")).fetchAdminEmails(ids),
+        ]);
         const map: Record<string, { email: string | null; full_name: string | null }> = {};
-        (data ?? []).forEach((p: any) => { map[p.id] = { email: p.email, full_name: p.full_name }; });
+        (data ?? []).forEach((p: any) => { map[p.id] = { email: emails[p.id] ?? null, full_name: p.full_name }; });
         setProfiles(map);
       }
     })();

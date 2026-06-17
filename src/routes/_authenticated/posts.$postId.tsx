@@ -39,7 +39,7 @@ function PostDetailPage() {
     const [{ data: sp }, { data: au }, { data: cm }, { data: rx }] = await Promise.all([
       supabase.from("spaces").select("*").eq("id", p.space_id).maybeSingle(),
       p.author_id
-        ? supabase.from("profiles").select("id,full_name,email,avatar_url").eq("id", p.author_id).maybeSingle()
+        ? supabase.from("profiles").select("id,full_name,avatar_url").eq("id", p.author_id).maybeSingle()
         : Promise.resolve({ data: null }),
       supabase.from("comments").select("*").eq("post_id", postId).order("created_at"),
       supabase.from("reactions").select("*").or(`and(target_type.eq.post,target_id.eq.${postId})`),
@@ -60,7 +60,7 @@ function PostDetailPage() {
       ...cmts.map((c) => c.author_id).filter((x): x is string => !!x),
     ]));
     const { data: profs } = authorIds.length
-      ? await supabase.from("profiles").select("id,full_name,email,avatar_url").in("id", authorIds)
+      ? await supabase.from("profiles").select("id,full_name,avatar_url").in("id", authorIds)
       : { data: [] as CommentAuthor[] };
     setAuthors(new Map(((profs ?? []) as CommentAuthor[]).map((a) => [a.id, a])));
     const [tags, qd] = await Promise.all([

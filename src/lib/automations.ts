@@ -224,7 +224,7 @@ export async function fetchAutomationStats(automationId: string): Promise<{
 export interface MemberOption { id: string; full_name: string | null; email: string | null; }
 
 export async function searchMembers(query: string, limit = 10): Promise<MemberOption[]> {
-  let q = db.from("profiles").select("id, full_name, email").limit(limit);
+  let q = db.from("profiles").select("id, full_name").limit(limit);
   if (query && query.trim()) q = q.or(`full_name.ilike.%${query}%,email.ilike.%${query}%`);
   const { data } = await q;
   return (data ?? []) as MemberOption[];
