@@ -3710,6 +3710,17 @@ export type Database = {
     Functions: {
       accept_invitation: { Args: { _token: string }; Returns: Json }
       accept_invite_link: { Args: { _token: string }; Returns: Json }
+      admin_lookup_profile_id_by_email: {
+        Args: { _email: string }
+        Returns: string
+      }
+      admin_profile_emails: {
+        Args: { _ids: string[] }
+        Returns: {
+          email: string
+          id: string
+        }[]
+      }
       award_badge_by_slug: {
         Args: {
           _awarded_by?: string
