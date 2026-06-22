@@ -14,6 +14,7 @@ import { LogOut, User, Settings, Shield } from "lucide-react";
 import { toast } from "sonner";
 import { NotificationBell } from "@/components/notifications/NotificationBell";
 import { GlobalSearchBar } from "@/components/search/GlobalSearchBar";
+import { BrandLogo } from "@/components/app/BrandLogo";
 
 export function TopBar() {
   const { profile, user, isAdmin, signOut } = useAuth();
