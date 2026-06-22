@@ -91,7 +91,7 @@ function AdminSpaceDetail() {
   };
 
   const removeMember = async (m: MemberRow) => {
-    if (!confirm(`Remove ${m.profile?.full_name || m.profile?.email || "member"}?`)) return;
+    if (!confirm(`Remove ${m.profile?.full_name || "member"}?`)) return;
     const { error } = await supabase.from("space_members").delete().eq("id", m.id);
     if (error) return toast.error(error.message);
     toast.success("Member removed");
@@ -168,7 +168,7 @@ function AdminSpaceDetail() {
           ) : (
             <ul className="divide-y divide-border">
               {members.map((m) => {
-                const name = m.profile?.full_name || m.profile?.email || "Member";
+                const name = m.profile?.full_name || "Member";
                 const initials = name.slice(0, 2).toUpperCase();
                 return (
                   <li key={m.id} className="flex items-center gap-3 py-3">
@@ -178,7 +178,7 @@ function AdminSpaceDetail() {
                     </Avatar>
                     <div className="flex-1 min-w-0">
                       <p className="text-sm font-medium truncate">{name}</p>
-                      <p className="text-xs text-muted-foreground">{m.profile?.email}</p>
+                      
                     </div>
                     <Select value={m.role} onValueChange={(v) => changeRole(m, v as SpaceMemberRole)}>
                       <SelectTrigger className="w-[160px]"><SelectValue /></SelectTrigger>
