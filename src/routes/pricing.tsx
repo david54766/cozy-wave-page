@@ -12,9 +12,9 @@ import { ArrowRight, Package } from "lucide-react";
 export const Route = createFileRoute("/pricing")({
   head: () => ({
     meta: [
-      { title: "Pricing — Choose the membership that fits your goals | MemberHub" },
-      { name: "description", content: "Start free or unlock premium courses, events, and member-only Spaces with a MemberHub plan." },
-      { property: "og:title", content: "MemberHub Pricing" },
+      { title: "Pricing — Choose the membership that fits your goals | Alpha Gamma Alpha" },
+      { name: "description", content: "Start free or unlock premium courses, events, and member-only Spaces with a Alpha Gamma Alpha plan." },
+      { property: "og:title", content: "Alpha Gamma Alpha Pricing" },
       { property: "og:description", content: "Choose the membership that fits your goals." },
     ],
   }),
