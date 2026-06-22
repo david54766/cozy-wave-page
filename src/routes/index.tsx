@@ -9,9 +9,9 @@ import {
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "MemberHub — Your private community for learning, connection, and growth" },
+      { title: "Alpha Gamma Alpha — Your private community for learning, connection, and growth" },
       { name: "description", content: "Access courses, live events, expert resources, and a supportive member community all in one place." },
-      { property: "og:title", content: "MemberHub" },
+      { property: "og:title", content: "Alpha Gamma Alpha" },
       { property: "og:description", content: "Your private community for learning, connection, and growth." },
     ],
   }),
@@ -33,8 +33,8 @@ function Landing() {
       <header className="border-b border-border/60">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
           <Link to="/" className="flex items-center gap-2">
-            <div className="size-8 rounded-lg bg-primary grid place-items-center text-primary-foreground font-bold">M</div>
-            <span className="font-semibold tracking-tight">MemberHub</span>
+            <img src="/__l5e/assets-v1/2a6d68b8-5945-4918-b7e6-922b9a9f0211/aga-logo.png" alt="Alpha Gamma Alpha" className="size-10 object-contain" />
+            <span className="font-semibold tracking-tight">Alpha Gamma Alpha</span>
           </Link>
           <div className="flex items-center gap-2">
             <Button asChild variant="ghost"><Link to="/auth">Member Login</Link></Button>
@@ -102,7 +102,7 @@ function Landing() {
 
       <footer className="border-t border-border/60">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between text-sm text-muted-foreground">
-          <span>© {new Date().getFullYear()} MemberHub</span>
+          <span>© {new Date().getFullYear()} Alpha Gamma Alpha</span>
           <Link to="/auth" className="hover:text-foreground">Sign in</Link>
         </div>
       </footer>

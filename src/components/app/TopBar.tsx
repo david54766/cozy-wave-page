@@ -14,6 +14,7 @@ import { LogOut, User, Settings, Shield } from "lucide-react";
 import { toast } from "sonner";
 import { NotificationBell } from "@/components/notifications/NotificationBell";
 import { GlobalSearchBar } from "@/components/search/GlobalSearchBar";
+import { BrandLogo } from "@/components/app/BrandLogo";
 
 export function TopBar() {
   const { profile, user, isAdmin, signOut } = useAuth();
@@ -38,8 +39,8 @@ export function TopBar() {
   return (
     <header className="h-16 border-b border-border bg-background/80 backdrop-blur sticky top-0 z-30 flex items-center px-4 sm:px-6 lg:px-8 gap-4">
       <Link to="/dashboard" className="md:hidden flex items-center gap-2">
-        <div className="size-8 rounded-lg bg-primary grid place-items-center text-primary-foreground font-bold">M</div>
-        <span className="font-semibold">MemberHub</span>
+        <BrandLogo className="size-9" />
+        <span className="font-semibold">Alpha Gamma Alpha</span>
       </Link>
       <div className="flex-1 max-w-md hidden sm:block">
         <GlobalSearchBar />

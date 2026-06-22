@@ -7,7 +7,7 @@ export interface SpaceMemberRow {
   user_id: string;
   role: string;
   joined_at: string;
-  profile: { full_name: string | null; email: string | null; avatar_url: string | null } | null;
+  profile: { full_name: string | null; avatar_url: string | null } | null;
 }
 
 export function SpaceMemberList({ members }: { members: SpaceMemberRow[] }) {
@@ -17,7 +17,7 @@ export function SpaceMemberList({ members }: { members: SpaceMemberRow[] }) {
   return (
     <ul className="divide-y divide-border rounded-2xl border border-border bg-card">
       {members.map((m) => {
-        const name = m.profile?.full_name || m.profile?.email || "Member";
+        const name = m.profile?.full_name || "Member";
         const initials = name.slice(0, 2).toUpperCase();
         return (
           <li key={m.user_id} className="flex items-center gap-3 p-3">

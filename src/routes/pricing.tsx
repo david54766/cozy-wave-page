@@ -12,9 +12,9 @@ import { ArrowRight, Package } from "lucide-react";
 export const Route = createFileRoute("/pricing")({
   head: () => ({
     meta: [
-      { title: "Pricing — Choose the membership that fits your goals | MemberHub" },
-      { name: "description", content: "Start free or unlock premium courses, events, and member-only Spaces with a MemberHub plan." },
-      { property: "og:title", content: "MemberHub Pricing" },
+      { title: "Pricing — Choose the membership that fits your goals | Alpha Gamma Alpha" },
+      { name: "description", content: "Start free or unlock premium courses, events, and member-only Spaces with a Alpha Gamma Alpha plan." },
+      { property: "og:title", content: "Alpha Gamma Alpha Pricing" },
       { property: "og:description", content: "Choose the membership that fits your goals." },
     ],
   }),
@@ -56,8 +56,8 @@ function PricingPage() {
       <header className="border-b border-border/60">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
           <Link to="/" className="flex items-center gap-2">
-            <div className="size-8 rounded-lg bg-primary grid place-items-center text-primary-foreground font-bold">M</div>
-            <span className="font-semibold tracking-tight">MemberHub</span>
+            <img src="/__l5e/assets-v1/2a6d68b8-5945-4918-b7e6-922b9a9f0211/aga-logo.png" alt="Alpha Gamma Alpha" className="size-10 object-contain" />
+            <span className="font-semibold tracking-tight">Alpha Gamma Alpha</span>
           </Link>
           <div className="flex items-center gap-2">
             <Button asChild variant="ghost"><Link to="/auth">Sign in</Link></Button>
