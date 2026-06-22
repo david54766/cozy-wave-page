@@ -27,8 +27,8 @@ function AuthPage() {
     <div className="min-h-screen grid place-items-center bg-gradient-to-br from-background via-background to-accent/30 px-4 py-12">
       <div className="w-full max-w-md space-y-6">
         <Link to="/" className="flex items-center justify-center gap-2">
-          <div className="size-9 rounded-xl bg-primary grid place-items-center text-primary-foreground font-bold">M</div>
-          <span className="text-lg font-semibold tracking-tight">MemberHub</span>
+          <img src="/__l5e/assets-v1/2a6d68b8-5945-4918-b7e6-922b9a9f0211/aga-logo.png" alt="Alpha Gamma Alpha" className="size-11 object-contain" />
+          <span className="text-lg font-semibold tracking-tight">Alpha Gamma Alpha</span>
         </Link>
         <Card className="rounded-2xl shadow-lg">
           <Tabs defaultValue="login">
