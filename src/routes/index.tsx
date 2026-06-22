@@ -46,6 +46,7 @@ function Landing() {
       <section className="relative overflow-hidden">
         <div className="absolute inset-0 -z-10 bg-gradient-to-br from-accent/40 via-background to-background" />
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-24 sm:py-32 text-center">
+          <img src="/__l5e/assets-v1/2a6d68b8-5945-4918-b7e6-922b9a9f0211/aga-logo.png" alt="Alpha Gamma Alpha" className="mx-auto h-40 sm:h-56 w-auto object-contain mb-6" />
           <span className="inline-flex items-center gap-1.5 rounded-full border border-border bg-background/60 px-3 py-1 text-xs font-medium text-muted-foreground mb-6">
             <Sparkles className="size-3.5 text-primary" /> Premium community platform
           </span>
