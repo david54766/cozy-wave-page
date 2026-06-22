@@ -43,10 +43,10 @@ export function Sidebar() {
 
   return (
     <aside className="hidden md:flex w-64 flex-col border-r border-border bg-sidebar h-screen sticky top-0">
-      <div className="px-6 h-16 flex items-center border-b border-border">
-        <Link to="/dashboard" className="flex items-center gap-2">
-          <img src="/__l5e/assets-v1/2a6d68b8-5945-4918-b7e6-922b9a9f0211/aga-logo.png" alt="Alpha Gamma Alpha" className="size-9 object-contain" />
-          <span className="font-semibold tracking-tight">Alpha Gamma Alpha</span>
+      <div className="px-4 py-4 flex items-center border-b border-border">
+        <Link to="/dashboard" className="flex items-center gap-2.5">
+          <img src="/__l5e/assets-v1/2a6d68b8-5945-4918-b7e6-922b9a9f0211/aga-logo.png" alt="Alpha Gamma Alpha" className="size-14 object-contain" />
+          <span className="font-semibold tracking-tight leading-tight text-sm">Alpha Gamma<br />Alpha</span>
         </Link>
       </div>
       <nav className="flex-1 overflow-y-auto px-3 py-4 space-y-1">
