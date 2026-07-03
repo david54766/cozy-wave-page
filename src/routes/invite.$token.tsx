@@ -73,11 +73,13 @@ function InviteAcceptancePage() {
             <p className="text-sm text-muted-foreground mt-1">Create your account or log in to join the community.</p>
           </div>
           <div className="rounded-lg border border-border p-3 text-sm text-left space-y-1">
-            {state.kind === "invitation" && <div><span className="text-muted-foreground">Email:</span> {d.email}</div>}
+            {/* Email + personal message are PII; only shown once signed in so a
+                bare token URL can't reveal them to an anonymous visitor. */}
+            {state.kind === "invitation" && user && d.email && <div><span className="text-muted-foreground">Email:</span> {d.email}</div>}
             {state.kind === "invite_link" && <div><span className="text-muted-foreground">Link:</span> {d.name}</div>}
             <div><span className="text-muted-foreground">Role:</span> <span className="capitalize">{d.role.replace("_"," ")}</span></div>
             {d.space_name && <div><span className="text-muted-foreground">Space:</span> {d.space_name}</div>}
-            {d.personal_message && <div className="pt-2 border-t border-border italic text-muted-foreground">"{d.personal_message}"</div>}
+            {user && d.personal_message && <div className="pt-2 border-t border-border italic text-muted-foreground">"{d.personal_message}"</div>}
           </div>
 
           {unavailable ? (
