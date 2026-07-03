@@ -2,12 +2,14 @@ import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
+import { getPublicSiteUrl } from "@/lib/site-url";
 import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { BrandLogo } from "@/components/app/BrandLogo";
 
 export const Route = createFileRoute("/auth")({
   component: AuthPage,
@@ -19,15 +21,18 @@ function AuthPage() {
 
   useEffect(() => {
     if (loading || !user) return;
-    if (profile && !profile.onboarding_completed) navigate({ to: "/onboarding" });
-    else if (profile) navigate({ to: isAdmin ? "/admin" : "/dashboard" });
+    // profile can be null when the signup trigger hasn't created the row —
+    // onboarding self-heals that with an upsert, so send the user there
+    // instead of leaving them stranded on the auth screen.
+    if (!profile || !profile.onboarding_completed) navigate({ to: "/onboarding" });
+    else navigate({ to: isAdmin ? "/admin" : "/dashboard" });
   }, [user, loading, isAdmin, profile, navigate]);
 
   return (
     <div className="min-h-screen grid place-items-center bg-gradient-to-br from-background via-background to-accent/30 px-4 py-12">
       <div className="w-full max-w-md space-y-6">
         <Link to="/" className="flex items-center justify-center gap-2">
-          <img src="/__l5e/assets-v1/2a6d68b8-5945-4918-b7e6-922b9a9f0211/aga-logo.png" alt="Alpha Gamma Alpha" className="size-11 object-contain" />
+          <BrandLogo className="size-11" />
           <span className="text-lg font-semibold tracking-tight">Alpha Gamma Alpha</span>
         </Link>
         <Card className="rounded-2xl shadow-lg">
@@ -95,7 +100,7 @@ function SignupForm() {
       email,
       password,
       options: {
-        emailRedirectTo: `${window.location.origin}/onboarding`,
+        emailRedirectTo: `${getPublicSiteUrl()}/onboarding`,
         data: { full_name: name },
       },
     });

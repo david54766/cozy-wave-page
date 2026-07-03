@@ -14,7 +14,7 @@ const items = [
 export function MobileBottomNav() {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   return (
-    <nav className="md:hidden fixed bottom-0 inset-x-0 z-40 border-t border-border bg-background/95 backdrop-blur">
+    <nav className="md:hidden fixed bottom-0 inset-x-0 z-40 border-t border-border bg-background/95 backdrop-blur pb-[env(safe-area-inset-bottom)]">
       <ul className="grid grid-cols-5">
         {items.map(({ label, to, icon: Icon }) => {
           const active = pathname === to;
@@ -23,7 +23,7 @@ export function MobileBottomNav() {
               <Link
                 to={to}
                 className={cn(
-                  "flex flex-col items-center justify-center gap-1 py-2.5 text-[11px]",
+                  "flex h-14 flex-col items-center justify-center gap-1 text-[11px]",
                   active ? "text-primary" : "text-muted-foreground"
                 )}
               >

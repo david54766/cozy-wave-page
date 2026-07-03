@@ -7,6 +7,7 @@ import {
 import { useAuth } from "@/hooks/useAuth";
 import { cn } from "@/lib/utils";
 import { UnreadChatBadge } from "@/components/chat/UnreadChatBadge";
+import { BrandLogo } from "@/components/app/BrandLogo";
 
 type NavItem = { label: string; to: string; icon: LucideIcon; comingSoon?: boolean; adminOnly?: boolean };
 
@@ -45,7 +46,7 @@ export function Sidebar() {
     <aside className="hidden md:flex w-64 flex-col border-r border-border bg-sidebar h-screen sticky top-0">
       <div className="px-4 py-4 flex items-center border-b border-border">
         <Link to="/dashboard" className="flex items-center gap-2.5">
-          <img src="/__l5e/assets-v1/2a6d68b8-5945-4918-b7e6-922b9a9f0211/aga-logo.png" alt="Alpha Gamma Alpha" className="size-14 object-contain" />
+          <BrandLogo className="size-14" />
           <span className="font-semibold tracking-tight leading-tight text-sm">Alpha Gamma<br />Alpha</span>
         </Link>
       </div>

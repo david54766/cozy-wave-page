@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
+import { BrandLogo } from "@/components/app/BrandLogo";
 import { Skeleton } from "@/components/ui/skeleton";
 import { BundleCard } from "@/components/bundles/BundleCard";
 import { fetchActiveBundles, fetchBundleItems, type Bundle, type BundleItem } from "@/lib/access";
@@ -35,7 +36,7 @@ function BundlesPage() {
       <header className="border-b border-border/60">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
           <Link to="/" className="flex items-center gap-2">
-            <img src="/__l5e/assets-v1/2a6d68b8-5945-4918-b7e6-922b9a9f0211/aga-logo.png" alt="Alpha Gamma Alpha" className="size-10 object-contain" />
+            <BrandLogo className="size-10" />
             <span className="font-semibold tracking-tight">Alpha Gamma Alpha</span>
           </Link>
           <div className="flex items-center gap-2">
