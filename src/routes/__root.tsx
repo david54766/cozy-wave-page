@@ -13,6 +13,7 @@ import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { AuthProvider } from "@/hooks/useAuth";
 import { Toaster } from "@/components/ui/sonner";
+import { NativeBootstrap } from "@/components/native/NativeBootstrap";
 
 function NotFoundComponent() {
   return (
@@ -78,21 +79,20 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
   head: () => ({
     meta: [
       { charSet: "utf-8" },
-      { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "MemberHub — Community, courses, and connection" },
+      { name: "viewport", content: "width=device-width, initial-scale=1, viewport-fit=cover" },
+      { title: "Alpha Gamma Alpha — Community, courses, and connection" },
       { name: "description", content: "A private community for learning, connection, and growth." },
-      { property: "og:title", content: "MemberHub — Community, courses, and connection" },
+      { property: "og:title", content: "Alpha Gamma Alpha — Community, courses, and connection" },
       { property: "og:description", content: "A private community for learning, connection, and growth." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
-      { name: "twitter:site", content: "@Lovable" },
-      { name: "twitter:title", content: "MemberHub — Community, courses, and connection" },
+      { name: "twitter:title", content: "Alpha Gamma Alpha — Community, courses, and connection" },
       { name: "twitter:description", content: "A private community for learning, connection, and growth." },
       { property: "og:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/5353e043-2b67-42cd-a687-87dc5a692264" },
       { name: "twitter:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/attachments/og-images/5353e043-2b67-42cd-a687-87dc5a692264" },
-      { name: "theme-color", content: "#6366f1" },
+      { name: "theme-color", content: "#4E89C4" },
       { name: "apple-mobile-web-app-capable", content: "yes" },
-      { name: "apple-mobile-web-app-title", content: "MemberHub" },
+      { name: "apple-mobile-web-app-title", content: "Alpha Gamma Alpha" },
       { name: "apple-mobile-web-app-status-bar-style", content: "black-translucent" },
     ],
     links: [
@@ -130,6 +130,7 @@ function RootComponent() {
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
         <Outlet />
+        <NativeBootstrap />
         <Toaster richColors position="top-right" />
       </AuthProvider>
     </QueryClientProvider>

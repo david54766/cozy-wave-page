@@ -10,7 +10,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { LogOut, User, Settings, Shield } from "lucide-react";
+import { LogOut, User, Settings, Shield, Search } from "lucide-react";
 import { toast } from "sonner";
 import { NotificationBell } from "@/components/notifications/NotificationBell";
 import { GlobalSearchBar } from "@/components/search/GlobalSearchBar";
@@ -37,15 +37,23 @@ export function TopBar() {
   };
 
   return (
-    <header className="h-16 border-b border-border bg-background/80 backdrop-blur sticky top-0 z-30 flex items-center px-4 sm:px-6 lg:px-8 gap-4">
-      <Link to="/dashboard" className="md:hidden flex items-center gap-2">
-        <BrandLogo className="size-9" />
-        <span className="font-semibold">Alpha Gamma Alpha</span>
+    <header className="border-b border-border bg-background/80 backdrop-blur sticky top-0 z-30 pt-[env(safe-area-inset-top)]">
+      <div className="h-16 flex items-center px-4 sm:px-6 lg:px-8 gap-3">
+      <Link to="/dashboard" className="md:hidden flex items-center gap-2 min-w-0">
+        <BrandLogo className="size-9 shrink-0" />
+        <span className="font-semibold truncate">Alpha Gamma Alpha</span>
       </Link>
       <div className="flex-1 max-w-md hidden sm:block">
         <GlobalSearchBar />
       </div>
       <div className="flex-1 sm:hidden" />
+      <Link
+        to="/search"
+        aria-label="Search"
+        className="sm:hidden inline-flex size-11 items-center justify-center rounded-full text-muted-foreground hover:text-foreground"
+      >
+        <Search className="size-5" />
+      </Link>
       <NotificationBell />
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
@@ -79,6 +87,7 @@ export function TopBar() {
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
+      </div>
     </header>
   );
 }
