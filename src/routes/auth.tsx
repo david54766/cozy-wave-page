@@ -10,6 +10,7 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { BrandLogo } from "@/components/app/BrandLogo";
+import { Capacitor } from "@capacitor/core";
 
 export const Route = createFileRoute("/auth")({
   component: AuthPage,
@@ -49,7 +50,7 @@ function AuthPage() {
             </CardContent>
           </Tabs>
         </Card>
-        <p className="text-center text-xs text-muted-foreground">
+        <p className={`text-center text-xs text-muted-foreground ${Capacitor.isNativePlatform() ? "hidden" : ""}`}>
           <Link to="/" className="hover:underline">← Back to home</Link>
         </p>
       </div>
