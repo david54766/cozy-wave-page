@@ -1,15 +1,22 @@
-import type { ReactNode } from "react";
+import { useEffect, type ReactNode } from "react";
 import { Sidebar } from "./Sidebar";
 import { TopBar } from "./TopBar";
 import { MobileBottomNav } from "./MobileBottomNav";
 import { AnnouncementBanner } from "@/components/announcements/AnnouncementBanner";
 import { AIHelperButton } from "@/components/ai/AIHelperButton";
 import { useAuth } from "@/hooks/useAuth";
+import { registerForPush } from "@/lib/push";
 import { AlertOctagon } from "lucide-react";
 
 export function AppShell({ children }: { children: ReactNode }) {
-  const { profile } = useAuth();
+  const { profile, user } = useAuth();
   const suspended = profile?.status === "suspended";
+
+  // Register this device for push once the member is authenticated. No-op on
+  // web and dormant on native until a Firebase config is present.
+  useEffect(() => {
+    if (user) registerForPush(user.id);
+  }, [user]);
   return (
     <div className="min-h-screen bg-background">
       <div className="flex">

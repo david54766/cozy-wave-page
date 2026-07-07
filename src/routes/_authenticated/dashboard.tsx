@@ -109,9 +109,6 @@ function Dashboard() {
 
   const featured = spaces.slice(0, 4);
 
-  const cards = [
-    { title: "Saved Resources", icon: <Bookmark className="size-4" />, msg: "Bookmarks and downloads." },
-  ];
   return (
     <div className="space-y-8">
       <header>
@@ -223,11 +220,6 @@ function Dashboard() {
             <Button size="sm" variant="outline" asChild><Link to="/saved">Open Saved <ArrowRight className="size-4 ml-1" /></Link></Button>
           </div>
         </DashboardCard>
-        {cards.map((c) => (
-          <DashboardCard key={c.title} title={c.title} icon={c.icon} comingSoon>
-            <p className="text-sm text-muted-foreground">{c.msg}</p>
-          </DashboardCard>
-        ))}
       </div>
 
       <UpgradePromptCard />

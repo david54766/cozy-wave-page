@@ -1,6 +1,5 @@
-import { Award, Download, Share2 } from "lucide-react";
+import { Award, Printer } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { toast } from "sonner";
 
 export function CertificateDetail(props: {
   title: string;
@@ -31,9 +30,7 @@ export function CertificateDetail(props: {
         </div>
       </div>
       <div className="flex flex-wrap gap-2 justify-center print:hidden">
-        <Button onClick={() => toast.info("PDF download coming soon")}><Download className="size-4 mr-2" />Download</Button>
-        <Button variant="outline" onClick={() => toast.info("Share coming soon")}><Share2 className="size-4 mr-2" />Share</Button>
-        <Button variant="outline" onClick={() => window.print()}>Print</Button>
+        <Button onClick={() => window.print()}><Printer className="size-4 mr-2" />Print / Save as PDF</Button>
       </div>
     </div>
   );
