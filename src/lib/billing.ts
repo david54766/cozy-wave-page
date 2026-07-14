@@ -177,10 +177,38 @@ export async function startCheckout(plan: Plan, userId: string, opts?: { couponI
       });
     } catch { /* non-blocking — coupon log */ }
   }
+
+  // When Stripe is configured, ask the server to create a real Checkout Session
+  // and hand back its hosted URL. Falls through to redirectUrl:null on any error
+  // so the caller can show a graceful "not activated yet" message.
+  let redirectUrl: string | null = null;
+  if (configured) {
+    try {
+      const { data: sess } = await supabase.auth.getSession();
+      const token = sess.session?.access_token;
+      if (token) {
+        const res = await fetch("/api/checkout", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ checkoutSessionId: data.id }),
+        });
+        if (res.ok) {
+          const out = (await res.json()) as { url?: string };
+          redirectUrl = out.url ?? null;
+        }
+      }
+    } catch {
+      /* non-blocking — leave redirectUrl null */
+    }
+  }
+
   return {
     configured,
     checkoutSessionId: data.id,
-    redirectUrl: null, // populated by Stripe in a later phase
+    redirectUrl,
   };
 }
 

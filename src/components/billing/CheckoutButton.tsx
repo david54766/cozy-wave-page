@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Capacitor } from "@capacitor/core";
 import { Button, type ButtonProps } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
 import { useNavigate } from "@tanstack/react-router";
@@ -20,6 +21,10 @@ export function CheckoutButton({ plan, label, appliedCoupon, ...rest }: Props) {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => { isStripeConfigured().then(setConfigured); }, []);
+
+  // App Store / Play policy: no external-payment purchase flow inside the
+  // native app. Members subscribe on the website; the app reflects access.
+  if (Capacitor.isNativePlatform()) return null;
 
   const isFree = plan.billing_interval === "free" || Number(plan.price) === 0;
   const computed = label ?? ctaForPlan(plan, configured, isAdmin);

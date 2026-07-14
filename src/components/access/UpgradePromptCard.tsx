@@ -1,9 +1,12 @@
+import { Capacitor } from "@capacitor/core";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Link } from "@tanstack/react-router";
 import { Sparkles } from "lucide-react";
 
 export function UpgradePromptCard({ headline, sub }: { headline?: string; sub?: string }) {
+  // Hidden in the native app — no upsell to external paid content (store policy).
+  if (Capacitor.isNativePlatform()) return null;
   return (
     <Card className="rounded-2xl border-primary/30 bg-gradient-to-br from-primary/10 via-background to-background">
       <CardContent className="pt-5 flex flex-wrap items-center gap-4">

@@ -4,18 +4,18 @@ import { createFileRoute } from "@tanstack/react-router";
  * Stripe webhook receiver.
  *
  * Security: every request is verified against STRIPE_WEBHOOK_SECRET before
- * anything is stored. Unsigned or invalid requests get 400/401 and are NOT
- * written to the database — this endpoint is public, so it must never persist
- * attacker-supplied data. If the secret isn't configured yet, the endpoint is
- * considered inactive and returns 503 (still storing nothing).
+ * anything is read or stored. Unsigned/invalid/replayed requests get 400/401
+ * and write nothing. If the secret isn't configured the endpoint returns 503.
  *
- * Event *processing* (subscription/invoice/purchase mutations) is a later
- * phase; for now verified events are recorded in `payment_webhook_events` for
- * admin inspection.
+ * On a verified event it updates billing state so access unlocks:
+ *   - checkout.session.completed → activate a subscription (or record a
+ *     one-time purchase) and mark the checkout_sessions row completed.
+ *   - customer.subscription.updated/deleted → sync status + period dates.
+ * Access itself is computed by has_access() from active subscriptions /
+ * paid purchases, so activating the row here is what grants access.
  *
  * Secrets are read per-request from Lovable Cloud secrets, never hard-coded:
  *   - STRIPE_WEBHOOK_SECRET  (required to activate this endpoint)
- *   - STRIPE_SECRET_KEY      (used by the later checkout/processing phase)
  */
 
 /** Constant-time-ish comparison of two hex strings. */
@@ -28,8 +28,8 @@ function hexEqual(a: string, b: string): boolean {
 
 /**
  * Verify a Stripe `stripe-signature` header against the raw body using the
- * webhook signing secret. Implements Stripe's v1 scheme (HMAC-SHA256 over
- * `${t}.${payload}`) with a 5-minute timestamp tolerance to block replays.
+ * webhook signing secret. Stripe v1 scheme (HMAC-SHA256 over `${t}.${payload}`)
+ * with a 5-minute timestamp tolerance to block replays.
  */
 async function verifyStripeSignature(
   payload: string,
@@ -49,7 +49,7 @@ async function verifyStripeSignature(
   const ts = Number.parseInt(t, 10);
   if (!Number.isFinite(ts)) return false;
   const nowSec = Math.floor(Date.now() / 1000);
-  if (Math.abs(nowSec - ts) > 300) return false; // replay window
+  if (Math.abs(nowSec - ts) > 300) return false;
 
   const enc = new TextEncoder();
   const key = await crypto.subtle.importKey(
@@ -66,17 +66,91 @@ async function verifyStripeSignature(
   return hexEqual(expected, v1);
 }
 
+const VALID_SUB_STATUSES = new Set([
+  "active", "trialing", "past_due", "canceled",
+  "incomplete", "incomplete_expired", "unpaid", "paused",
+]);
+
+function toIso(unixSeconds: unknown): string | null {
+  const n = Number(unixSeconds);
+  return Number.isFinite(n) && n > 0 ? new Date(n * 1000).toISOString() : null;
+}
+
+type Admin = { from: (t: string) => any };
+
+/** Apply a verified event to billing tables. Returns true if handled. */
+async function processStripeEvent(
+  admin: Admin,
+  type: string,
+  event: Record<string, any>,
+): Promise<boolean> {
+  const obj = (event?.data?.object ?? {}) as Record<string, any>;
+
+  if (type === "checkout.session.completed") {
+    const meta = (obj.metadata ?? {}) as Record<string, string>;
+    const userId = meta.user_id ?? null;
+    const planId = meta.plan_id ?? null;
+    const csId = meta.checkout_session_id ?? obj.client_reference_id ?? null;
+
+    if (csId) {
+      await admin.from("checkout_sessions").update({ status: "completed" }).eq("id", csId);
+    }
+    if (!userId) return true;
+
+    if (obj.mode === "subscription" && obj.subscription) {
+      await admin.from("subscriptions").upsert(
+        {
+          user_id: userId,
+          plan_id: planId,
+          stripe_customer_id: obj.customer ?? null,
+          stripe_subscription_id: obj.subscription,
+          status: "active",
+        },
+        { onConflict: "stripe_subscription_id" },
+      );
+    } else if (obj.mode === "payment") {
+      await admin.from("purchases").insert({
+        user_id: userId,
+        plan_id: planId,
+        purchase_type: "one_time",
+        amount: (Number(obj.amount_total) || 0) / 100,
+        currency: String(obj.currency ?? "usd").toUpperCase(),
+        stripe_payment_intent_id: obj.payment_intent ?? null,
+        status: "paid",
+      });
+    }
+    return true;
+  }
+
+  if (type === "customer.subscription.updated" || type === "customer.subscription.deleted") {
+    const status = VALID_SUB_STATUSES.has(obj.status) ? obj.status : "canceled";
+    await admin
+      .from("subscriptions")
+      .update({
+        status,
+        current_period_start: toIso(obj.current_period_start),
+        current_period_end: toIso(obj.current_period_end),
+        cancel_at_period_end: !!obj.cancel_at_period_end,
+        trial_end: toIso(obj.trial_end),
+      })
+      .eq("stripe_subscription_id", obj.id);
+    return true;
+  }
+
+  // Other event types are recorded for audit but need no action here.
+  return false;
+}
+
 export const Route = createFileRoute("/api/public/stripe-webhook")({
   server: {
     handlers: {
       POST: async ({ request }) => {
         const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
-        // Not activated yet — reject without touching the database.
         if (!webhookSecret) {
-          return new Response(
-            JSON.stringify({ error: "Webhook not configured" }),
-            { status: 503, headers: { "Content-Type": "application/json" } },
-          );
+          return new Response(JSON.stringify({ error: "Webhook not configured" }), {
+            status: 503,
+            headers: { "Content-Type": "application/json" },
+          });
         }
 
         const bodyText = await request.text();
@@ -84,11 +158,10 @@ export const Route = createFileRoute("/api/public/stripe-webhook")({
 
         const valid = await verifyStripeSignature(bodyText, stripeSignature, webhookSecret);
         if (!valid) {
-          // Invalid/forged/replayed — store nothing, return 400.
-          return new Response(
-            JSON.stringify({ error: "Signature verification failed" }),
-            { status: 400, headers: { "Content-Type": "application/json" } },
-          );
+          return new Response(JSON.stringify({ error: "Signature verification failed" }), {
+            status: 400,
+            headers: { "Content-Type": "application/json" },
+          });
         }
 
         let payload: Record<string, unknown> = {};
@@ -102,17 +175,29 @@ export const Route = createFileRoute("/api/public/stripe-webhook")({
           return new Response("Invalid JSON", { status: 400 });
         }
 
+        const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+        const admin = supabaseAdmin as unknown as Admin;
+
+        let processed = false;
+        let processingError: string | null = null;
         try {
-          const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-          await supabaseAdmin.from("payment_webhook_events").insert({
+          processed = await processStripeEvent(admin, eventType, payload);
+        } catch (e) {
+          processingError = e instanceof Error ? e.message : String(e);
+          console.error("[webhook] processing error", eventType, processingError);
+        }
+
+        try {
+          await admin.from("payment_webhook_events").insert({
             stripe_event_id: stripeEventId,
             event_type: eventType,
             payload_json: payload,
-            processed: false,
-            processing_error: "Verified — event processing not yet activated.",
+            processed,
+            processing_error: processingError,
           });
         } catch {
-          return new Response("Storage error", { status: 500 });
+          // Already acted; don't fail the ack or Stripe will retry the mutation.
+          console.error("[webhook] failed to record event", stripeEventId);
         }
 
         return new Response(JSON.stringify({ received: true }), {
