@@ -1,5 +1,7 @@
-// Hidden until the Stripe Customer Portal is actually wired up — showing a
-// button that only toasts "coming soon" makes the app feel unfinished.
+// Kept for import compatibility; now a thin wrapper over the real, web-only
+// portal button (hidden in the native app).
+import { CustomerPortalButton } from "./CustomerPortalButton";
+
 export function CustomerPortalButtonPlaceholder() {
-  return null;
+  return <CustomerPortalButton size="sm" />;
 }

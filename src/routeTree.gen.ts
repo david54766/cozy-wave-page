@@ -21,6 +21,7 @@ import { Route as InviteTokenRouteImport } from './routes/invite.$token'
 import { Route as CheckoutSuccessRouteImport } from './routes/checkout.success'
 import { Route as CheckoutFailedRouteImport } from './routes/checkout.failed'
 import { Route as ApiCheckoutRouteImport } from './routes/api/checkout'
+import { Route as ApiBillingPortalRouteImport } from './routes/api/billing-portal'
 import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticated/settings'
 import { Route as AuthenticatedSearchRouteImport } from './routes/_authenticated/search'
 import { Route as AuthenticatedSavedRouteImport } from './routes/_authenticated/saved'
@@ -172,6 +173,11 @@ const CheckoutFailedRoute = CheckoutFailedRouteImport.update({
 const ApiCheckoutRoute = ApiCheckoutRouteImport.update({
   id: '/api/checkout',
   path: '/api/checkout',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiBillingPortalRoute = ApiBillingPortalRouteImport.update({
+  id: '/api/billing-portal',
+  path: '/api/billing-portal',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthenticatedSettingsRoute = AuthenticatedSettingsRouteImport.update({
@@ -743,6 +749,7 @@ export interface FileRoutesByFullPath {
   '/saved': typeof AuthenticatedSavedRoute
   '/search': typeof AuthenticatedSearchRoute
   '/settings': typeof AuthenticatedSettingsRouteWithChildren
+  '/api/billing-portal': typeof ApiBillingPortalRoute
   '/api/checkout': typeof ApiCheckoutRoute
   '/checkout/failed': typeof CheckoutFailedRoute
   '/checkout/success': typeof CheckoutSuccessRoute
@@ -849,6 +856,7 @@ export interface FileRoutesByTo {
   '/saved': typeof AuthenticatedSavedRoute
   '/search': typeof AuthenticatedSearchRoute
   '/settings': typeof AuthenticatedSettingsRouteWithChildren
+  '/api/billing-portal': typeof ApiBillingPortalRoute
   '/api/checkout': typeof ApiCheckoutRoute
   '/checkout/failed': typeof CheckoutFailedRoute
   '/checkout/success': typeof CheckoutSuccessRoute
@@ -957,6 +965,7 @@ export interface FileRoutesById {
   '/_authenticated/saved': typeof AuthenticatedSavedRoute
   '/_authenticated/search': typeof AuthenticatedSearchRoute
   '/_authenticated/settings': typeof AuthenticatedSettingsRouteWithChildren
+  '/api/billing-portal': typeof ApiBillingPortalRoute
   '/api/checkout': typeof ApiCheckoutRoute
   '/checkout/failed': typeof CheckoutFailedRoute
   '/checkout/success': typeof CheckoutSuccessRoute
@@ -1065,6 +1074,7 @@ export interface FileRouteTypes {
     | '/saved'
     | '/search'
     | '/settings'
+    | '/api/billing-portal'
     | '/api/checkout'
     | '/checkout/failed'
     | '/checkout/success'
@@ -1171,6 +1181,7 @@ export interface FileRouteTypes {
     | '/saved'
     | '/search'
     | '/settings'
+    | '/api/billing-portal'
     | '/api/checkout'
     | '/checkout/failed'
     | '/checkout/success'
@@ -1278,6 +1289,7 @@ export interface FileRouteTypes {
     | '/_authenticated/saved'
     | '/_authenticated/search'
     | '/_authenticated/settings'
+    | '/api/billing-portal'
     | '/api/checkout'
     | '/checkout/failed'
     | '/checkout/success'
@@ -1368,6 +1380,7 @@ export interface RootRouteChildren {
   OnboardingRoute: typeof OnboardingRoute
   PricingRoute: typeof PricingRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
+  ApiBillingPortalRoute: typeof ApiBillingPortalRoute
   ApiCheckoutRoute: typeof ApiCheckoutRoute
   CheckoutFailedRoute: typeof CheckoutFailedRoute
   CheckoutSuccessRoute: typeof CheckoutSuccessRoute
@@ -1459,6 +1472,13 @@ declare module '@tanstack/react-router' {
       path: '/api/checkout'
       fullPath: '/api/checkout'
       preLoaderRoute: typeof ApiCheckoutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/billing-portal': {
+      id: '/api/billing-portal'
+      path: '/api/billing-portal'
+      fullPath: '/api/billing-portal'
+      preLoaderRoute: typeof ApiBillingPortalRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authenticated/settings': {
@@ -2418,6 +2438,7 @@ const rootRouteChildren: RootRouteChildren = {
   OnboardingRoute: OnboardingRoute,
   PricingRoute: PricingRoute,
   ResetPasswordRoute: ResetPasswordRoute,
+  ApiBillingPortalRoute: ApiBillingPortalRoute,
   ApiCheckoutRoute: ApiCheckoutRoute,
   CheckoutFailedRoute: CheckoutFailedRoute,
   CheckoutSuccessRoute: CheckoutSuccessRoute,
