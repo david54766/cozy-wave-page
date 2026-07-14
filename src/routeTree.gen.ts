@@ -20,6 +20,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as InviteTokenRouteImport } from './routes/invite.$token'
 import { Route as CheckoutSuccessRouteImport } from './routes/checkout.success'
 import { Route as CheckoutFailedRouteImport } from './routes/checkout.failed'
+import { Route as ApiCheckoutRouteImport } from './routes/api/checkout'
 import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticated/settings'
 import { Route as AuthenticatedSearchRouteImport } from './routes/_authenticated/search'
 import { Route as AuthenticatedSavedRouteImport } from './routes/_authenticated/saved'
@@ -166,6 +167,11 @@ const CheckoutSuccessRoute = CheckoutSuccessRouteImport.update({
 const CheckoutFailedRoute = CheckoutFailedRouteImport.update({
   id: '/checkout/failed',
   path: '/checkout/failed',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiCheckoutRoute = ApiCheckoutRouteImport.update({
+  id: '/api/checkout',
+  path: '/api/checkout',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthenticatedSettingsRoute = AuthenticatedSettingsRouteImport.update({
@@ -737,6 +743,7 @@ export interface FileRoutesByFullPath {
   '/saved': typeof AuthenticatedSavedRoute
   '/search': typeof AuthenticatedSearchRoute
   '/settings': typeof AuthenticatedSettingsRouteWithChildren
+  '/api/checkout': typeof ApiCheckoutRoute
   '/checkout/failed': typeof CheckoutFailedRoute
   '/checkout/success': typeof CheckoutSuccessRoute
   '/invite/$token': typeof InviteTokenRoute
@@ -842,6 +849,7 @@ export interface FileRoutesByTo {
   '/saved': typeof AuthenticatedSavedRoute
   '/search': typeof AuthenticatedSearchRoute
   '/settings': typeof AuthenticatedSettingsRouteWithChildren
+  '/api/checkout': typeof ApiCheckoutRoute
   '/checkout/failed': typeof CheckoutFailedRoute
   '/checkout/success': typeof CheckoutSuccessRoute
   '/invite/$token': typeof InviteTokenRoute
@@ -949,6 +957,7 @@ export interface FileRoutesById {
   '/_authenticated/saved': typeof AuthenticatedSavedRoute
   '/_authenticated/search': typeof AuthenticatedSearchRoute
   '/_authenticated/settings': typeof AuthenticatedSettingsRouteWithChildren
+  '/api/checkout': typeof ApiCheckoutRoute
   '/checkout/failed': typeof CheckoutFailedRoute
   '/checkout/success': typeof CheckoutSuccessRoute
   '/invite/$token': typeof InviteTokenRoute
@@ -1056,6 +1065,7 @@ export interface FileRouteTypes {
     | '/saved'
     | '/search'
     | '/settings'
+    | '/api/checkout'
     | '/checkout/failed'
     | '/checkout/success'
     | '/invite/$token'
@@ -1161,6 +1171,7 @@ export interface FileRouteTypes {
     | '/saved'
     | '/search'
     | '/settings'
+    | '/api/checkout'
     | '/checkout/failed'
     | '/checkout/success'
     | '/invite/$token'
@@ -1267,6 +1278,7 @@ export interface FileRouteTypes {
     | '/_authenticated/saved'
     | '/_authenticated/search'
     | '/_authenticated/settings'
+    | '/api/checkout'
     | '/checkout/failed'
     | '/checkout/success'
     | '/invite/$token'
@@ -1356,6 +1368,7 @@ export interface RootRouteChildren {
   OnboardingRoute: typeof OnboardingRoute
   PricingRoute: typeof PricingRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
+  ApiCheckoutRoute: typeof ApiCheckoutRoute
   CheckoutFailedRoute: typeof CheckoutFailedRoute
   CheckoutSuccessRoute: typeof CheckoutSuccessRoute
   InviteTokenRoute: typeof InviteTokenRoute
@@ -1439,6 +1452,13 @@ declare module '@tanstack/react-router' {
       path: '/checkout/failed'
       fullPath: '/checkout/failed'
       preLoaderRoute: typeof CheckoutFailedRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/checkout': {
+      id: '/api/checkout'
+      path: '/api/checkout'
+      fullPath: '/api/checkout'
+      preLoaderRoute: typeof ApiCheckoutRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authenticated/settings': {
@@ -2398,6 +2418,7 @@ const rootRouteChildren: RootRouteChildren = {
   OnboardingRoute: OnboardingRoute,
   PricingRoute: PricingRoute,
   ResetPasswordRoute: ResetPasswordRoute,
+  ApiCheckoutRoute: ApiCheckoutRoute,
   CheckoutFailedRoute: CheckoutFailedRoute,
   CheckoutSuccessRoute: CheckoutSuccessRoute,
   InviteTokenRoute: InviteTokenRoute,
