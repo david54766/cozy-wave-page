@@ -2,8 +2,8 @@ import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
-import { AdminStatCard, DashboardCard, EmptyState } from "@/components/app/DashboardCard";
-import { Users, UserPlus, Activity, Settings, Users2, GraduationCap, Calendar, CreditCard, Bot, Sparkles, FolderTree, Plus, ArrowRight, MessageSquare, Shield, CalendarCheck, UserX, BarChart3, ShieldAlert, ListChecks, Award, Trophy, Star, Tag, Clock, Zap, AlertTriangle, FileText, Megaphone, Layers, BookOpen, Mail } from "lucide-react";
+import { AdminStatCard, EmptyState } from "@/components/app/DashboardCard";
+import { Users, UserPlus, Activity, Settings, Users2, GraduationCap, Calendar, CreditCard, Sparkles, FolderTree, Plus, ArrowRight, MessageSquare, Shield, CalendarCheck, UserX, BarChart3, ShieldAlert, ListChecks, Award, Trophy, Star, Tag, Clock, Zap, AlertTriangle, FileText, Megaphone, Layers, BookOpen, Mail, Package, Bot, type LucideIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { getIcon, type Space } from "@/lib/spaces";
@@ -92,84 +92,129 @@ function AdminPage() {
 
   if (!isAdmin) return null;
 
+  type AdminLink = { to: string; label: string; icon: LucideIcon; badge?: number; status?: string };
+  const sections: { title: string; icon: LucideIcon; links: AdminLink[] }[] = [
+    {
+      title: "Members & Access", icon: Users, links: [
+        { to: "/admin/members", label: "Members", icon: Users },
+        { to: "/admin/invitations", label: "Invitations", icon: Mail, badge: stats.pendingInvites },
+        { to: "/admin/segments", label: "Segments", icon: Layers },
+        { to: "/admin/access", label: "Access grants", icon: Shield },
+        { to: "/admin/moderation", label: "Moderation", icon: ShieldAlert, badge: stats.openReports },
+        { to: "/admin/audit-logs", label: "Audit logs", icon: FileText },
+      ],
+    },
+    {
+      title: "Content", icon: BookOpen, links: [
+        { to: "/admin/spaces", label: "Spaces", icon: Users2 },
+        { to: "/admin/collections", label: "Collections", icon: FolderTree },
+        { to: "/admin/courses", label: "Courses", icon: GraduationCap },
+        { to: "/admin/events", label: "Events", icon: Calendar },
+        { to: "/admin/posts", label: "Posts", icon: MessageSquare },
+        { to: "/admin/resources", label: "Resources", icon: BookOpen },
+        { to: "/admin/resource-folders", label: "Resource folders", icon: FolderTree },
+        { to: "/admin/announcements", label: "Announcements", icon: Megaphone, badge: stats.draftAnnouncements },
+        { to: "/admin/certificates", label: "Certificates", icon: Award },
+      ],
+    },
+    {
+      title: "Billing & Revenue", icon: CreditCard, links: [
+        { to: "/admin/plans", label: "Plans", icon: CreditCard },
+        { to: "/admin/bundles", label: "Bundles", icon: Package },
+        { to: "/admin/coupons", label: "Coupons", icon: Tag },
+        { to: "/admin/trials", label: "Trials", icon: Clock },
+        { to: "/admin/subscribers", label: "Subscribers", icon: Users },
+        { to: "/admin/transactions", label: "Transactions", icon: CreditCard },
+        { to: "/admin/payment-events", label: "Payment events", icon: Activity },
+        { to: "/admin/revenue", label: "Revenue", icon: BarChart3 },
+        { to: "/admin/billing-settings", label: "Billing settings", icon: Settings, status: stats.billingConfigured ? "Ready" : "Setup" },
+      ],
+    },
+    {
+      title: "Engagement", icon: Trophy, links: [
+        { to: "/admin/badges", label: "Badges", icon: Award },
+        { to: "/admin/points", label: "Points", icon: Trophy },
+        { to: "/admin/checklist", label: "Onboarding checklist", icon: ListChecks },
+      ],
+    },
+    {
+      title: "AI Tools", icon: Sparkles, links: [
+        { to: "/admin/ai-assistant", label: "AI Assistant", icon: Sparkles },
+        { to: "/admin/ai-course-builder", label: "AI Course Builder", icon: Sparkles },
+        { to: "/admin/ai-course-generations", label: "AI Generations", icon: FileText },
+        { to: "/admin/ai-drafts", label: "AI Drafts", icon: FileText },
+        { to: "/admin/ai-member-insights", label: "Member Insights", icon: Sparkles },
+        { to: "/admin/ai-content-sources", label: "Content Sources", icon: FileText },
+        { to: "/admin/ai-settings", label: "AI Settings", icon: Bot },
+        { to: "/admin/ai-helper-settings", label: "AI Helper Settings", icon: Bot },
+      ],
+    },
+    {
+      title: "Automation & Analytics", icon: Zap, links: [
+        { to: "/admin/automations", label: "Automations", icon: Zap },
+        { to: "/admin/automation-logs", label: "Automation logs", icon: AlertTriangle, badge: stats.failedLogs },
+        { to: "/admin/analytics", label: "Analytics", icon: BarChart3 },
+      ],
+    },
+  ];
+
   return (
     <div className="space-y-8">
       <header className="flex flex-wrap items-start justify-between gap-4">
         <div>
           <h1 className="text-3xl font-semibold tracking-tight">Platform Dashboard</h1>
-          <p className="text-muted-foreground mt-1">Manage members, settings, content, engagement, and platform growth from one central dashboard.</p>
+          <p className="text-muted-foreground mt-1">Manage members, content, engagement, billing, and growth from one place.</p>
         </div>
-        <div className="grid grid-cols-2 gap-2 w-full sm:w-auto sm:flex sm:flex-wrap">
+        <div className="grid grid-cols-2 gap-2 w-full sm:w-auto sm:flex">
           <Button asChild><Link to="/admin/spaces"><Plus className="size-4 mr-1.5" />Create Space</Link></Button>
-          <Button variant="outline" asChild><Link to="/admin/collections"><Plus className="size-4 mr-1.5" />Create Collection</Link></Button>
-          <Button variant="outline" asChild><Link to="/admin/members"><Users className="size-4 mr-2" />Manage Members</Link></Button>
-          <Button variant="outline" asChild><Link to="/admin/events"><Calendar className="size-4 mr-2" />Events</Link></Button>
-          <Button variant="outline" asChild><Link to="/admin/posts"><MessageSquare className="size-4 mr-2" />Posts</Link></Button>
-          <Button variant="outline" asChild><Link to="/admin/moderation"><Shield className="size-4 mr-2" />Moderation</Link></Button>
-          <Button variant="outline" asChild><Link to="/admin/analytics"><BarChart3 className="size-4 mr-2" />Analytics</Link></Button>
-          <Button variant="outline" asChild><Link to="/admin/audit-logs"><FileText className="size-4 mr-2" />Audit Logs</Link></Button>
-          <Button variant="outline" asChild><Link to="/admin/checklist"><ListChecks className="size-4 mr-2" />Onboarding</Link></Button>
-          <Button variant="outline" asChild><Link to="/admin/badges"><Award className="size-4 mr-2" />Badges</Link></Button>
-          <Button variant="outline" asChild><Link to="/admin/points"><Trophy className="size-4 mr-2" />Points</Link></Button>
-          <Button variant="outline" asChild><Link to="/admin/plans"><CreditCard className="size-4 mr-2" />Plans</Link></Button>
-          <Button variant="outline" asChild><Link to="/admin/billing-settings"><CreditCard className="size-4 mr-2" />Billing</Link></Button>
-          <Button variant="outline" asChild><Link to="/admin/subscribers"><Users className="size-4 mr-2" />Subscribers</Link></Button>
-          <Button variant="outline" asChild><Link to="/admin/transactions"><CreditCard className="size-4 mr-2" />Transactions</Link></Button>
-          <Button variant="outline" asChild><Link to="/admin/payment-events"><Activity className="size-4 mr-2" />Payment Events</Link></Button>
-          <Button variant="outline" asChild><Link to="/admin/access"><Shield className="size-4 mr-2" />Access</Link></Button>
-          <Button variant="outline" asChild><Link to="/admin/bundles"><CreditCard className="size-4 mr-2" />Bundles</Link></Button>
-          <Button variant="outline" asChild><Link to="/admin/coupons"><Tag className="size-4 mr-2" />Coupons</Link></Button>
-          <Button variant="outline" asChild><Link to="/admin/trials"><Clock className="size-4 mr-2" />Trials</Link></Button>
-          <Button variant="outline" asChild><Link to="/admin/revenue"><BarChart3 className="size-4 mr-2" />Revenue</Link></Button>
-          <Button variant="outline" asChild><Link to="/admin/automations"><Zap className="size-4 mr-2" />Automations</Link></Button>
-          <Button variant="outline" asChild><Link to="/admin/automation-logs"><FileText className="size-4 mr-2" />Automation Logs</Link></Button>
-          <Button asChild><Link to="/admin/automations/new"><Plus className="size-4 mr-1.5" />Create Automation</Link></Button>
-          <Button variant="outline" asChild><Link to="/admin/segments"><Layers className="size-4 mr-2" />Segments</Link></Button>
-          <Button asChild><Link to="/admin/segments/new"><Plus className="size-4 mr-1.5" />Create Segment</Link></Button>
-          <Button variant="outline" asChild><Link to="/admin/announcements"><Megaphone className="size-4 mr-2" />Announcements</Link></Button>
-          <Button asChild><Link to="/admin/announcements/new"><Plus className="size-4 mr-1.5" />Create Announcement</Link></Button>
-          <Button asChild><Link to="/admin/ai-assistant"><Sparkles className="size-4 mr-1.5" />AI Assistant</Link></Button>
-          <Button asChild><Link to="/admin/ai-course-builder"><Sparkles className="size-4 mr-1.5" />Generate Course</Link></Button>
-          <Button variant="outline" asChild><Link to="/admin/ai-course-generations"><FileText className="size-4 mr-2" />AI Generations</Link></Button>
-          <Button variant="outline" asChild><Link to="/admin/ai-drafts"><FileText className="size-4 mr-2" />AI Drafts</Link></Button>
-          <Button variant="outline" asChild><Link to="/admin/ai-settings"><Bot className="size-4 mr-2" />AI Settings</Link></Button>
-          <Button variant="outline" asChild><Link to="/admin/ai-member-insights"><Sparkles className="size-4 mr-2" />Member Insights</Link></Button>
-          <Button variant="outline" asChild><Link to="/admin/ai-content-sources"><FileText className="size-4 mr-2" />AI Content Sources</Link></Button>
-          <Button variant="outline" asChild><Link to="/admin/ai-helper-settings"><Bot className="size-4 mr-2" />AI Helper Settings</Link></Button>
-          <Button variant="outline" asChild><Link to="/admin/resources"><BookOpen className="size-4 mr-2" />Resources</Link></Button>
-          <Button variant="outline" asChild><Link to="/admin/resource-folders"><FolderTree className="size-4 mr-2" />Resource Folders</Link></Button>
-          <Button asChild><Link to="/admin/invitations"><Mail className="size-4 mr-1.5" />Invite Member</Link></Button>
-          <Button asChild><Link to="/admin/certificates"><Award className="size-4 mr-1.5" />Create Certificate</Link></Button>
-          <Button variant="outline" asChild><Link to="/admin/settings"><Settings className="size-4 mr-2" />Settings</Link></Button>
+          <Button variant="outline" asChild><Link to="/admin/invitations"><Mail className="size-4 mr-1.5" />Invite Member</Link></Button>
+          <Button variant="outline" asChild><Link to="/admin/settings"><Settings className="size-4 mr-1.5" />Settings</Link></Button>
         </div>
       </header>
 
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <AdminStatCard label="Total Members" value={stats.total} icon={<Users className="size-4 text-muted-foreground" />} />
-        <AdminStatCard label="New Members (30d)" value={stats.newMonth} icon={<UserPlus className="size-4 text-muted-foreground" />} />
-        <AdminStatCard label="Active Members (7d)" value={stats.active} icon={<Activity className="size-4 text-muted-foreground" />} />
-        <AdminStatCard label="Suspended" value={stats.suspended} icon={<UserX className="size-4 text-muted-foreground" />} />
-        <AdminStatCard label="Total Spaces" value={stats.spaces} icon={<Users2 className="size-4 text-muted-foreground" />} />
-        <AdminStatCard label="Collections" value={stats.collections} icon={<FolderTree className="size-4 text-muted-foreground" />} />
-        <AdminStatCard label="Total Events" value={stats.events} icon={<Calendar className="size-4 text-muted-foreground" />} />
-        <AdminStatCard label="Upcoming Events" value={stats.upcomingEvents} icon={<CalendarCheck className="size-4 text-muted-foreground" />} />
+      {/* Key metrics — the numbers worth glancing at daily. */}
+      <div className="grid gap-4 grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
+        <AdminStatCard label="Members" value={stats.total} hint={`+${stats.newMonth} in 30d`} icon={<Users className="size-4 text-muted-foreground" />} />
+        <AdminStatCard label="Active (7d)" value={stats.active} icon={<Activity className="size-4 text-muted-foreground" />} />
         <AdminStatCard label="Open Reports" value={stats.openReports} icon={<ShieldAlert className="size-4 text-muted-foreground" />} />
-        <AdminStatCard label="Total Plans" value={stats.totalPlans} icon={<CreditCard className="size-4 text-muted-foreground" />} />
-        <AdminStatCard label="Active Plans" value={stats.activePlans} icon={<CreditCard className="size-4 text-muted-foreground" />} />
-        <AdminStatCard label="Featured Plan" value={stats.featuredPlan} icon={<Star className="size-4 text-muted-foreground" />} />
-        <AdminStatCard label="Billing Setup" value={stats.billingConfigured ? "Ready" : "Pending"} icon={<CreditCard className="size-4 text-muted-foreground" />} />
-        <AdminStatCard label="Total Automations" value={stats.totalAutomations} icon={<Zap className="size-4 text-muted-foreground" />} />
-        <AdminStatCard label="Active Automations" value={stats.activeAutomations} icon={<Zap className="size-4 text-muted-foreground" />} />
-        <AdminStatCard label="Failed Automation Logs" value={stats.failedLogs} icon={<AlertTriangle className="size-4 text-muted-foreground" />} />
-        <AdminStatCard label="Active Segments" value={stats.activeSegments} icon={<Layers className="size-4 text-muted-foreground" />} />
-        <AdminStatCard label="Sent Announcements" value={stats.sentAnnouncements} icon={<Megaphone className="size-4 text-muted-foreground" />} />
-        <AdminStatCard label="Draft Announcements" value={stats.draftAnnouncements} icon={<Megaphone className="size-4 text-muted-foreground" />} />
-        <AdminStatCard label="AI Course Outlines" value={stats.aiOutlines} icon={<Sparkles className="size-4 text-muted-foreground" />} />
-        <AdminStatCard label="AI Lesson Drafts" value={stats.aiLessons} icon={<Sparkles className="size-4 text-muted-foreground" />} />
-        <AdminStatCard label="AI Outlines Converted" value={stats.aiConverted} icon={<GraduationCap className="size-4 text-muted-foreground" />} />
-        <AdminStatCard label="Pending Invitations" value={stats.pendingInvites} icon={<Mail className="size-4 text-muted-foreground" />} />
-        <AdminStatCard label="Active Invite Links" value={stats.inviteLinks} icon={<Mail className="size-4 text-muted-foreground" />} />
-        <AdminStatCard label="Certificates Issued" value={stats.certsIssued} icon={<Award className="size-4 text-muted-foreground" />} />
+        <AdminStatCard label="Pending Invites" value={stats.pendingInvites} icon={<Mail className="size-4 text-muted-foreground" />} />
+        <AdminStatCard label="Spaces" value={stats.spaces} icon={<Users2 className="size-4 text-muted-foreground" />} />
+        <AdminStatCard label="Billing" value={stats.billingConfigured ? "Ready" : "Setup"} icon={<CreditCard className="size-4 text-muted-foreground" />} />
+      </div>
+
+      {/* Organized navigation into every admin area. */}
+      <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+        {sections.map((section) => (
+          <Card key={section.title} className="rounded-2xl">
+            <CardContent className="pt-5">
+              <div className="flex items-center gap-2 mb-3">
+                <div className="size-8 rounded-lg bg-primary/10 text-primary grid place-items-center">
+                  <section.icon className="size-4" />
+                </div>
+                <h2 className="font-semibold">{section.title}</h2>
+              </div>
+              <ul className="space-y-0.5">
+                {section.links.map((l) => (
+                  <li key={l.to}>
+                    <Link
+                      to={l.to as string}
+                      className="flex items-center gap-2.5 rounded-lg px-2 py-1.5 text-sm text-foreground/90 hover:bg-accent hover:text-accent-foreground transition-colors"
+                    >
+                      <l.icon className="size-4 text-muted-foreground shrink-0" />
+                      <span className="flex-1 truncate">{l.label}</span>
+                      {typeof l.badge === "number" && l.badge > 0 && (
+                        <span className="text-[10px] font-semibold rounded-full bg-primary/10 text-primary px-1.5 py-0.5">{l.badge}</span>
+                      )}
+                      {l.status && (
+                        <span className={`text-[10px] font-medium rounded-full px-1.5 py-0.5 ${l.status === "Ready" ? "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300" : "bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300"}`}>{l.status}</span>
+                      )}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </CardContent>
+          </Card>
+        ))}
       </div>
 
       <section className="space-y-3">
@@ -211,21 +256,6 @@ function AdminPage() {
         )}
       </section>
 
-      <section className="space-y-3">
-        <h2 className="text-lg font-semibold">Platform areas</h2>
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {[
-            { t: "Courses", i: <GraduationCap className="size-4" /> },
-            { t: "Payments", i: <CreditCard className="size-4" /> },
-            { t: "Automations", i: <Bot className="size-4" /> },
-            { t: "AI Assistant", i: <Sparkles className="size-4" /> },
-          ].map((x) => (
-            <DashboardCard key={x.t} title={x.t} icon={x.i} comingSoon>
-              <p className="text-sm text-muted-foreground">Management tools will appear here.</p>
-            </DashboardCard>
-          ))}
-        </div>
-      </section>
     </div>
   );
 }

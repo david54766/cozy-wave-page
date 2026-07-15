@@ -6,8 +6,9 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { AlertCircle } from "lucide-react";
+import { CheckCircle2, Circle, KeyRound } from "lucide-react";
 import { toast } from "sonner";
+import { getPublicSiteUrl } from "@/lib/site-url";
 import { fetchBillingSettings, updateBillingSettings, createBillingSettings, type BillingSettings } from "@/lib/plans";
 
 export const Route = createFileRoute("/_authenticated/admin/billing-settings")({ component: BillingSettingsPage });
@@ -31,13 +32,16 @@ function BillingSettingsPage() {
 
   if (!isAdmin || !s) return null;
 
+  const configured = !!s.stripe_publishable_key;
+  const webhookUrl = `${getPublicSiteUrl()}/api/public/stripe-webhook`;
+
   const save = async () => {
     setSaving(true);
     try {
+      // Only the publishable key + display defaults live in the DB. Real secrets
+      // (STRIPE_SECRET_KEY, STRIPE_WEBHOOK_SECRET) are env-only and never stored here.
       await updateBillingSettings(s.id, {
         stripe_publishable_key: s.stripe_publishable_key,
-        stripe_secret_key_placeholder: s.stripe_secret_key_placeholder,
-        stripe_webhook_secret_placeholder: s.stripe_webhook_secret_placeholder,
         currency: s.currency,
         tax_behavior: s.tax_behavior,
         billing_support_email: s.billing_support_email,
@@ -47,43 +51,50 @@ function BillingSettingsPage() {
     finally { setSaving(false); }
   };
 
+  const copyWebhook = async () => {
+    try { await navigator.clipboard.writeText(webhookUrl); toast.success("Webhook URL copied"); }
+    catch { toast.info(webhookUrl); }
+  };
+
   return (
     <div className="space-y-6 max-w-2xl mx-auto">
       <header>
         <h1 className="text-3xl font-semibold tracking-tight">Billing settings</h1>
-        <p className="text-muted-foreground mt-1">Prepare Stripe configuration. Checkout activates in a later phase.</p>
+        <p className="text-muted-foreground mt-1">Connect Stripe to accept web payments. Purchases happen on the website; the mobile apps reflect access.</p>
       </header>
 
-      <Card className="rounded-2xl border-amber-200/60 bg-amber-50/50 dark:bg-amber-950/20 dark:border-amber-900/40">
-        <CardContent className="pt-5 flex gap-3 text-sm">
-          <AlertCircle className="size-5 text-amber-600 shrink-0 mt-0.5" />
-          <div>
-            <p className="font-medium">Checkout and live payments will be activated in a later phase.</p>
-            <p className="text-muted-foreground mt-1">
-              This page prepares the platform for Stripe integration. Never paste real production secret keys here —
-              they should be managed securely via environment variables / backend secrets.
-            </p>
+      {/* Setup checklist / status */}
+      <Card className="rounded-2xl">
+        <CardHeader className="flex flex-row items-center gap-2">
+          <KeyRound className="size-5 text-primary" />
+          <h2 className="font-semibold">Setup status</h2>
+        </CardHeader>
+        <CardContent className="space-y-3 text-sm">
+          <StatusRow done={configured} label="Publishable key set" hint="Set below — this switches on the Upgrade buttons." />
+          <StatusRow done={undefined} label="STRIPE_SECRET_KEY in backend secrets" hint="Add in Lovable Cloud secrets (use a restricted key). Not stored here." />
+          <StatusRow done={undefined} label="STRIPE_WEBHOOK_SECRET in backend secrets" hint="From your Stripe webhook endpoint. Not stored here." />
+          <div className="rounded-xl border bg-muted/40 p-3 space-y-1.5">
+            <p className="font-medium">Webhook endpoint</p>
+            <p className="text-muted-foreground text-xs">Add this URL in Stripe → Developers → Webhooks, subscribed to <code className="text-foreground">checkout.session.completed</code>, <code className="text-foreground">customer.subscription.updated</code>, <code className="text-foreground">customer.subscription.deleted</code>.</p>
+            <div className="flex items-center gap-2">
+              <code className="flex-1 truncate rounded-md bg-background border px-2 py-1 text-xs">{webhookUrl}</code>
+              <Button size="sm" variant="outline" onClick={copyWebhook}>Copy</Button>
+            </div>
           </div>
         </CardContent>
       </Card>
 
       <Card className="rounded-2xl">
-        <CardHeader><h2 className="font-semibold">Stripe keys (placeholders)</h2></CardHeader>
-        <CardContent className="space-y-4">
+        <CardHeader><h2 className="font-semibold">Publishable key</h2></CardHeader>
+        <CardContent className="space-y-3">
           <div className="space-y-1.5">
             <Label>Stripe publishable key</Label>
-            <Input placeholder="pk_test_..." value={s.stripe_publishable_key ?? ""} onChange={(e) => setS({ ...s, stripe_publishable_key: e.target.value })} />
-            <p className="text-xs text-muted-foreground">Safe to expose to the browser.</p>
+            <Input placeholder="pk_test_... / pk_live_..." value={s.stripe_publishable_key ?? ""} onChange={(e) => setS({ ...s, stripe_publishable_key: e.target.value })} />
+            <p className="text-xs text-muted-foreground">Public by design (safe to expose). Setting it turns on checkout in the web app.</p>
           </div>
-          <div className="space-y-1.5">
-            <Label>Stripe secret key (placeholder, masked)</Label>
-            <Input type="password" placeholder="sk_test_..." value={s.stripe_secret_key_placeholder ?? ""} onChange={(e) => setS({ ...s, stripe_secret_key_placeholder: e.target.value })} />
-            <p className="text-xs text-muted-foreground">Placeholder only. Move real values to backend secrets before going live.</p>
-          </div>
-          <div className="space-y-1.5">
-            <Label>Stripe webhook secret (placeholder, masked)</Label>
-            <Input type="password" placeholder="whsec_..." value={s.stripe_webhook_secret_placeholder ?? ""} onChange={(e) => setS({ ...s, stripe_webhook_secret_placeholder: e.target.value })} />
-          </div>
+          <p className="text-xs text-muted-foreground">
+            Do not paste your secret key or webhook secret anywhere in this app — those belong only in backend secrets (env).
+          </p>
         </CardContent>
       </Card>
 
@@ -114,6 +125,22 @@ function BillingSettingsPage() {
 
       <div className="flex justify-end">
         <Button onClick={save} disabled={saving}>{saving ? "Saving…" : "Save settings"}</Button>
+      </div>
+    </div>
+  );
+}
+
+function StatusRow({ done, label, hint }: { done: boolean | undefined; label: string; hint: string }) {
+  return (
+    <div className="flex items-start gap-2.5">
+      {done ? (
+        <CheckCircle2 className="size-4 text-emerald-600 shrink-0 mt-0.5" />
+      ) : (
+        <Circle className={`size-4 shrink-0 mt-0.5 ${done === false ? "text-muted-foreground" : "text-muted-foreground/60"}`} />
+      )}
+      <div>
+        <p className="font-medium">{label}</p>
+        <p className="text-xs text-muted-foreground">{hint}</p>
       </div>
     </div>
   );
