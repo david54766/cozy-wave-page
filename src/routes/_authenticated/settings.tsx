@@ -74,14 +74,10 @@ function SettingsPage() {
   const onDeleteAccount = async () => {
     setDeleting(true);
     try {
-      const { data: sess } = await supabase.auth.getSession();
-      const token = sess.session?.access_token;
-      if (!token) { toast.error("Please sign in again"); return; }
-      const res = await fetch("/api/delete-account", {
-        method: "POST",
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      if (!res.ok) { toast.error("Could not delete account. Please try again."); return; }
+      // RPC (not a server route) so it works identically on web and in the
+      // native WebView, where a relative /api/* URL wouldn't reach the server.
+      const { error } = await (supabase as any).rpc("delete_own_account");
+      if (error) { toast.error(error.message ?? "Could not delete account. Please try again."); return; }
       await signOut();
       toast.success("Your account has been deleted.");
       navigate({ to: "/" });
