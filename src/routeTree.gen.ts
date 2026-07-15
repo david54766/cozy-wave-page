@@ -20,6 +20,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as InviteTokenRouteImport } from './routes/invite.$token'
 import { Route as CheckoutSuccessRouteImport } from './routes/checkout.success'
 import { Route as CheckoutFailedRouteImport } from './routes/checkout.failed'
+import { Route as ApiDeleteAccountRouteImport } from './routes/api/delete-account'
 import { Route as ApiCheckoutRouteImport } from './routes/api/checkout'
 import { Route as ApiBillingPortalRouteImport } from './routes/api/billing-portal'
 import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticated/settings'
@@ -169,6 +170,11 @@ const CheckoutSuccessRoute = CheckoutSuccessRouteImport.update({
 const CheckoutFailedRoute = CheckoutFailedRouteImport.update({
   id: '/checkout/failed',
   path: '/checkout/failed',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiDeleteAccountRoute = ApiDeleteAccountRouteImport.update({
+  id: '/api/delete-account',
+  path: '/api/delete-account',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiCheckoutRoute = ApiCheckoutRouteImport.update({
@@ -757,6 +763,7 @@ export interface FileRoutesByFullPath {
   '/settings': typeof AuthenticatedSettingsRouteWithChildren
   '/api/billing-portal': typeof ApiBillingPortalRoute
   '/api/checkout': typeof ApiCheckoutRoute
+  '/api/delete-account': typeof ApiDeleteAccountRoute
   '/checkout/failed': typeof CheckoutFailedRoute
   '/checkout/success': typeof CheckoutSuccessRoute
   '/invite/$token': typeof InviteTokenRoute
@@ -864,6 +871,7 @@ export interface FileRoutesByTo {
   '/settings': typeof AuthenticatedSettingsRouteWithChildren
   '/api/billing-portal': typeof ApiBillingPortalRoute
   '/api/checkout': typeof ApiCheckoutRoute
+  '/api/delete-account': typeof ApiDeleteAccountRoute
   '/checkout/failed': typeof CheckoutFailedRoute
   '/checkout/success': typeof CheckoutSuccessRoute
   '/invite/$token': typeof InviteTokenRoute
@@ -974,6 +982,7 @@ export interface FileRoutesById {
   '/_authenticated/settings': typeof AuthenticatedSettingsRouteWithChildren
   '/api/billing-portal': typeof ApiBillingPortalRoute
   '/api/checkout': typeof ApiCheckoutRoute
+  '/api/delete-account': typeof ApiDeleteAccountRoute
   '/checkout/failed': typeof CheckoutFailedRoute
   '/checkout/success': typeof CheckoutSuccessRoute
   '/invite/$token': typeof InviteTokenRoute
@@ -1084,6 +1093,7 @@ export interface FileRouteTypes {
     | '/settings'
     | '/api/billing-portal'
     | '/api/checkout'
+    | '/api/delete-account'
     | '/checkout/failed'
     | '/checkout/success'
     | '/invite/$token'
@@ -1191,6 +1201,7 @@ export interface FileRouteTypes {
     | '/settings'
     | '/api/billing-portal'
     | '/api/checkout'
+    | '/api/delete-account'
     | '/checkout/failed'
     | '/checkout/success'
     | '/invite/$token'
@@ -1300,6 +1311,7 @@ export interface FileRouteTypes {
     | '/_authenticated/settings'
     | '/api/billing-portal'
     | '/api/checkout'
+    | '/api/delete-account'
     | '/checkout/failed'
     | '/checkout/success'
     | '/invite/$token'
@@ -1392,6 +1404,7 @@ export interface RootRouteChildren {
   ResetPasswordRoute: typeof ResetPasswordRoute
   ApiBillingPortalRoute: typeof ApiBillingPortalRoute
   ApiCheckoutRoute: typeof ApiCheckoutRoute
+  ApiDeleteAccountRoute: typeof ApiDeleteAccountRoute
   CheckoutFailedRoute: typeof CheckoutFailedRoute
   CheckoutSuccessRoute: typeof CheckoutSuccessRoute
   InviteTokenRoute: typeof InviteTokenRoute
@@ -1475,6 +1488,13 @@ declare module '@tanstack/react-router' {
       path: '/checkout/failed'
       fullPath: '/checkout/failed'
       preLoaderRoute: typeof CheckoutFailedRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/delete-account': {
+      id: '/api/delete-account'
+      path: '/api/delete-account'
+      fullPath: '/api/delete-account'
+      preLoaderRoute: typeof ApiDeleteAccountRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/checkout': {
@@ -2459,6 +2479,7 @@ const rootRouteChildren: RootRouteChildren = {
   ResetPasswordRoute: ResetPasswordRoute,
   ApiBillingPortalRoute: ApiBillingPortalRoute,
   ApiCheckoutRoute: ApiCheckoutRoute,
+  ApiDeleteAccountRoute: ApiDeleteAccountRoute,
   CheckoutFailedRoute: CheckoutFailedRoute,
   CheckoutSuccessRoute: CheckoutSuccessRoute,
   InviteTokenRoute: InviteTokenRoute,

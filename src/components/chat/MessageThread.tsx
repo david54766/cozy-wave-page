@@ -12,6 +12,7 @@ import { MessageBubble } from "./MessageBubble";
 import { MessageComposer } from "./MessageComposer";
 import { ReportMessageModal } from "./ReportMessageModal";
 import { Skeleton } from "@/components/ui/skeleton";
+import { fetchMyBlockedIds } from "@/lib/blocks";
 
 export function MessageThread({
   conversationId,
@@ -27,7 +28,10 @@ export function MessageThread({
   const [profiles, setProfiles] = useState<Map<string, ProfileLite>>(new Map());
   const [loading, setLoading] = useState(true);
   const [reportId, setReportId] = useState<string | null>(null);
+  const [blockedIds, setBlockedIds] = useState<Set<string>>(new Set());
   const bottomRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => { fetchMyBlockedIds(currentUserId).then(setBlockedIds); }, [currentUserId]);
 
   const loadProfiles = useCallback(async (msgs: Message[]) => {
     const ids = Array.from(new Set(msgs.map((m) => m.sender_id))).filter((id) => !profiles.has(id));
@@ -90,12 +94,12 @@ export function MessageThread({
             <Skeleton className="h-12 w-1/2 ml-auto" />
             <Skeleton className="h-16 w-3/4" />
           </div>
-        ) : messages.length === 0 ? (
+        ) : messages.filter((m) => !blockedIds.has(m.sender_id)).length === 0 ? (
           <p className="text-center text-sm text-muted-foreground py-12">
             No messages yet. Say hello 👋
           </p>
         ) : (
-          messages.map((m) => (
+          messages.filter((m) => !blockedIds.has(m.sender_id)).map((m) => (
             <MessageBubble
               key={m.id}
               message={m}

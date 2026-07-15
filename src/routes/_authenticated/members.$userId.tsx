@@ -9,7 +9,9 @@ import { MemberAchievementPanel } from "@/components/gamification/MemberAchievem
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Calendar, Users2 } from "lucide-react";
+import { Calendar, Users2, Ban, ShieldOff } from "lucide-react";
+import { toast } from "sonner";
+import { blockUser, unblockUser, isBlocked as checkBlocked } from "@/lib/blocks";
 import type { Space } from "@/lib/spaces";
 import type { Course, Lesson, LessonProgress } from "@/lib/courses";
 
@@ -26,6 +28,33 @@ function MemberDetail() {
   const [posts, setPosts] = useState<{ id: string; title: string | null; body: string; created_at: string }[]>([]);
   const [inProgress, setInProgress] = useState<{ course: Course; lesson: Lesson; progress: LessonProgress }[]>([]);
   const [loading, setLoading] = useState(true);
+  const [blocked, setBlocked] = useState(false);
+  const [blockBusy, setBlockBusy] = useState(false);
+
+  useEffect(() => {
+    if (!user || user.id === userId) return;
+    checkBlocked(user.id, userId).then(setBlocked);
+  }, [user, userId]);
+
+  const toggleBlock = async () => {
+    if (!user) return;
+    setBlockBusy(true);
+    try {
+      if (blocked) {
+        await unblockUser(user.id, userId);
+        setBlocked(false);
+        toast.success("Member unblocked");
+      } else {
+        await blockUser(user.id, userId);
+        setBlocked(true);
+        toast.success("Member blocked. You won't see their posts or messages.");
+      }
+    } catch (e: any) {
+      toast.error(e?.message ?? "Couldn't update block");
+    } finally {
+      setBlockBusy(false);
+    }
+  };
 
   useEffect(() => {
     (async () => {
@@ -145,6 +174,28 @@ function MemberDetail() {
               {member.last_active_at ? new Date(member.last_active_at).toLocaleString() : "Not yet recorded"}
             </CardContent>
           </Card>
+
+          {!isSelf && (
+            <Card className="rounded-2xl">
+              <CardHeader><CardTitle className="text-base">Safety</CardTitle></CardHeader>
+              <CardContent className="space-y-2">
+                <Button
+                  variant={blocked ? "outline" : "destructive"}
+                  size="sm"
+                  className="w-full"
+                  onClick={toggleBlock}
+                  disabled={blockBusy}
+                >
+                  {blocked ? <><ShieldOff className="size-4 mr-1.5" />Unblock member</> : <><Ban className="size-4 mr-1.5" />Block member</>}
+                </Button>
+                <p className="text-xs text-muted-foreground">
+                  {blocked
+                    ? "You've blocked this member — their posts and messages are hidden."
+                    : "Block to hide this member's posts and messages and stop them contacting you."}
+                </p>
+              </CardContent>
+            </Card>
+          )}
         </div>
       </div>
     </div>

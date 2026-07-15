@@ -1,5 +1,7 @@
 import { useEffect, useMemo, useState, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/hooks/useAuth";
+import { fetchMyBlockedIds } from "@/lib/blocks";
 import type { Post, Reaction, QuestionDetails } from "@/lib/feed";
 import type { Space } from "@/lib/spaces";
 import { fetchHashtagsForPosts, fetchQuestionDetailsForPosts } from "@/lib/postExtras";
@@ -25,6 +27,7 @@ export interface FeedState {
  * needed to render and filter the feed.
  */
 export function useFeedData(opts: { spaceId?: string } = {}): FeedState {
+  const { user } = useAuth();
   const [loading, setLoading] = useState(true);
   const [posts, setPosts] = useState<Post[]>([]);
   const [spaces, setSpaces] = useState<Space[]>([]);
@@ -46,7 +49,12 @@ export function useFeedData(opts: { spaceId?: string } = {}): FeedState {
       .limit(100);
     if (opts.spaceId) q = q.eq("space_id", opts.spaceId);
     const { data: postRows } = await q;
-    const ps = (postRows ?? []) as Post[];
+    let ps = (postRows ?? []) as Post[];
+    // Hide posts authored by members the current user has blocked.
+    if (user) {
+      const blockedIds = await fetchMyBlockedIds(user.id);
+      if (blockedIds.size) ps = ps.filter((p) => !p.author_id || !blockedIds.has(p.author_id));
+    }
     setPosts(ps);
 
     const spaceIds = Array.from(new Set(ps.map((p) => p.space_id)));
@@ -82,7 +90,7 @@ export function useFeedData(opts: { spaceId?: string } = {}): FeedState {
     setHashtagsByPost(hashtagMap);
     setQuestionDetailsByPost(qdMap);
     setLoading(false);
-  }, [opts.spaceId]);
+  }, [opts.spaceId, user]);
 
   useEffect(() => { refresh(); }, [refresh]);
 
