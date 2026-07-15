@@ -10,6 +10,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Skeleton } from "@/components/ui/skeleton";
+import { ImageUpload } from "@/components/ImageUpload";
 
 export const Route = createFileRoute("/onboarding")({
   component: OnboardingPage,
@@ -78,8 +79,12 @@ function OnboardingPage() {
             <div className="flex items-center gap-4">
               <Avatar className="size-16"><AvatarImage src={avatar || undefined} /><AvatarFallback>{initials}</AvatarFallback></Avatar>
               <div className="flex-1 space-y-1.5">
-                <Label htmlFor="ob-avatar">Avatar URL</Label>
-                <Input id="ob-avatar" value={avatar} onChange={(e) => setAvatar(e.target.value)} placeholder="https://..." />
+                <Label htmlFor="ob-avatar">Profile photo</Label>
+                <div className="flex items-center gap-2">
+                  <ImageUpload userId={user.id} kind="avatar" onUploaded={setAvatar} label="Upload photo" />
+                  {avatar && <Button type="button" variant="ghost" size="sm" onClick={() => setAvatar("")}>Remove</Button>}
+                </div>
+                <Input id="ob-avatar" value={avatar} onChange={(e) => setAvatar(e.target.value)} placeholder="…or paste an image URL" />
               </div>
             </div>
             <div className="space-y-1.5">
