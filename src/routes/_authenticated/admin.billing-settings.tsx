@@ -6,7 +6,8 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { CheckCircle2, Circle, KeyRound } from "lucide-react";
+import { Skeleton } from "@/components/ui/skeleton";
+import { CheckCircle2, Circle, KeyRound, AlertCircle } from "lucide-react";
 import { toast } from "sonner";
 import { getPublicSiteUrl } from "@/lib/site-url";
 import { fetchBillingSettings, updateBillingSettings, createBillingSettings, type BillingSettings } from "@/lib/plans";
@@ -18,19 +19,65 @@ function BillingSettingsPage() {
   const navigate = useNavigate();
   const [s, setS] = useState<BillingSettings | null>(null);
   const [saving, setSaving] = useState(false);
+  const [err, setErr] = useState<string | null>(null);
 
   useEffect(() => { if (!loading && !isAdmin) navigate({ to: "/dashboard" }); }, [loading, isAdmin, navigate]);
 
   useEffect(() => {
     if (!isAdmin) return;
     (async () => {
-      let row = await fetchBillingSettings();
-      if (!row) row = await createBillingSettings({ currency: "USD", tax_behavior: "exclusive" });
-      setS(row);
+      try {
+        let row = await fetchBillingSettings();
+        if (!row) row = await createBillingSettings({ currency: "USD", tax_behavior: "exclusive" });
+        setS(row);
+      } catch (e: any) {
+        setErr(e?.message ?? "Could not load billing settings.");
+      }
     })();
   }, [isAdmin]);
 
-  if (!isAdmin || !s) return null;
+  // While auth is resolving, show a skeleton rather than a blank screen.
+  if (loading) {
+    return (
+      <div className="space-y-4 max-w-2xl mx-auto">
+        <Skeleton className="h-10 w-64" />
+        <Skeleton className="h-40 rounded-2xl" />
+        <Skeleton className="h-40 rounded-2xl" />
+      </div>
+    );
+  }
+  if (!isAdmin) return null; // redirect effect handles navigation
+
+  // Surface a real error instead of rendering nothing.
+  if (err) {
+    return (
+      <div className="max-w-2xl mx-auto">
+        <Card className="rounded-2xl border-destructive/40 bg-destructive/5">
+          <CardContent className="pt-5 flex gap-3 text-sm">
+            <AlertCircle className="size-5 text-destructive shrink-0 mt-0.5" />
+            <div>
+              <p className="font-medium text-destructive">Couldn't load billing settings.</p>
+              <p className="text-muted-foreground mt-1">{err}</p>
+              <p className="text-muted-foreground mt-2 text-xs">
+                If this says a permissions/row-level error, your account may not have the
+                platform_admin role active yet — sign out and back in, then retry.
+              </p>
+              <Button className="mt-3" size="sm" variant="outline" onClick={() => window.location.reload()}>Retry</Button>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  if (!s) {
+    return (
+      <div className="space-y-4 max-w-2xl mx-auto">
+        <Skeleton className="h-10 w-64" />
+        <Skeleton className="h-40 rounded-2xl" />
+      </div>
+    );
+  }
 
   const configured = !!s.stripe_publishable_key;
   const webhookUrl = `${getPublicSiteUrl()}/api/public/stripe-webhook`;
