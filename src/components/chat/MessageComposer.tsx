@@ -1,8 +1,9 @@
 import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { Send, Loader2 } from "lucide-react";
+import { Send, Loader2, ImagePlus } from "lucide-react";
 import { sendMessage } from "@/lib/chat";
+import { ImageUpload } from "@/components/ImageUpload";
 import { toast } from "sonner";
 
 export function MessageComposer({
@@ -35,11 +36,24 @@ export function MessageComposer({
     }
   };
 
+  const sendImage = async (url: string) => {
+    try {
+      await sendMessage(conversationId, senderId, body.trim(), [url]);
+      setBody("");
+      onSent?.();
+    } catch (e: any) {
+      toast.error(e.message ?? "Failed to send image");
+    }
+  };
+
   return (
     <form
       onSubmit={(e) => { e.preventDefault(); send(); }}
       className="flex gap-2 items-end border-t border-border p-3 bg-background"
     >
+      <ImageUpload userId={senderId} kind="chat" onUploaded={sendImage} size="icon" variant="ghost">
+        <ImagePlus className="size-5" />
+      </ImageUpload>
       <Textarea
         ref={ref}
         value={body}

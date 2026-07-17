@@ -77,15 +77,34 @@ export function MessageBubble({
           <span className="font-medium text-foreground">{sender?.full_name || sender?.email || "Member"}</span>
           <span>{new Date(message.created_at).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}</span>
         </div>
-        <div
-          className={cn(
-            "rounded-2xl px-3.5 py-2 text-sm whitespace-pre-wrap break-words",
+        {isDeleted || isHidden ? (
+          <div className={cn(
+            "rounded-2xl px-3.5 py-2 text-sm italic opacity-70",
             isMe ? "bg-primary text-primary-foreground rounded-br-sm" : "bg-muted rounded-bl-sm",
-            (isDeleted || isHidden) && "italic opacity-70",
-          )}
-        >
-          {isDeleted ? "Message deleted" : isHidden ? "Hidden by moderator" : message.body}
-        </div>
+          )}>
+            {isDeleted ? "Message deleted" : "Hidden by moderator"}
+          </div>
+        ) : (
+          <>
+            {message.body && (
+              <div className={cn(
+                "rounded-2xl px-3.5 py-2 text-sm whitespace-pre-wrap break-words",
+                isMe ? "bg-primary text-primary-foreground rounded-br-sm" : "bg-muted rounded-bl-sm",
+              )}>
+                {message.body}
+              </div>
+            )}
+            {message.media_urls?.length > 0 && (
+              <div className={cn("flex flex-col gap-1", message.body && "mt-1", isMe && "items-end")}>
+                {message.media_urls.map((url, i) => (
+                  <a key={i} href={url} target="_blank" rel="noreferrer">
+                    <img src={url} alt="Shared image" loading="lazy" className="max-w-[220px] max-h-72 rounded-xl border object-cover" />
+                  </a>
+                ))}
+              </div>
+            )}
+          </>
+        )}
         {grouped.length > 0 && (
           <div className={cn("flex gap-1 mt-1 px-1", isMe && "justify-end")}>
             {grouped.map((g) => (

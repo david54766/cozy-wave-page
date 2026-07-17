@@ -16,12 +16,16 @@ export function ImageUpload({
   onUploaded,
   label = "Upload image",
   children,
+  size = "sm",
+  variant = "outline",
 }: {
   userId: string;
   kind: string;
   onUploaded: (url: string) => void;
   label?: string;
   children?: ReactNode;
+  size?: "sm" | "icon" | "default";
+  variant?: "outline" | "ghost" | "default";
 }) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [busy, setBusy] = useState(false);
@@ -53,9 +57,14 @@ export function ImageUpload({
   return (
     <>
       <input ref={inputRef} type="file" accept="image/*" className="hidden" onChange={onFile} />
-      <Button type="button" variant="outline" size="sm" onClick={() => inputRef.current?.click()} disabled={busy}>
-        {busy ? <Loader2 className="size-4 mr-1.5 animate-spin" /> : <Upload className="size-4 mr-1.5" />}
-        {children ?? (busy ? "Uploading…" : label)}
+      <Button type="button" variant={variant} size={size} onClick={() => inputRef.current?.click()} disabled={busy}>
+        {busy ? (
+          <Loader2 className="size-4 animate-spin" />
+        ) : children ? (
+          children
+        ) : (
+          <><Upload className="size-4 mr-1.5" />{label}</>
+        )}
       </Button>
     </>
   );
