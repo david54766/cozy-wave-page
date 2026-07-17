@@ -1,6 +1,6 @@
 import { supabase } from "@/integrations/supabase/client";
 
-const BUCKET = "avatars";
+const BUCKET = "profiles";
 
 /**
  * Uploads an image to Supabase Storage and returns its public URL.
