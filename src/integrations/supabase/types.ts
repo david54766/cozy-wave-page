@@ -901,6 +901,27 @@ export type Database = {
         }
         Relationships: []
       }
+      blocked_users: {
+        Row: {
+          blocked_user_id: string
+          blocker_user_id: string
+          created_at: string
+          id: string
+        }
+        Insert: {
+          blocked_user_id: string
+          blocker_user_id: string
+          created_at?: string
+          id?: string
+        }
+        Update: {
+          blocked_user_id?: string
+          blocker_user_id?: string
+          created_at?: string
+          id?: string
+        }
+        Relationships: []
+      }
       bundle_items: {
         Row: {
           access_level: Database["public"]["Enums"]["plan_access_level"]
@@ -3788,6 +3809,7 @@ export type Database = {
         }
         Returns: undefined
       }
+      delete_own_account: { Args: never; Returns: undefined }
       eval_automation_condition: {
         Args: { _condition: Json; _user_id: string }
         Returns: boolean
