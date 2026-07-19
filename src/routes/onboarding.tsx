@@ -81,9 +81,10 @@ function OnboardingPage() {
               <div className="flex-1 space-y-1.5">
                 <Label htmlFor="ob-avatar">Profile photo</Label>
                 <div className="flex items-center gap-2">
-                  <ImageUpload userId={user.id} kind="avatar" onUploaded={setAvatar} label="Upload photo" />
+                  <ImageUpload userId={user.id} kind="avatar" aspect={1} cropTitle="Crop profile photo" requirement="Square · 1:1 · up to 5 MB" onUploaded={setAvatar} label="Upload photo" />
                   {avatar && <Button type="button" variant="ghost" size="sm" onClick={() => setAvatar("")}>Remove</Button>}
                 </div>
+                <p className="text-[11px] text-muted-foreground">Square photo · JPG or PNG · up to 5 MB</p>
                 <Input id="ob-avatar" value={avatar} onChange={(e) => setAvatar(e.target.value)} placeholder="…or paste an image URL" />
               </div>
             </div>

@@ -89,9 +89,10 @@ export function ProfileEditForm({ profile, userId, email, onSaved }: { profile: 
           <div className="space-y-1.5">
             <Label>Cover image</Label>
             <div className="flex items-center gap-2">
-              <ImageUpload userId={userId} kind="cover" onUploaded={(url) => set("cover_image_url", url)} label="Upload cover" />
+              <ImageUpload userId={userId} kind="cover" aspect={3} cropTitle="Crop cover image" requirement="Wide banner · 3:1 · up to 5 MB" onUploaded={(url) => set("cover_image_url", url)} label="Upload cover" />
               {state.cover_image_url && <Button type="button" variant="ghost" size="sm" onClick={() => set("cover_image_url", "")}>Remove</Button>}
             </div>
+            <p className="text-[11px] text-muted-foreground">Recommended 3:1 wide banner · JPG or PNG · up to 5 MB</p>
             <Input value={state.cover_image_url} onChange={(e) => set("cover_image_url", e.target.value)} placeholder="…or paste an image URL" />
           </div>
           <div className="space-y-1.5">
@@ -101,9 +102,10 @@ export function ProfileEditForm({ profile, userId, email, onSaved }: { profile: 
                 <AvatarImage src={state.avatar_url || undefined} />
                 <AvatarFallback>{memberInitials(state.full_name, email)}</AvatarFallback>
               </Avatar>
-              <ImageUpload userId={userId} kind="avatar" onUploaded={(url) => set("avatar_url", url)} label="Upload photo" />
+              <ImageUpload userId={userId} kind="avatar" aspect={1} cropTitle="Crop profile photo" requirement="Square · 1:1 · up to 5 MB" onUploaded={(url) => set("avatar_url", url)} label="Upload photo" />
               {state.avatar_url && <Button type="button" variant="ghost" size="sm" onClick={() => set("avatar_url", "")}>Remove</Button>}
             </div>
+            <p className="text-[11px] text-muted-foreground">Square photo · JPG or PNG · up to 5 MB</p>
             <Input value={state.avatar_url} onChange={(e) => set("avatar_url", e.target.value)} placeholder="…or paste an image URL" />
           </div>
         </div>
