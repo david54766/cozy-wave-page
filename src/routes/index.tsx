@@ -119,7 +119,11 @@ function Landing() {
       <footer className="border-t border-border/60">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between text-sm text-muted-foreground">
           <span>© {new Date().getFullYear()} Alpha Gamma Alpha</span>
-          <Link to="/auth" className="hover:text-foreground">Sign in</Link>
+          <div className="flex items-center gap-4">
+            <Link to="/terms" className="hover:text-foreground">Terms</Link>
+            <Link to="/privacy" className="hover:text-foreground">Privacy</Link>
+            <Link to="/auth" className="hover:text-foreground">Sign in</Link>
+          </div>
         </div>
       </footer>
     </main>

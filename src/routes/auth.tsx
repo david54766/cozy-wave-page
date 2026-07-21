@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Checkbox } from "@/components/ui/checkbox";
 import { BrandLogo } from "@/components/app/BrandLogo";
 import { Capacitor } from "@capacitor/core";
 
@@ -92,9 +93,11 @@ function SignupForm() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [agreed, setAgreed] = useState(false);
   const [loading, setLoading] = useState(false);
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!agreed) return toast.error("Please agree to the Terms of Use and Privacy Policy");
     if (password.length < 6) return toast.error("Password must be at least 6 characters");
     setLoading(true);
     const { error } = await supabase.auth.signUp({
@@ -123,7 +126,16 @@ function SignupForm() {
         <Label htmlFor="su-pw">Password</Label>
         <Input id="su-pw" type="password" required value={password} onChange={(e) => setPassword(e.target.value)} />
       </div>
-      <Button type="submit" className="w-full" disabled={loading}>{loading ? "Creating account..." : "Create account"}</Button>
+      <label className="flex items-start gap-2 text-xs text-muted-foreground">
+        <Checkbox checked={agreed} onCheckedChange={(v) => setAgreed(v === true)} className="mt-0.5" />
+        <span>
+          I agree to the{" "}
+          <Link to="/terms" className="text-primary hover:underline">Terms of Use</Link>{" "}
+          and{" "}
+          <Link to="/privacy" className="text-primary hover:underline">Privacy Policy</Link>.
+        </span>
+      </label>
+      <Button type="submit" className="w-full" disabled={loading || !agreed}>{loading ? "Creating account..." : "Create account"}</Button>
     </form>
   );
 }

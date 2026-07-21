@@ -9,7 +9,9 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as TermsRouteImport } from './routes/terms'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
+import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as PricingRouteImport } from './routes/pricing'
 import { Route as OnboardingRouteImport } from './routes/onboarding'
 import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
@@ -117,9 +119,19 @@ import { Route as AuthenticatedAdminSegmentsSegmentIdEditRouteImport } from './r
 import { Route as AuthenticatedAdminAutomationsAutomationIdEditRouteImport } from './routes/_authenticated/admin.automations.$automationId.edit'
 import { Route as AuthenticatedAdminAnnouncementsAnnouncementIdEditRouteImport } from './routes/_authenticated/admin.announcements.$announcementId.edit'
 
+const TermsRoute = TermsRouteImport.update({
+  id: '/terms',
+  path: '/terms',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ResetPasswordRoute = ResetPasswordRouteImport.update({
   id: '/reset-password',
   path: '/reset-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PrivacyRoute = PrivacyRouteImport.update({
+  id: '/privacy',
+  path: '/privacy',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PricingRoute = PricingRouteImport.update({
@@ -736,7 +748,9 @@ export interface FileRoutesByFullPath {
   '/forgot-password': typeof ForgotPasswordRoute
   '/onboarding': typeof OnboardingRoute
   '/pricing': typeof PricingRoute
+  '/privacy': typeof PrivacyRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/terms': typeof TermsRoute
   '/achievements': typeof AuthenticatedAchievementsRoute
   '/admin': typeof AuthenticatedAdminRouteWithChildren
   '/ai-helper': typeof AuthenticatedAiHelperRoute
@@ -844,7 +858,9 @@ export interface FileRoutesByTo {
   '/forgot-password': typeof ForgotPasswordRoute
   '/onboarding': typeof OnboardingRoute
   '/pricing': typeof PricingRoute
+  '/privacy': typeof PrivacyRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/terms': typeof TermsRoute
   '/achievements': typeof AuthenticatedAchievementsRoute
   '/ai-helper': typeof AuthenticatedAiHelperRoute
   '/billing': typeof AuthenticatedBillingRoute
@@ -953,7 +969,9 @@ export interface FileRoutesById {
   '/forgot-password': typeof ForgotPasswordRoute
   '/onboarding': typeof OnboardingRoute
   '/pricing': typeof PricingRoute
+  '/privacy': typeof PrivacyRoute
   '/reset-password': typeof ResetPasswordRoute
+  '/terms': typeof TermsRoute
   '/_authenticated/achievements': typeof AuthenticatedAchievementsRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRouteWithChildren
   '/_authenticated/ai-helper': typeof AuthenticatedAiHelperRoute
@@ -1063,7 +1081,9 @@ export interface FileRouteTypes {
     | '/forgot-password'
     | '/onboarding'
     | '/pricing'
+    | '/privacy'
     | '/reset-password'
+    | '/terms'
     | '/achievements'
     | '/admin'
     | '/ai-helper'
@@ -1171,7 +1191,9 @@ export interface FileRouteTypes {
     | '/forgot-password'
     | '/onboarding'
     | '/pricing'
+    | '/privacy'
     | '/reset-password'
+    | '/terms'
     | '/achievements'
     | '/ai-helper'
     | '/billing'
@@ -1279,7 +1301,9 @@ export interface FileRouteTypes {
     | '/forgot-password'
     | '/onboarding'
     | '/pricing'
+    | '/privacy'
     | '/reset-password'
+    | '/terms'
     | '/_authenticated/achievements'
     | '/_authenticated/admin'
     | '/_authenticated/ai-helper'
@@ -1389,7 +1413,9 @@ export interface RootRouteChildren {
   ForgotPasswordRoute: typeof ForgotPasswordRoute
   OnboardingRoute: typeof OnboardingRoute
   PricingRoute: typeof PricingRoute
+  PrivacyRoute: typeof PrivacyRoute
   ResetPasswordRoute: typeof ResetPasswordRoute
+  TermsRoute: typeof TermsRoute
   ApiBillingPortalRoute: typeof ApiBillingPortalRoute
   ApiCheckoutRoute: typeof ApiCheckoutRoute
   CheckoutFailedRoute: typeof CheckoutFailedRoute
@@ -1400,11 +1426,25 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/terms': {
+      id: '/terms'
+      path: '/terms'
+      fullPath: '/terms'
+      preLoaderRoute: typeof TermsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/reset-password': {
       id: '/reset-password'
       path: '/reset-password'
       fullPath: '/reset-password'
       preLoaderRoute: typeof ResetPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/privacy': {
+      id: '/privacy'
+      path: '/privacy'
+      fullPath: '/privacy'
+      preLoaderRoute: typeof PrivacyRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/pricing': {
@@ -2456,7 +2496,9 @@ const rootRouteChildren: RootRouteChildren = {
   ForgotPasswordRoute: ForgotPasswordRoute,
   OnboardingRoute: OnboardingRoute,
   PricingRoute: PricingRoute,
+  PrivacyRoute: PrivacyRoute,
   ResetPasswordRoute: ResetPasswordRoute,
+  TermsRoute: TermsRoute,
   ApiBillingPortalRoute: ApiBillingPortalRoute,
   ApiCheckoutRoute: ApiCheckoutRoute,
   CheckoutFailedRoute: CheckoutFailedRoute,

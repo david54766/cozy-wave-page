@@ -14,6 +14,7 @@ import { reportLovableError } from "../lib/lovable-error-reporting";
 import { AuthProvider } from "@/hooks/useAuth";
 import { Toaster } from "@/components/ui/sonner";
 import { NativeBootstrap } from "@/components/native/NativeBootstrap";
+import { CookieConsent } from "@/components/CookieConsent";
 
 function NotFoundComponent() {
   return (
@@ -131,6 +132,7 @@ function RootComponent() {
       <AuthProvider>
         <Outlet />
         <NativeBootstrap />
+        <CookieConsent />
         <Toaster richColors position="top-right" />
       </AuthProvider>
     </QueryClientProvider>
