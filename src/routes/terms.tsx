@@ -19,16 +19,17 @@ function TermsPage() {
         <h1 className="text-3xl font-semibold tracking-tight">Terms of Use</h1>
         <p className="text-muted-foreground">Last updated: July 2026</p>
 
-        <p>These Terms of Use ("Terms") govern your use of the Alpha Gamma Alpha application and website (the "Service"). By creating an account or using the Service, you agree to these Terms. If you do not agree, do not use the Service.</p>
+        <p>These Terms of Use ("Terms") govern your use of the Alpha Gamma Alpha application and website (the "Service"), operated by Classroom Panda LLC ("we", "us", "our"). By creating an account or using the Service, you agree to these Terms. If you do not agree, do not use the Service.</p>
 
         <h2 className="text-lg font-semibold pt-2">1. Eligibility</h2>
         <p>You must be at least 13 years old to use the Service. By using it, you represent that you meet this requirement.</p>
 
         <h2 className="text-lg font-semibold pt-2">2. Accounts</h2>
-        <p>You are responsible for your account and keeping your login secure. You may delete your account at any time from Settings → Delete account, which permanently removes your account and associated data.</p>
+        <p>You are responsible for your account and keeping your login secure. You may delete your account at any time from Settings → Delete account, which permanently removes your account and associated data. You can also request deletion without the app — see <Link to="/account-deletion" className="text-primary hover:underline">Account &amp; Data Deletion</Link>.</p>
 
         <h2 className="text-lg font-semibold pt-2">3. Membership and payments</h2>
-        <p>Some features require a paid membership, purchased and managed on our website. Fees and renewal terms are shown at the point of purchase. Payments are processed by Stripe; we do not store full card details.</p>
+        <p>Some features require a paid membership, purchased and managed on our website. Fees and renewal terms are shown at the point of purchase. Paid memberships renew automatically until cancelled. Payments are processed by Stripe; we do not store full card details.</p>
+        <p>You can cancel a recurring membership at any time from your billing settings on the website, or by contacting <a href="mailto:info@easyfill.ai" className="text-primary hover:underline">info@easyfill.ai</a>. Cancellation stops future renewals; unless required by law, payments already made are non-refundable, and you keep access until the end of the paid period.</p>
 
         <h2 className="text-lg font-semibold pt-2">4. Your content</h2>
         <p>You retain ownership of content you post. You grant us a non-exclusive, worldwide, royalty-free license to host and display that content within the Service to operate it. You are responsible for content you post and must have the right to post it.</p>
@@ -46,13 +47,16 @@ function TermsPage() {
         <h2 className="text-lg font-semibold pt-2">8. Disclaimers &amp; liability</h2>
         <p>The Service is provided "as is" without warranties of any kind. To the maximum extent permitted by law, we are not liable for indirect, incidental, or consequential damages arising from your use of the Service.</p>
 
-        <h2 className="text-lg font-semibold pt-2">9. Changes</h2>
+        <h2 className="text-lg font-semibold pt-2">9. Governing law</h2>
+        <p>The Service is operated by Classroom Panda LLC. These Terms are governed by the laws of the United States and the State of Tennessee, without regard to conflict-of-law rules. You agree that the courts located in Tennessee have jurisdiction over any dispute arising from these Terms or the Service, except where applicable law gives you the right to bring a claim elsewhere.</p>
+
+        <h2 className="text-lg font-semibold pt-2">10. Changes</h2>
         <p>We may update these Terms; material changes will be posted here with an updated date. Continued use after changes means you accept them.</p>
 
-        <h2 className="text-lg font-semibold pt-2">10. Contact</h2>
+        <h2 className="text-lg font-semibold pt-2">11. Contact</h2>
         <p>Questions about these Terms: <a href="mailto:info@easyfill.ai" className="text-primary hover:underline">info@easyfill.ai</a>.</p>
 
-        <p className="pt-4"><Link to="/privacy" className="text-primary hover:underline">Privacy Policy →</Link></p>
+        <p className="pt-4 flex gap-4"><Link to="/privacy" className="text-primary hover:underline">Privacy Policy →</Link><Link to="/account-deletion" className="text-primary hover:underline">Account &amp; Data Deletion →</Link></p>
       </article>
     </main>
   );

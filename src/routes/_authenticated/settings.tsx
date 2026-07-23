@@ -4,18 +4,10 @@ import { toast } from "sonner";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Bell, ChevronRight, Trash2, ShieldOff } from "lucide-react";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -109,7 +101,7 @@ function SettingsPage() {
     <div className="max-w-2xl space-y-6">
       <header>
         <h1 className="text-3xl font-semibold tracking-tight">Account Preferences</h1>
-        <p className="text-muted-foreground mt-1">Control how you receive notifications and how the app looks.</p>
+        <p className="text-muted-foreground mt-1">Control how you receive notifications and manage your account.</p>
       </header>
 
       <Card className="rounded-2xl">
@@ -139,22 +131,8 @@ function SettingsPage() {
         </CardContent>
       </Card>
 
-      <Card className="rounded-2xl">
-        <CardHeader><CardTitle>Appearance</CardTitle></CardHeader>
-        <CardContent className="space-y-5">
-          <div className="space-y-2">
-            <Label>Theme</Label>
-            <Select value={theme} onValueChange={setTheme}>
-              <SelectTrigger className="w-full sm:w-60"><SelectValue /></SelectTrigger>
-              <SelectContent>
-                <SelectItem value="system">System</SelectItem>
-                <SelectItem value="light">Light</SelectItem>
-                <SelectItem value="dark">Dark</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-        </CardContent>
-      </Card>
+      {/* Appearance/theme card hidden: the selector didn't apply a theme
+          anywhere, so it was a no-op. Re-enable once theme switching is wired up. */}
 
       <Button onClick={onSave} disabled={saving}>{saving ? "Saving..." : "Save preferences"}</Button>
 
@@ -179,6 +157,21 @@ function SettingsPage() {
               </div>
             ))
           )}
+        </CardContent>
+      </Card>
+
+      <Card className="rounded-2xl">
+        <CardHeader><CardTitle>About &amp; legal</CardTitle></CardHeader>
+        <CardContent className="space-y-2">
+          <Link to="/terms" className="flex items-center justify-between rounded-xl border px-4 py-3 hover:bg-accent transition-colors text-sm font-medium">
+            Terms of Use <ChevronRight className="size-4 text-muted-foreground" />
+          </Link>
+          <Link to="/privacy" className="flex items-center justify-between rounded-xl border px-4 py-3 hover:bg-accent transition-colors text-sm font-medium">
+            Privacy Policy <ChevronRight className="size-4 text-muted-foreground" />
+          </Link>
+          <Link to="/account-deletion" className="flex items-center justify-between rounded-xl border px-4 py-3 hover:bg-accent transition-colors text-sm font-medium">
+            Account &amp; data deletion <ChevronRight className="size-4 text-muted-foreground" />
+          </Link>
         </CardContent>
       </Card>
 

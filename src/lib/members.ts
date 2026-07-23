@@ -25,6 +25,13 @@ export interface MemberSummary extends MemberProfile {
   spaces_joined: number;
 }
 
+// Explicit column list for reading other members' profiles. We deliberately
+// omit `email`: the `authenticated` role is not granted SELECT on profiles.email
+// (members shouldn't read each other's addresses), so `select("*")` throws a 403
+// and the directory comes back empty. Select only the readable, public columns.
+export const MEMBER_PROFILE_COLUMNS =
+  "id, full_name, avatar_url, cover_image_url, bio, location, headline, website_url, social_links_json, status, onboarding_completed, created_at, last_active_at";
+
 export const ROLE_LABELS: Record<AppRole, string> = {
   platform_admin: "Platform Admin",
   moderator: "Moderator",
@@ -58,7 +65,7 @@ export function memberInitials(name: string | null | undefined, fallback?: strin
 
 export async function fetchMembers(): Promise<MemberSummary[]> {
   const [{ data: profs }, { data: roleRows }, { data: memRows }] = await Promise.all([
-    supabase.from("profiles").select("*").order("created_at", { ascending: false }),
+    supabase.from("profiles").select(MEMBER_PROFILE_COLUMNS).order("created_at", { ascending: false }),
     supabase.from("user_roles").select("user_id, role"),
     supabase.from("space_members").select("user_id").eq("status", "active"),
   ]);
@@ -79,7 +86,7 @@ export async function fetchMembers(): Promise<MemberSummary[]> {
 }
 
 export async function fetchMember(userId: string): Promise<MemberSummary | null> {
-  const { data: prof } = await supabase.from("profiles").select("*").eq("id", userId).maybeSingle();
+  const { data: prof } = await supabase.from("profiles").select(MEMBER_PROFILE_COLUMNS).eq("id", userId).maybeSingle();
   if (!prof) return null;
   const [{ data: roleRows }, { count: spacesJoined }] = await Promise.all([
     supabase.from("user_roles").select("role").eq("user_id", userId),

@@ -122,6 +122,7 @@ function Landing() {
           <div className="flex items-center gap-4">
             <Link to="/terms" className="hover:text-foreground">Terms</Link>
             <Link to="/privacy" className="hover:text-foreground">Privacy</Link>
+            <Link to="/account-deletion" className="hover:text-foreground">Delete account</Link>
             <Link to="/auth" className="hover:text-foreground">Sign in</Link>
           </div>
         </div>

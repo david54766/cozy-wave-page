@@ -8,6 +8,10 @@ Reference docs that travel with the repo. Not part of the app build.
 - **AGA-app-store-submission-answers.md** — App Store Connect / Play listing
   answers: app info, App Privacy / Data Safety, age rating, review notes,
   compliance status.
+- **AGA-play-store-legal-checklist.md** — Google Play legal pages, Data-safety
+  answers, content rating, and the deletion URL, mapped to Console fields.
+- **AGA-xcode-update-2.md** — incremental iOS build for the recent, unsubmitted
+  changes; opens with a check that the previous submission is complete.
 - **STRIPE-PAYMENTS-SETUP.md** — web payments setup (secrets, webhook, test flow,
   API-key restrictions). Payments are web-only; native hides purchase UI.
 - **PUSH-NOTIFICATIONS-SETUP.md** — push is scaffolded/dormant; what Firebase/APNs

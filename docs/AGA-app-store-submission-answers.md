@@ -10,8 +10,9 @@ Apple requirements the app doesn't meet yet that will cause rejection.**
 
 1. **In-app account deletion (Guideline 5.1.1(v)) — ✅ BUILT.**
    Settings → Danger zone → "Delete account" (confirm dialog) permanently
-   deletes the account + data via `/api/delete-account`. *Needs: publish in
-   Lovable.*
+   deletes the account + data via the Supabase `delete_own_account` RPC. A public
+   deletion page also exists at `/account-deletion` (required by Google Play, and
+   good for Apple). *Needs: publish in Lovable.*
 2. **Block abusive users (Guideline 1.2, UGC apps) — ✅ BUILT.**
    Block/Unblock on a member's profile; blocked members' feed posts and chat
    messages are hidden; managed in Settings → Blocked members. *Needs: run the
@@ -19,10 +20,13 @@ Apple requirements the app doesn't meet yet that will cause rejection.**
    then publish.*
 3. **Report content — ✅ already existed** (chat + feed report actions).
 
-Still needed (not code):
-4. **Terms of Use (EULA)** URL — draft at `aga-play-store/terms-of-use.md`
-   (includes the Guideline 1.2 zero-tolerance clause). Host it and link it.
-5. **Privacy Policy** URL — draft at `aga-play-store/privacy-policy.md`; host it.
+Legal pages — ✅ live in-app and on the web (publish to make current):
+4. **Terms of Use (EULA):** `https://joinagalink.com/terms` (zero-tolerance
+   clause, auto-renew + cancellation, governing law, liability disclaimer).
+5. **Privacy Policy:** `https://joinagalink.com/privacy`.
+6. **Account & Data Deletion:** `https://joinagalink.com/account-deletion`
+   (Google Play's Data-safety "deletion URL" field — see
+   `AGA-play-store-legal-checklist.md`).
 
 Everything else below is ready to answer.
 

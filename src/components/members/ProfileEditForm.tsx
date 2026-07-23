@@ -32,22 +32,48 @@ export function ProfileEditForm({ profile, userId, email, onSaved }: { profile: 
   });
   const [saving, setSaving] = useState(false);
 
-  useEffect(() => {
-    if (!profile) return;
-    const social = (profile.social_links_json ?? {}) as Record<string, string>;
+  // Load the FULL profile row directly. We can't rely on the `profile` prop from
+  // useAuth — that select only returns a handful of columns (no cover_image_url,
+  // headline, website_url, or social_links_json), so populating from it would
+  // blank those fields and the next save would wipe them in the DB.
+  const load = async () => {
+    const { data } = await supabase
+      .from("profiles")
+      .select("full_name,headline,bio,location,avatar_url,cover_image_url,website_url,social_links_json")
+      .eq("id", userId)
+      .maybeSingle();
+    if (!data) return;
+    const social = (data.social_links_json ?? {}) as Record<string, string>;
     setState({
-      full_name: profile.full_name ?? "",
-      headline: profile.headline ?? "",
-      bio: profile.bio ?? "",
-      location: profile.location ?? "",
-      avatar_url: profile.avatar_url ?? "",
-      cover_image_url: profile.cover_image_url ?? "",
-      website_url: profile.website_url ?? "",
+      full_name: data.full_name ?? "",
+      headline: data.headline ?? "",
+      bio: data.bio ?? "",
+      location: data.location ?? "",
+      avatar_url: data.avatar_url ?? "",
+      cover_image_url: data.cover_image_url ?? "",
+      website_url: data.website_url ?? "",
       twitter: social.twitter ?? "",
       linkedin: social.linkedin ?? "",
       github: social.github ?? "",
     });
-  }, [profile]);
+  };
+
+  useEffect(() => {
+    let active = true;
+    // Instant paint from whatever the prop has, then override with the full row.
+    if (profile) {
+      setState((s) => ({
+        ...s,
+        full_name: profile.full_name ?? s.full_name,
+        avatar_url: profile.avatar_url ?? s.avatar_url,
+        bio: profile.bio ?? s.bio,
+        location: profile.location ?? s.location,
+      }));
+    }
+    void (async () => { if (active) await load(); })();
+    return () => { active = false; };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [userId]);
 
   const set = <K extends keyof FormState>(k: K, v: FormState[K]) => setState((s) => ({ ...s, [k]: v }));
 
@@ -71,7 +97,8 @@ export function ProfileEditForm({ profile, userId, email, onSaved }: { profile: 
     setSaving(false);
     if (error) return toast.error(error.message);
     toast.success("Profile updated");
-    onSaved?.();
+    await load();      // re-read the canonical row so nothing is blanked out
+    onSaved?.();       // refresh the global avatar/name in the nav
   };
 
   return (

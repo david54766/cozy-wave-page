@@ -19,7 +19,7 @@ function PrivacyPage() {
         <h1 className="text-3xl font-semibold tracking-tight">Privacy Policy</h1>
         <p className="text-muted-foreground">Last updated: July 2026</p>
 
-        <p>Alpha Gamma Alpha ("we", "us") provides a private community platform. This policy explains what we collect, why, and your choices.</p>
+        <p>Alpha Gamma Alpha, operated by Classroom Panda LLC ("we", "us", "our"), provides a private community platform. This policy explains what we collect, why, and your choices.</p>
 
         <h2 className="text-lg font-semibold pt-2">Information we collect</h2>
         <ul className="list-disc pl-5 space-y-1">
@@ -36,7 +36,7 @@ function PrivacyPage() {
         <p>Data is stored with our backend provider, Supabase, and transmitted over encrypted HTTPS. Content you post is visible to other members according to the app's access rules. We do not sell your personal information. Payments, where applicable, are processed by Stripe; we do not store full card details.</p>
 
         <h2 className="text-lg font-semibold pt-2">Your choices and rights</h2>
-        <p>You can view and edit your profile in the app. You can permanently delete your account and associated data at any time from <strong>Settings → Delete account</strong>. You can also block other members from their profile.</p>
+        <p>You can view and edit your profile in the app. You can permanently delete your account and associated data at any time from <strong>Settings → Delete account</strong>, or request deletion without the app — see our <Link to="/account-deletion" className="text-primary hover:underline">Account &amp; Data Deletion</Link> page. You can also block other members from their profile.</p>
 
         <h2 className="text-lg font-semibold pt-2">Cookies and local storage</h2>
         <p>On the web, we use essential local storage/cookies to keep you signed in and remember preferences, and basic analytics to improve the app. We do not use advertising cookies.</p>
@@ -53,7 +53,7 @@ function PrivacyPage() {
         <h2 className="text-lg font-semibold pt-2">Contact</h2>
         <p>Questions about this policy: <a href="mailto:info@easyfill.ai" className="text-primary hover:underline">info@easyfill.ai</a>.</p>
 
-        <p className="pt-4"><Link to="/terms" className="text-primary hover:underline">Terms of Use →</Link></p>
+        <p className="pt-4 flex gap-4"><Link to="/terms" className="text-primary hover:underline">Terms of Use →</Link><Link to="/account-deletion" className="text-primary hover:underline">Account &amp; Data Deletion →</Link></p>
       </article>
     </main>
   );
