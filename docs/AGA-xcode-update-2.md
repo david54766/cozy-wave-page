@@ -118,6 +118,21 @@ above.
 
 ---
 
+## Step 2.5 — App icon (use the ready emblem icon)
+
+The Android launcher icon was fixed to use the **emblem only** (crest without the
+"INCORPORATED" text banner), centered. Match iOS to it. A ready **1024×1024,
+opaque (no alpha)** App Store icon is committed at **`assets/appicon-ios-1024.png`**.
+
+- Simplest: in Xcode → `Assets.xcassets` → AppIcon, set the 1024pt "App Store"
+  slot to `assets/appicon-ios-1024.png` (and let Xcode use single-size, or
+  generate the smaller sizes from it).
+- Or regenerate all sizes: `npx @capacitor/assets generate --ios` after copying
+  `assets/appicon-ios-1024.png` over `assets/icon-only.png` — but the committed
+  1024 is already the correct crop, so dropping it into the AppIcon set is enough.
+- The icon must have **no alpha channel** (this file already has none). Do not add
+  transparency or pre-round the corners — iOS rounds them.
+
 ## Step 3 — Bump the build number
 
 In Xcode → target **App** → **General**:
