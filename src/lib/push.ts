@@ -12,8 +12,16 @@ import { supabase } from "@/integrations/supabase/client";
 
 let started = false;
 
+// Push stays OFF until Firebase is configured (android/app/google-services.json
+// + iOS APNs). Without it, the native PushNotifications.register() call throws a
+// "Default FirebaseApp is not initialized" exception on the native side — which a
+// JS try/catch CANNOT catch — and the app hard-crashes right after login (that is
+// exactly when AppShell calls this). Keep this false until google-services.json
+// exists, then flip to true and rebuild. See PUSH-NOTIFICATIONS-SETUP.md.
+const PUSH_ENABLED = false;
+
 export async function registerForPush(userId: string): Promise<void> {
-  if (!Capacitor.isNativePlatform() || started) return;
+  if (!PUSH_ENABLED || !Capacitor.isNativePlatform() || started) return;
   started = true;
   try {
     const { PushNotifications } = await import("@capacitor/push-notifications");
