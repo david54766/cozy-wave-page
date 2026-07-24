@@ -101,7 +101,8 @@ function PricingPage() {
           </div>
         )}
         <p className="text-center text-xs text-muted-foreground mt-10">
-          Checkout is coming soon. Plans currently shown for preview — no charges will occur.
+          Secure checkout is powered by Stripe. Paid memberships renew until cancelled;
+          cancel anytime from your billing settings.
         </p>
 
         {bundles.length > 0 && (

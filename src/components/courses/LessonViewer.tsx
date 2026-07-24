@@ -38,7 +38,7 @@ export function LessonViewer({ lesson }: { lesson: Lesson }) {
         ) : (
           <div className="flex flex-col items-center text-muted-foreground gap-2">
             <Video className="size-10" />
-            <p className="text-sm">Video coming soon</p>
+            <p className="text-sm">No video for this lesson</p>
           </div>
         )}
       </div>

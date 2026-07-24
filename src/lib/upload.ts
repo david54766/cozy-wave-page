@@ -22,3 +22,21 @@ export async function uploadImage(file: File, userId: string, kind: string): Pro
   const { data } = supabase.storage.from(BUCKET).getPublicUrl(path);
   return data.publicUrl;
 }
+
+/**
+ * Uploads any file (documents, PDFs, etc.) to storage under the user's folder and
+ * returns its public URL. Same bucket/RLS as images — the path is prefixed with
+ * the user id so RLS permits the write.
+ */
+export async function uploadFile(file: File, userId: string, kind = "file"): Promise<string> {
+  const ext = (file.name.split(".").pop() || "bin").toLowerCase().replace(/[^a-z0-9]/g, "") || "bin";
+  const path = `${userId}/${kind}-${Date.now()}.${ext}`;
+  const { error } = await supabase.storage.from(BUCKET).upload(path, file, {
+    upsert: true,
+    contentType: file.type || "application/octet-stream",
+    cacheControl: "3600",
+  });
+  if (error) throw error;
+  const { data } = supabase.storage.from(BUCKET).getPublicUrl(path);
+  return data.publicUrl;
+}

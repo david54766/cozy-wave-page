@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { Check, Lock, X } from "lucide-react";
@@ -28,9 +29,8 @@ export function RSVPButton({
 
   if (isLocked(event)) {
     return (
-      <Button variant="outline" disabled>
-        <Lock className="size-4" />
-        Paid event — coming soon
+      <Button asChild variant="outline">
+        <Link to="/plans"><Lock className="size-4 mr-1.5" />Upgrade to attend</Link>
       </Button>
     );
   }

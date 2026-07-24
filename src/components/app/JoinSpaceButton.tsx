@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { Lock, Loader2 } from "lucide-react";
@@ -21,10 +22,19 @@ export function JoinSpaceButton({
   const [busy, setBusy] = useState(false);
 
   if (!canJoin(space) && !isMember) {
+    // Paid space → send the member to the plans page (which runs real checkout on
+    // web and hides purchase UI on native, per store policy). Other locked spaces
+    // are simply not joinable.
+    if (space.access_level === "paid_placeholder") {
+      return (
+        <Button asChild size={size} variant="secondary" className="flex-1">
+          <Link to="/plans"><Lock className="size-3.5 mr-1.5" />Upgrade to unlock</Link>
+        </Button>
+      );
+    }
     return (
       <Button size={size} variant="secondary" disabled className="flex-1">
-        <Lock className="size-3.5 mr-1.5" />
-        {space.access_level === "paid_placeholder" ? "Coming soon" : "Locked"}
+        <Lock className="size-3.5 mr-1.5" />Locked
       </Button>
     );
   }

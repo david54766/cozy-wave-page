@@ -154,7 +154,7 @@ function EventDetail() {
           <LivestreamPanel event={event} canJoin={canJoinStream} isLive={isLive} isPast={past} />
         </>
       ) : locked ? (
-        <LockedContentCard title="Paid event — coming soon" description="Paid event support will be available in a future phase." />
+        <LockedContentCard title="Members-only event" description="Upgrade your membership to unlock this event and its details." />
       ) : event.virtual_link ? (
         <Card className="rounded-2xl">
           <CardContent className="pt-6">

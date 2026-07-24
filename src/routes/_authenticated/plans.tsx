@@ -2,7 +2,6 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { PlanCard } from "@/components/plans/PlanCard";
 import { CheckoutButton } from "@/components/billing/CheckoutButton";
@@ -61,11 +60,10 @@ function PlansPage() {
                 <p className="font-semibold">Free Member</p>
               </div>
             </div>
-            <Badge variant="secondary">Coming soon</Badge>
           </div>
         </CardHeader>
         <CardContent className="flex flex-wrap items-center justify-between gap-3">
-          <p className="text-sm text-muted-foreground">Paid checkout will activate in a later phase. Browse upgrade options below.</p>
+          <p className="text-sm text-muted-foreground">Choose a plan below to upgrade — secure checkout via Stripe.</p>
           <Button variant="outline" asChild><Link to="/pricing">View public pricing</Link></Button>
         </CardContent>
       </Card>

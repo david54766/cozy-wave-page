@@ -126,7 +126,7 @@ function CourseDetail() {
                 </Link>
               </Button>
             )}
-            {locked && <Button disabled><Lock className="size-4 mr-1.5" />Unlock coming soon</Button>}
+            {locked && <Button asChild><Link to="/plans"><Lock className="size-4 mr-1.5" />Upgrade to unlock</Link></Button>}
           </div>
         </div>
         <div className="aspect-video rounded-2xl overflow-hidden bg-gradient-to-br from-primary/20 via-primary/5 to-background grid place-items-center">

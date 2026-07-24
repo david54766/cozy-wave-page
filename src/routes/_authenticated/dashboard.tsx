@@ -208,7 +208,7 @@ function Dashboard() {
         <SuggestedMembersCard />
         <DashboardCard title="Membership" icon={<CreditCard className="size-4" />}>
           <p className="text-sm"><span className="text-muted-foreground">Current plan:</span> <span className="font-medium">Free Member</span></p>
-          <p className="text-xs text-muted-foreground mt-1">Upgrade Coming Soon — full checkout activates in a later phase.</p>
+          <p className="text-xs text-muted-foreground mt-1">Unlock paid spaces, events, and courses by upgrading your membership.</p>
           <div className="mt-3 flex gap-2">
             <Button size="sm" variant="outline" asChild><Link to="/plans">View plans <ArrowRight className="size-4 ml-1" /></Link></Button>
             <Button size="sm" variant="ghost" asChild><Link to="/pricing">Pricing</Link></Button>

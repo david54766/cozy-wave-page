@@ -1,11 +1,17 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
+import { toast } from "sonner";
+import { Upload, Loader2 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
+import { useAuth } from "@/hooks/useAuth";
+import { uploadFile } from "@/lib/upload";
 import { RESOURCE_TYPE_LABELS, RESOURCE_VISIBILITY_LABELS, RESOURCE_ACCESS_LABELS, type Resource, type ResourceFolder } from "@/lib/resources";
+
+const MAX_FILE_MB = 25;
 
 interface Props {
   initial?: Partial<Resource>;
@@ -22,10 +28,30 @@ export function AdminResourceForm({ initial, folders, spaces, onSubmit, onCancel
     ...initial,
   });
   const [busy, setBusy] = useState(false);
+  const { user } = useAuth();
+  const fileRef = useRef<HTMLInputElement>(null);
+  const [uploading, setUploading] = useState(false);
 
   useEffect(() => { if (initial) setV((s: any) => ({ ...s, ...initial })); }, [initial?.id]);
 
   const set = (k: string, val: any) => setV((s: any) => ({ ...s, [k]: val }));
+
+  const onPickFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    e.target.value = "";
+    if (!file || !user) return;
+    if (file.size > MAX_FILE_MB * 1024 * 1024) { toast.error(`File must be under ${MAX_FILE_MB} MB`); return; }
+    setUploading(true);
+    try {
+      const url = await uploadFile(file, user.id, "resource");
+      set("file_url", url);
+      toast.success("File uploaded");
+    } catch (err: any) {
+      toast.error(err?.message ?? "Upload failed");
+    } finally {
+      setUploading(false);
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -81,8 +107,14 @@ export function AdminResourceForm({ initial, folders, spaces, onSubmit, onCancel
           <Input value={v.thumbnail_url ?? ""} onChange={(e) => set("thumbnail_url", e.target.value)} placeholder="https://..." />
         </div>
         <div>
-          <Label>File URL</Label>
-          <Input value={v.file_url ?? ""} onChange={(e) => set("file_url", e.target.value)} placeholder="https://..." />
+          <Label>File</Label>
+          <div className="flex gap-2">
+            <Input value={v.file_url ?? ""} onChange={(e) => set("file_url", e.target.value)} placeholder="Upload or paste a URL" />
+            <input ref={fileRef} type="file" className="hidden" onChange={onPickFile} />
+            <Button type="button" variant="outline" onClick={() => fileRef.current?.click()} disabled={uploading}>
+              {uploading ? <Loader2 className="size-4 animate-spin" /> : <><Upload className="size-4 mr-1.5" />Upload</>}
+            </Button>
+          </div>
         </div>
         <div>
           <Label>External URL</Label>
@@ -107,7 +139,7 @@ export function AdminResourceForm({ initial, folders, spaces, onSubmit, onCancel
         <label className="flex items-center gap-2 text-sm"><Switch checked={!!v.is_featured} onCheckedChange={(x) => set("is_featured", x)} /> Featured</label>
         <label className="flex items-center gap-2 text-sm"><Switch checked={!!v.is_archived} onCheckedChange={(x) => set("is_archived", x)} /> Archived</label>
       </div>
-      <p className="text-xs text-muted-foreground">File upload to storage coming soon — paste a hosted URL for now.</p>
+      <p className="text-xs text-muted-foreground">Upload a file (up to {MAX_FILE_MB} MB) or paste a hosted URL.</p>
       <div className="flex justify-end gap-2 pt-2">
         <Button type="button" variant="ghost" onClick={onCancel}>Cancel</Button>
         <Button type="submit" disabled={busy}>{initial?.id ? "Save changes" : "Create resource"}</Button>

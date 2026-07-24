@@ -1,5 +1,5 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { DashboardCard, EmptyState } from "./DashboardCard";
+import { DashboardCard } from "./DashboardCard";
 import { SpaceMemberList, type SpaceMemberRow } from "./SpaceMemberList";
 import { Compass, Newspaper, GraduationCap, Calendar, Users, BookOpen, Sparkles, MessageSquare } from "lucide-react";
 import type { Space } from "@/lib/spaces";
@@ -7,6 +7,7 @@ import { FeedList } from "@/components/feed/FeedList";
 import { SpaceCoursesTab } from "./SpaceCoursesTab";
 import { UpcomingEventsWidget } from "@/components/events/UpcomingEventsWidget";
 import { SpaceChatPanel } from "@/components/chat/SpaceChatPanel";
+import { SpaceResourcesTab } from "./SpaceResourcesTab";
 
 export function SpaceTabs({ space, members, isMember }: { space: Space; members: SpaceMemberRow[]; isMember: boolean }) {
   return (
@@ -65,7 +66,7 @@ export function SpaceTabs({ space, members, isMember }: { space: Space; members:
         <SpaceMemberList members={members} />
       </TabsContent>
       <TabsContent value="resources">
-        <EmptyState icon={<BookOpen className="size-5" />} title="Resources are coming soon" description="Templates, files, and links will live here." />
+        <SpaceResourcesTab spaceId={space.id} />
       </TabsContent>
     </Tabs>
   );

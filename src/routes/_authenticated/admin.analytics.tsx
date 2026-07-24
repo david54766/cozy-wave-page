@@ -13,7 +13,7 @@ import {
 } from "lucide-react";
 import { ExportButtonPlaceholder } from "@/components/analytics/ExportButtonPlaceholder";
 import { AtRiskMemberTable } from "@/components/analytics/AtRiskMemberTable";
-import { AnalyticsChartPlaceholder } from "@/components/analytics/AnalyticsChartPlaceholder";
+import { AnalyticsChart, type ChartPoint } from "@/components/analytics/AnalyticsChart";
 import { AuditLogTable } from "@/components/audit/AuditLogTable";
 
 export const Route = createFileRoute("/_authenticated/admin/analytics")({
@@ -245,6 +245,40 @@ function AnalyticsPage() {
 }
 
 function AdvancedAnalyticsSection() {
+  const [series, setSeries] = useState<{ members: ChartPoint[]; newMembers: ChartPoint[]; posts: ChartPoint[]; revenue: ChartPoint[] } | null>(null);
+
+  // Real time-series for the charts: 8 weekly buckets aggregated from live rows.
+  useEffect(() => {
+    (async () => {
+      const sb: any = supabase;
+      const [profs, postRows, purchaseRows] = await Promise.all([
+        supabase.from("profiles").select("created_at"),
+        supabase.from("posts").select("created_at").eq("status", "active"),
+        sb.from("purchases").select("amount,created_at,status"),
+      ]);
+      const now = Date.now();
+      const WEEK = 7 * 86400_000;
+      const buckets = Array.from({ length: 8 }, (_, i) => {
+        const end = now - (7 - i) * WEEK;
+        const d = new Date(end);
+        return { start: end - WEEK, end, label: `${d.getMonth() + 1}/${d.getDate()}` };
+      });
+      const ts = (r: any) => new Date(r.created_at).getTime();
+      const profTimes = (profs.data ?? []).map(ts);
+      const postTimes = (postRows.data ?? []).map(ts);
+      const paid = (purchaseRows.data ?? []).filter((r: any) => r.status === "paid");
+      setSeries({
+        members: buckets.map((b) => ({ label: b.label, value: profTimes.filter((t) => t <= b.end).length })),
+        newMembers: buckets.map((b) => ({ label: b.label, value: profTimes.filter((t) => t > b.start && t <= b.end).length })),
+        posts: buckets.map((b) => ({ label: b.label, value: postTimes.filter((t) => t > b.start && t <= b.end).length })),
+        revenue: buckets.map((b) => ({
+          label: b.label,
+          value: Math.round(paid.filter((r: any) => { const t = ts(r); return t > b.start && t <= b.end; }).reduce((s: number, r: any) => s + (Number(r.amount) || 0), 0)),
+        })),
+      });
+    })().catch(() => setSeries({ members: [], newMembers: [], posts: [], revenue: [] }));
+  }, []);
+
   return (
     <>
       <div className="flex flex-wrap items-center justify-between gap-2 pt-4">
@@ -270,10 +304,10 @@ function AdvancedAnalyticsSection() {
       </div>
 
       <div className="grid gap-4 lg:grid-cols-2">
-        <AnalyticsChartPlaceholder title="Member growth over time" />
-        <AnalyticsChartPlaceholder title="Daily active members" />
-        <AnalyticsChartPlaceholder title="Posts over time" />
-        <AnalyticsChartPlaceholder title="Revenue over time" />
+        <AnalyticsChart title="Member growth (cumulative)" data={series?.members ?? []} loading={!series} />
+        <AnalyticsChart title="New members / week" data={series?.newMembers ?? []} loading={!series} />
+        <AnalyticsChart title="Posts / week" data={series?.posts ?? []} loading={!series} />
+        <AnalyticsChart title="Revenue / week" data={series?.revenue ?? []} prefix="$" loading={!series} />
       </div>
     </>
   );

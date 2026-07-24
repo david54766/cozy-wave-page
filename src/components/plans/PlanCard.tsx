@@ -72,8 +72,8 @@ export function PlanCard({ plan, features, ctaLabel, ctaTo, onCta, highlight, fo
               <Link to={ctaTo}>{ctaLabel ?? "View Plan"}</Link>
             </Button>
           ) : (
-            <Button variant={featured ? "default" : "outline"} className="w-full" onClick={onCta}>
-              {ctaLabel ?? "Upgrade Coming Soon"}
+            <Button asChild variant={featured ? "default" : "outline"} className="w-full">
+              <Link to="/plans">{ctaLabel ?? "View plans"}</Link>
             </Button>
           )}
           {footer}

@@ -6,7 +6,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
-import { MessageSquare, MoreHorizontal, Pin, Star, Flag, EyeOff, Eye, Trash2, AlertOctagon } from "lucide-react";
+import { MessageSquare, MoreHorizontal, Pin, Star, Flag, EyeOff, Eye, Trash2 } from "lucide-react";
 import { PostTypePill } from "./PostTypePill";
 import { ReactionBar } from "./ReactionBar";
 import { ReportModal } from "./ReportModal";
@@ -177,9 +177,12 @@ export function PostCard({
         {hashtags.length > 0 && <HashtagList tags={hashtags} />}
 
         {post.media_urls.length > 0 && (
-          <div className="rounded-xl border border-dashed border-border bg-muted/30 px-4 py-3 text-xs text-muted-foreground">
-            <AlertOctagon className="size-3.5 inline mr-1.5" />
-            Media preview coming soon
+          <div className={`grid gap-2 ${post.media_urls.length === 1 ? "grid-cols-1" : "grid-cols-2"}`}>
+            {post.media_urls.map((url, i) => (
+              <a key={`${url}-${i}`} href={url} target="_blank" rel="noopener noreferrer" className="block overflow-hidden rounded-lg border">
+                <img src={url} alt="" loading="lazy" className="w-full max-h-96 object-cover" />
+              </a>
+            ))}
           </div>
         )}
 
