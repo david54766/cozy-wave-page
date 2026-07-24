@@ -23,6 +23,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as InviteTokenRouteImport } from './routes/invite.$token'
 import { Route as CheckoutSuccessRouteImport } from './routes/checkout.success'
 import { Route as CheckoutFailedRouteImport } from './routes/checkout.failed'
+import { Route as ApiSendInviteRouteImport } from './routes/api/send-invite'
 import { Route as ApiCheckoutRouteImport } from './routes/api/checkout'
 import { Route as ApiBillingPortalRouteImport } from './routes/api/billing-portal'
 import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticated/settings'
@@ -188,6 +189,11 @@ const CheckoutSuccessRoute = CheckoutSuccessRouteImport.update({
 const CheckoutFailedRoute = CheckoutFailedRouteImport.update({
   id: '/checkout/failed',
   path: '/checkout/failed',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiSendInviteRoute = ApiSendInviteRouteImport.update({
+  id: '/api/send-invite',
+  path: '/api/send-invite',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiCheckoutRoute = ApiCheckoutRouteImport.update({
@@ -784,6 +790,7 @@ export interface FileRoutesByFullPath {
   '/settings': typeof AuthenticatedSettingsRouteWithChildren
   '/api/billing-portal': typeof ApiBillingPortalRoute
   '/api/checkout': typeof ApiCheckoutRoute
+  '/api/send-invite': typeof ApiSendInviteRoute
   '/checkout/failed': typeof CheckoutFailedRoute
   '/checkout/success': typeof CheckoutSuccessRoute
   '/invite/$token': typeof InviteTokenRoute
@@ -895,6 +902,7 @@ export interface FileRoutesByTo {
   '/settings': typeof AuthenticatedSettingsRouteWithChildren
   '/api/billing-portal': typeof ApiBillingPortalRoute
   '/api/checkout': typeof ApiCheckoutRoute
+  '/api/send-invite': typeof ApiSendInviteRoute
   '/checkout/failed': typeof CheckoutFailedRoute
   '/checkout/success': typeof CheckoutSuccessRoute
   '/invite/$token': typeof InviteTokenRoute
@@ -1009,6 +1017,7 @@ export interface FileRoutesById {
   '/_authenticated/settings': typeof AuthenticatedSettingsRouteWithChildren
   '/api/billing-portal': typeof ApiBillingPortalRoute
   '/api/checkout': typeof ApiCheckoutRoute
+  '/api/send-invite': typeof ApiSendInviteRoute
   '/checkout/failed': typeof CheckoutFailedRoute
   '/checkout/success': typeof CheckoutSuccessRoute
   '/invite/$token': typeof InviteTokenRoute
@@ -1123,6 +1132,7 @@ export interface FileRouteTypes {
     | '/settings'
     | '/api/billing-portal'
     | '/api/checkout'
+    | '/api/send-invite'
     | '/checkout/failed'
     | '/checkout/success'
     | '/invite/$token'
@@ -1234,6 +1244,7 @@ export interface FileRouteTypes {
     | '/settings'
     | '/api/billing-portal'
     | '/api/checkout'
+    | '/api/send-invite'
     | '/checkout/failed'
     | '/checkout/success'
     | '/invite/$token'
@@ -1347,6 +1358,7 @@ export interface FileRouteTypes {
     | '/_authenticated/settings'
     | '/api/billing-portal'
     | '/api/checkout'
+    | '/api/send-invite'
     | '/checkout/failed'
     | '/checkout/success'
     | '/invite/$token'
@@ -1443,6 +1455,7 @@ export interface RootRouteChildren {
   TermsRoute: typeof TermsRoute
   ApiBillingPortalRoute: typeof ApiBillingPortalRoute
   ApiCheckoutRoute: typeof ApiCheckoutRoute
+  ApiSendInviteRoute: typeof ApiSendInviteRoute
   CheckoutFailedRoute: typeof CheckoutFailedRoute
   CheckoutSuccessRoute: typeof CheckoutSuccessRoute
   InviteTokenRoute: typeof InviteTokenRoute
@@ -1548,6 +1561,13 @@ declare module '@tanstack/react-router' {
       path: '/checkout/failed'
       fullPath: '/checkout/failed'
       preLoaderRoute: typeof CheckoutFailedRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/send-invite': {
+      id: '/api/send-invite'
+      path: '/api/send-invite'
+      fullPath: '/api/send-invite'
+      preLoaderRoute: typeof ApiSendInviteRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/checkout': {
@@ -2542,6 +2562,7 @@ const rootRouteChildren: RootRouteChildren = {
   TermsRoute: TermsRoute,
   ApiBillingPortalRoute: ApiBillingPortalRoute,
   ApiCheckoutRoute: ApiCheckoutRoute,
+  ApiSendInviteRoute: ApiSendInviteRoute,
   CheckoutFailedRoute: CheckoutFailedRoute,
   CheckoutSuccessRoute: CheckoutSuccessRoute,
   InviteTokenRoute: InviteTokenRoute,

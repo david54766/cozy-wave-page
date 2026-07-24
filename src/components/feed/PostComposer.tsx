@@ -12,6 +12,7 @@ import { toast } from "sonner";
 import { Send, Loader2, Plus, X } from "lucide-react";
 import type { Space } from "@/lib/spaces";
 import { parseHashtags, normalizeHashtag, type PostType, type PostVisibility } from "@/lib/feed";
+import { ImageUpload } from "@/components/ImageUpload";
 
 export function PostComposer({
   spaces,
@@ -34,6 +35,7 @@ export function PostComposer({
   const [allowMultiple, setAllowMultiple] = useState(false);
   const [closesAt, setClosesAt] = useState("");
   const [hashtagsRaw, setHashtagsRaw] = useState("");
+  const [mediaUrls, setMediaUrls] = useState<string[]>([]);
 
   const isPoll = postType === "poll";
   const needsTitle = postType === "article" || postType === "question" || postType === "poll";
@@ -42,7 +44,7 @@ export function PostComposer({
     setTitle(""); setBody(""); setPostType("quick_post");
     setVisibility("space_members"); setOpen(false);
     setPollOptions(["", ""]); setAllowMultiple(false); setClosesAt("");
-    setHashtagsRaw("");
+    setHashtagsRaw(""); setMediaUrls([]);
   };
 
   const submit = async () => {
@@ -65,6 +67,7 @@ export function PostComposer({
       title: needsTitle ? title.trim().slice(0, 200) : (title.trim() ? title.trim().slice(0, 200) : null),
       body: body.trim().slice(0, 10000),
       visibility,
+      media_urls: mediaUrls,
     }).select("id").maybeSingle();
     if (error || !postRow) {
       setBusy(false);
@@ -209,6 +212,31 @@ export function PostComposer({
                     <Input type="datetime-local" value={closesAt} onChange={(e) => setClosesAt(e.target.value)} className="w-[200px]" />
                   </div>
                 </div>
+              </div>
+            )}
+            {!isPoll && (
+              <div className="space-y-2">
+                <Label className="text-xs text-muted-foreground">Images (optional)</Label>
+                {mediaUrls.length > 0 && (
+                  <div className="flex flex-wrap gap-2">
+                    {mediaUrls.map((url, i) => (
+                      <div key={`${url}-${i}`} className="relative">
+                        <img src={url} alt="" className="size-20 rounded-lg border object-cover" />
+                        <button
+                          type="button"
+                          onClick={() => setMediaUrls((m) => m.filter((_, idx) => idx !== i))}
+                          className="absolute -top-1.5 -right-1.5 rounded-full bg-background border p-0.5 shadow-sm"
+                          aria-label="Remove image"
+                        >
+                          <X className="size-3.5" />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+                {user && (
+                  <ImageUpload userId={user.id} kind="post" variant="outline" label="Add image" onUploaded={(url) => setMediaUrls((m) => [...m, url])} />
+                )}
               </div>
             )}
             <div className="space-y-1.5">

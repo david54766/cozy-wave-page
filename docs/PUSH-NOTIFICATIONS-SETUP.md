@@ -56,6 +56,19 @@ push. To add more push types later, edit `PUSH_TYPES` in
 4. Bad/expired tokens are pruned automatically (the route deletes tokens FCM
    reports as unregistered).
 
+## Email notifications (same fan-out)
+
+The notification fan-out route also sends **email** for the same `new_message` /
+`admin_announcement` events, to members who have **Email notifications** on. It
+uses Resend.
+
+1. Create a Resend account, verify the **joinagalink.com** domain.
+2. Set secrets: **`RESEND_API_KEY`**, and optionally **`EMAIL_FROM`**
+   (default `Alpha Gamma Alpha <noreply@joinagalink.com>`).
+3. That's it — the same `notifications` webhook now emails opted-in members, and
+   the **Resend invite** button (Admin → Invitations) sends a real invite email
+   (falls back to copying the invite link if `RESEND_API_KEY` isn't set).
+
 ## Notes
 - Push currently goes to **every registered device** for the recipient (having a
   token means the user granted OS notification permission). A user-facing on/off

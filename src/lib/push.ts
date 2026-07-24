@@ -20,8 +20,27 @@ let started = false;
 // exists, then flip to true and rebuild. See PUSH-NOTIFICATIONS-SETUP.md.
 const PUSH_ENABLED = false;
 
+/** Stop receiving push on this account: delete stored device tokens. */
+export async function unregisterPush(userId: string): Promise<void> {
+  started = false;
+  try {
+    await (supabase as any).from("device_push_tokens").delete().eq("user_id", userId);
+    if (PUSH_ENABLED && Capacitor.isNativePlatform()) {
+      const { PushNotifications } = await import("@capacitor/push-notifications");
+      await PushNotifications.removeAllListeners();
+    }
+  } catch { /* best-effort */ }
+}
+
 export async function registerForPush(userId: string): Promise<void> {
   if (!PUSH_ENABLED || !Capacitor.isNativePlatform() || started) return;
+  // Respect the member's in-app toggle — only register if they've enabled push.
+  const { data: pref } = await supabase
+    .from("user_preferences")
+    .select("push_notifications_enabled")
+    .eq("user_id", userId)
+    .maybeSingle();
+  if (!pref?.push_notifications_enabled) return;
   started = true;
   try {
     const { PushNotifications } = await import("@capacitor/push-notifications");

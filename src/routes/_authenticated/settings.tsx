@@ -20,6 +20,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { fetchMyBlockedMembers, unblockUser, type BlockedMember } from "@/lib/blocks";
+import { registerForPush, unregisterPush } from "@/lib/push";
 
 export const Route = createFileRoute("/_authenticated/settings")({
   component: SettingsPage,
@@ -80,6 +81,20 @@ function SettingsPage() {
     }
   };
 
+  const onTogglePush = async (v: boolean) => {
+    setPushNotif(v);
+    if (!user) return;
+    // Persist immediately so the choice is authoritative for the push sender.
+    await supabase.from("user_preferences").upsert(
+      { user_id: user.id, push_notifications_enabled: v },
+      { onConflict: "user_id" },
+    );
+    try {
+      if (v) { await registerForPush(user.id); } else { await unregisterPush(user.id); }
+    } catch { /* native-only; ignore on web */ }
+    toast.success(v ? "Push notifications on" : "Push notifications off");
+  };
+
   const onSave = async () => {
     if (!user) return;
     setSaving(true);
@@ -110,8 +125,8 @@ function SettingsPage() {
           <Row label="Email notifications" hint="Receive activity summaries by email.">
             <Switch checked={emailNotif} onCheckedChange={setEmailNotif} />
           </Row>
-          <Row label="Push notifications" hint="Coming soon — get notified on your devices.">
-            <Switch checked={pushNotif} onCheckedChange={setPushNotif} disabled />
+          <Row label="Push notifications" hint="Get notified on your devices about new messages and announcements.">
+            <Switch checked={pushNotif} onCheckedChange={onTogglePush} />
           </Row>
           <Link
             to="/settings/notifications"

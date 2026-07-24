@@ -91,11 +91,11 @@ function NotificationPreferencesPage() {
           <Card className="rounded-2xl">
             <CardHeader><CardTitle>Delivery channels</CardTitle></CardHeader>
             <CardContent className="space-y-5">
-              <Row label="Email notifications" hint="Coming soon — receive activity summaries by email.">
-                <Switch checked={prefs.email_notifications_enabled} onCheckedChange={(v) => update({ email_notifications_enabled: v })} disabled />
+              <Row label="Email notifications" hint="Receive activity summaries by email.">
+                <Switch checked={prefs.email_notifications_enabled} onCheckedChange={(v) => update({ email_notifications_enabled: v })} />
               </Row>
-              <Row label="Push notifications" hint="Coming soon — get notified on your devices.">
-                <Switch checked={prefs.push_notifications_enabled} onCheckedChange={(v) => update({ push_notifications_enabled: v })} disabled />
+              <Row label="Push notifications" hint="Get notified on your devices about new messages and announcements.">
+                <Switch checked={prefs.push_notifications_enabled} onCheckedChange={(v) => update({ push_notifications_enabled: v })} />
               </Row>
             </CardContent>
           </Card>

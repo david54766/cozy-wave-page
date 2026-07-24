@@ -23,11 +23,15 @@ function getEmbedUrl(url: string): string | null {
 }
 
 export function LessonViewer({ lesson }: { lesson: Lesson }) {
-  const embed = lesson.video_url ? getEmbedUrl(lesson.video_url) : null;
+  const url = lesson.video_url || null;
+  const isDirectFile = url ? /\.(mp4|webm|ogg|mov|m4v)(\?.*)?$/i.test(url) : false;
+  const embed = url && !isDirectFile ? getEmbedUrl(url) : null;
   return (
     <div className="space-y-6">
       <div className="aspect-video rounded-2xl overflow-hidden bg-muted grid place-items-center">
-        {embed ? (
+        {isDirectFile && url ? (
+          <video src={url} controls className="size-full" />
+        ) : embed ? (
           <iframe
             src={embed}
             title={lesson.title}

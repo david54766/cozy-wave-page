@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { loadServiceAccount, sendPush } from "@/lib/server/fcm";
+import { emailConfigured, sendEmail, emailShell } from "@/lib/server/email";
 
 /**
  * Push fan-out. Sends a device push whenever an in-app notification is created.
@@ -57,40 +58,53 @@ export const Route = createFileRoute("/api/public/push-fanout")({
         if (!PUSH_TYPES.has(type)) return json(200, { skipped: `type ${type}` });
         if (!userId) return json(200, { skipped: "no recipient" });
 
-        const sa = loadServiceAccount();
-        if (!sa) return json(503, { error: "FCM service account not configured" });
-
         const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
         const admin = supabaseAdmin as unknown as { from: (t: string) => any };
 
-        const { data: tokenRows } = await admin
-          .from("device_push_tokens")
-          .select("token")
-          .eq("user_id", userId);
-        const tokens = (tokenRows ?? []).map((r: any) => r.token as string).filter(Boolean);
-        if (tokens.length === 0) return json(200, { skipped: "no devices" });
+        const { data: pref } = await admin
+          .from("user_preferences")
+          .select("push_notifications_enabled, email_notifications_enabled")
+          .eq("user_id", userId)
+          .maybeSingle();
 
-        const results = await sendPush(sa, tokens, {
-          title: String(record.title || "AGA"),
-          body: String(record.body || ""),
-          url: urlForTarget(record.target_type, record.target_id),
-        });
+        const title = String(record.title || "Alpha Gamma Alpha");
+        const body = String(record.body || "");
+        const url = urlForTarget(record.target_type, record.target_id);
+        const out: Record<string, unknown> = { type };
 
-        const dead = results.filter((r) => r.dead).map((r) => r.token);
-        if (dead.length) {
-          try {
-            await admin.from("device_push_tokens").delete().in("token", dead);
-          } catch {
-            /* non-fatal */
+        // --- Push channel (opt-in + Firebase configured) ---
+        const sa = loadServiceAccount();
+        if (pref?.push_notifications_enabled && sa) {
+          const { data: tokenRows } = await admin
+            .from("device_push_tokens")
+            .select("token")
+            .eq("user_id", userId);
+          const tokens = (tokenRows ?? []).map((r: any) => r.token as string).filter(Boolean);
+          if (tokens.length) {
+            const results = await sendPush(sa, tokens, { title, body, url });
+            const dead = results.filter((r) => r.dead).map((r) => r.token);
+            if (dead.length) {
+              try { await admin.from("device_push_tokens").delete().in("token", dead); } catch { /* non-fatal */ }
+            }
+            out.push = { sent: results.filter((r) => r.ok).length, pruned: dead.length };
           }
         }
 
-        return json(200, {
-          type,
-          sent: results.filter((r) => r.ok).length,
-          failed: results.filter((r) => !r.ok).length,
-          pruned: dead.length,
-        });
+        // --- Email channel (opt-in + Resend configured) ---
+        if (pref?.email_notifications_enabled && emailConfigured()) {
+          const { data: prof } = await admin.from("profiles").select("email").eq("id", userId).maybeSingle();
+          if (prof?.email) {
+            const link = `https://joinagalink.com${url}`;
+            const r = await sendEmail({
+              to: prof.email,
+              subject: title,
+              html: emailShell(title, `<p>${body}</p><p><a href="${link}" style="color:#4E89C4">Open in Alpha Gamma Alpha →</a></p>`),
+            });
+            out.email = r.ok ? "sent" : r.error;
+          }
+        }
+
+        return json(200, out);
       },
     },
   },
