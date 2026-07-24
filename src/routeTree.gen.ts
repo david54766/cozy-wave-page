@@ -50,6 +50,7 @@ import { Route as AuthenticatedCoursesIndexRouteImport } from './routes/_authent
 import { Route as AuthenticatedCertificatesIndexRouteImport } from './routes/_authenticated/certificates.index'
 import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin.index'
 import { Route as ApiPublicStripeWebhookRouteImport } from './routes/api/public/stripe-webhook'
+import { Route as ApiPublicPushFanoutRouteImport } from './routes/api/public/push-fanout'
 import { Route as AuthenticatedSpacesSpaceIdRouteImport } from './routes/_authenticated/spaces.$spaceId'
 import { Route as AuthenticatedSettingsNotificationsRouteImport } from './routes/_authenticated/settings.notifications'
 import { Route as AuthenticatedResourcesResourceIdRouteImport } from './routes/_authenticated/resources.$resourceId'
@@ -331,6 +332,11 @@ const AuthenticatedAdminIndexRoute = AuthenticatedAdminIndexRouteImport.update({
 const ApiPublicStripeWebhookRoute = ApiPublicStripeWebhookRouteImport.update({
   id: '/api/public/stripe-webhook',
   path: '/api/public/stripe-webhook',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicPushFanoutRoute = ApiPublicPushFanoutRouteImport.update({
+  id: '/api/public/push-fanout',
+  path: '/api/public/push-fanout',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthenticatedSpacesSpaceIdRoute =
@@ -821,6 +827,7 @@ export interface FileRoutesByFullPath {
   '/resources/$resourceId': typeof AuthenticatedResourcesResourceIdRoute
   '/settings/notifications': typeof AuthenticatedSettingsNotificationsRoute
   '/spaces/$spaceId': typeof AuthenticatedSpacesSpaceIdRouteWithChildren
+  '/api/public/push-fanout': typeof ApiPublicPushFanoutRoute
   '/api/public/stripe-webhook': typeof ApiPublicStripeWebhookRoute
   '/admin/': typeof AuthenticatedAdminIndexRoute
   '/certificates/': typeof AuthenticatedCertificatesIndexRoute
@@ -931,6 +938,7 @@ export interface FileRoutesByTo {
   '/resources/$resourceId': typeof AuthenticatedResourcesResourceIdRoute
   '/settings/notifications': typeof AuthenticatedSettingsNotificationsRoute
   '/spaces/$spaceId': typeof AuthenticatedSpacesSpaceIdRouteWithChildren
+  '/api/public/push-fanout': typeof ApiPublicPushFanoutRoute
   '/api/public/stripe-webhook': typeof ApiPublicStripeWebhookRoute
   '/admin': typeof AuthenticatedAdminIndexRoute
   '/certificates': typeof AuthenticatedCertificatesIndexRoute
@@ -1044,6 +1052,7 @@ export interface FileRoutesById {
   '/_authenticated/resources/$resourceId': typeof AuthenticatedResourcesResourceIdRoute
   '/_authenticated/settings/notifications': typeof AuthenticatedSettingsNotificationsRoute
   '/_authenticated/spaces/$spaceId': typeof AuthenticatedSpacesSpaceIdRouteWithChildren
+  '/api/public/push-fanout': typeof ApiPublicPushFanoutRoute
   '/api/public/stripe-webhook': typeof ApiPublicStripeWebhookRoute
   '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
   '/_authenticated/certificates/': typeof AuthenticatedCertificatesIndexRoute
@@ -1157,6 +1166,7 @@ export interface FileRouteTypes {
     | '/resources/$resourceId'
     | '/settings/notifications'
     | '/spaces/$spaceId'
+    | '/api/public/push-fanout'
     | '/api/public/stripe-webhook'
     | '/admin/'
     | '/certificates/'
@@ -1267,6 +1277,7 @@ export interface FileRouteTypes {
     | '/resources/$resourceId'
     | '/settings/notifications'
     | '/spaces/$spaceId'
+    | '/api/public/push-fanout'
     | '/api/public/stripe-webhook'
     | '/admin'
     | '/certificates'
@@ -1379,6 +1390,7 @@ export interface FileRouteTypes {
     | '/_authenticated/resources/$resourceId'
     | '/_authenticated/settings/notifications'
     | '/_authenticated/spaces/$spaceId'
+    | '/api/public/push-fanout'
     | '/api/public/stripe-webhook'
     | '/_authenticated/admin/'
     | '/_authenticated/certificates/'
@@ -1434,6 +1446,7 @@ export interface RootRouteChildren {
   CheckoutFailedRoute: typeof CheckoutFailedRoute
   CheckoutSuccessRoute: typeof CheckoutSuccessRoute
   InviteTokenRoute: typeof InviteTokenRoute
+  ApiPublicPushFanoutRoute: typeof ApiPublicPushFanoutRoute
   ApiPublicStripeWebhookRoute: typeof ApiPublicStripeWebhookRoute
 }
 
@@ -1724,6 +1737,13 @@ declare module '@tanstack/react-router' {
       path: '/api/public/stripe-webhook'
       fullPath: '/api/public/stripe-webhook'
       preLoaderRoute: typeof ApiPublicStripeWebhookRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/push-fanout': {
+      id: '/api/public/push-fanout'
+      path: '/api/public/push-fanout'
+      fullPath: '/api/public/push-fanout'
+      preLoaderRoute: typeof ApiPublicPushFanoutRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authenticated/spaces/$spaceId': {
@@ -2525,6 +2545,7 @@ const rootRouteChildren: RootRouteChildren = {
   CheckoutFailedRoute: CheckoutFailedRoute,
   CheckoutSuccessRoute: CheckoutSuccessRoute,
   InviteTokenRoute: InviteTokenRoute,
+  ApiPublicPushFanoutRoute: ApiPublicPushFanoutRoute,
   ApiPublicStripeWebhookRoute: ApiPublicStripeWebhookRoute,
 }
 export const routeTree = rootRouteImport
