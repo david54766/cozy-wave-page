@@ -4,8 +4,19 @@
 // joinagalink.com sender — the domain must be verified in Resend). Used for
 // invitation emails and email notifications.
 
+/** Read the Resend key under any of the common secret names. */
+function resendKey(): string | undefined {
+  return (
+    process.env.RESEND_API_KEY ||
+    process.env.RESEND_KEY ||
+    process.env.RESEND_TOKEN ||
+    process.env.RESEND_API_TOKEN ||
+    undefined
+  );
+}
+
 export function emailConfigured(): boolean {
-  return !!process.env.RESEND_API_KEY;
+  return !!resendKey();
 }
 
 export async function sendEmail(opts: {
@@ -13,8 +24,8 @@ export async function sendEmail(opts: {
   subject: string;
   html: string;
 }): Promise<{ ok: boolean; error?: string }> {
-  const key = process.env.RESEND_API_KEY;
-  if (!key) return { ok: false, error: "RESEND_API_KEY not set" };
+  const key = resendKey();
+  if (!key) return { ok: false, error: "Resend API key not set" };
   const from = process.env.EMAIL_FROM || "Alpha Gamma Alpha <noreply@joinagalink.com>";
   try {
     const res = await fetch("https://api.resend.com/emails", {
