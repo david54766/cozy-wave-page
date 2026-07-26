@@ -14,6 +14,24 @@ export type Database = {
   }
   public: {
     Tables: {
+      _webhook_config: {
+        Row: {
+          key: string
+          updated_at: string
+          value: string | null
+        }
+        Insert: {
+          key: string
+          updated_at?: string
+          value?: string | null
+        }
+        Update: {
+          key?: string
+          updated_at?: string
+          value?: string | null
+        }
+        Relationships: []
+      }
       access_grants: {
         Row: {
           access_source: Database["public"]["Enums"]["access_source"]
