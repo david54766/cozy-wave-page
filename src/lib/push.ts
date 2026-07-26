@@ -18,7 +18,7 @@ let started = false;
 // JS try/catch CANNOT catch — and the app hard-crashes right after login (that is
 // exactly when AppShell calls this). Keep this false until google-services.json
 // exists, then flip to true and rebuild. See PUSH-NOTIFICATIONS-SETUP.md.
-const PUSH_ENABLED = false;
+const PUSH_ENABLED = true;
 
 /** Stop receiving push on this account: delete stored device tokens. */
 export async function unregisterPush(userId: string): Promise<void> {
