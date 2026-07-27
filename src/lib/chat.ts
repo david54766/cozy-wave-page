@@ -6,6 +6,16 @@ export type MessageReactionType = "like" | "love" | "celebrate" | "helpful";
 
 const sb = supabase as any;
 
+/** UUID v4. crypto.randomUUID needs a secure context — fall back for older WebViews. */
+function newId(): string {
+  const c = globalThis.crypto as Crypto | undefined;
+  if (c?.randomUUID) return c.randomUUID();
+  return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, (ch) => {
+    const r = (Math.random() * 16) | 0;
+    return (ch === "x" ? r : (r & 0x3) | 0x8).toString(16);
+  });
+}
+
 export interface Conversation {
   id: string;
   type: ConversationType;
@@ -206,34 +216,41 @@ export async function getOrCreateDirect(currentUserId: string, otherUserId: stri
     const match = (others ?? [])[0];
     if (match) return match.conversation_id;
   }
-  // Create
-  const { data: conv, error } = await sb
+  // Create.
+  //
+  // We generate the id ourselves and do NOT chain .select(). Selecting the row
+  // back turns this into INSERT ... RETURNING, which makes Postgres evaluate the
+  // SELECT policy on the new row inside the same statement. That policy calls
+  // the STABLE can_access_conversation(), whose snapshot predates this insert, so
+  // it can't see the row and the whole statement fails with
+  // "new row violates row-level security policy". Skipping RETURNING avoids it.
+  const id = newId();
+  const { error } = await sb
     .from("conversations")
-    .insert({ type: "direct", created_by: currentUserId })
-    .select()
-    .single();
+    .insert({ id, type: "direct", created_by: currentUserId });
   if (error) throw error;
   const { error: mErr } = await sb.from("conversation_members").insert([
-    { conversation_id: conv.id, user_id: currentUserId },
-    { conversation_id: conv.id, user_id: otherUserId },
+    { conversation_id: id, user_id: currentUserId },
+    { conversation_id: id, user_id: otherUserId },
   ]);
   if (mErr) throw mErr;
-  return conv.id as string;
+  return id;
 }
 
 export async function createGroup(currentUserId: string, userIds: string[], title?: string): Promise<string> {
   const unique = Array.from(new Set([currentUserId, ...userIds]));
   if (unique.length < 2) throw new Error("Select at least one member");
-  const { data: conv, error } = await sb
+  // Same as getOrCreateDirect: supply the id and skip RETURNING so the insert
+  // isn't rejected by the SELECT policy evaluated mid-statement.
+  const id = newId();
+  const { error } = await sb
     .from("conversations")
-    .insert({ type: "group", created_by: currentUserId, title: title?.trim() || null })
-    .select()
-    .single();
+    .insert({ id, type: "group", created_by: currentUserId, title: title?.trim() || null });
   if (error) throw error;
-  const rows = unique.map((u) => ({ conversation_id: conv.id, user_id: u }));
+  const rows = unique.map((u) => ({ conversation_id: id, user_id: u }));
   const { error: mErr } = await sb.from("conversation_members").insert(rows);
   if (mErr) throw mErr;
-  return conv.id as string;
+  return id;
 }
 
 /** Find or create the conversation tied to a Space. */
