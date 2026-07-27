@@ -6,10 +6,16 @@ import { EmptyState } from "@/components/app/DashboardCard";
 import { AlertTriangle } from "lucide-react";
 
 interface Row {
-  user_id: string; full_name: string | null; email: string | null;
+  user_id: string; full_name: string | null;
   inactive_14d: boolean; onboarding_incomplete: boolean; past_due: boolean; trial_ending_soon: boolean;
   active_warnings: number; post_count: number; status: string;
 }
+
+// Explicit column list (never `*`, never `email`). This view runs with owner
+// rights, so selecting email here would expose every member's address to any
+// signed-in user. Name + risk tags is all this table needs.
+const COLUMNS =
+  "user_id, full_name, status, inactive_14d, onboarding_incomplete, past_due, trial_ending_soon, active_warnings, post_count";
 
 export function AtRiskMemberTable({ limit = 10 }: { limit?: number }) {
   const [rows, setRows] = useState<Row[] | null>(null);
@@ -18,7 +24,7 @@ export function AtRiskMemberTable({ limit = 10 }: { limit?: number }) {
     (async () => {
       const { data } = await (supabase as any)
         .from("at_risk_members")
-        .select("*")
+        .select(COLUMNS)
         .or("inactive_14d.eq.true,past_due.eq.true,trial_ending_soon.eq.true,active_warnings.gte.1,onboarding_incomplete.eq.true")
         .limit(limit);
       setRows((data ?? []) as Row[]);
@@ -41,8 +47,8 @@ export function AtRiskMemberTable({ limit = 10 }: { limit?: number }) {
         return (
           <Link key={r.user_id} to="/admin/members/$userId" params={{ userId: r.user_id }} className="flex flex-wrap items-center justify-between gap-3 p-3 hover:bg-muted/40">
             <div className="min-w-0">
-              <p className="text-sm font-medium truncate">{r.full_name || r.email || "Member"}</p>
-              <p className="text-xs text-muted-foreground truncate">{r.email}</p>
+              <p className="text-sm font-medium truncate">{r.full_name || "Member"}</p>
+              <p className="text-xs text-muted-foreground truncate">{r.status}</p>
             </div>
             <div className="flex flex-wrap gap-1.5">
               {tags.map((t) => <span key={t} className="text-[10px] uppercase tracking-wide rounded-full bg-amber-500/15 text-amber-700 dark:text-amber-300 px-2 py-0.5">{t}</span>)}
