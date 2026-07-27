@@ -10,7 +10,10 @@ import { createGroup, getOrCreateDirect, initials } from "@/lib/chat";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 
-type Profile = { id: string; full_name: string | null; email: string | null; avatar_url: string | null };
+// NOTE: never select `email` here. The `authenticated` role is not granted
+// SELECT on profiles.email, so including it makes the whole query 403 and the
+// member list comes back empty. Headline is the readable, non-sensitive subtitle.
+type Profile = { id: string; full_name: string | null; headline: string | null; avatar_url: string | null };
 
 export function NewConversationModal({
   open,
@@ -36,7 +39,7 @@ export function NewConversationModal({
     (async () => {
       const { data } = await supabase
         .from("profiles")
-        .select("id,full_name,email,avatar_url")
+        .select("id,full_name,headline,avatar_url")
         .neq("id", currentUserId)
         .eq("status", "active")
         .order("full_name");
@@ -47,7 +50,7 @@ export function NewConversationModal({
   const filtered = members.filter((m) => {
     const q = query.trim().toLowerCase();
     if (!q) return true;
-    return (m.full_name ?? "").toLowerCase().includes(q) || (m.email ?? "").toLowerCase().includes(q);
+    return (m.full_name ?? "").toLowerCase().includes(q) || (m.headline ?? "").toLowerCase().includes(q);
   });
 
   const toggle = (id: string, single = false) => {
@@ -111,17 +114,17 @@ function MemberList({ items, selected, onToggle }: { items: Profile[]; selected:
       {items.length === 0 && <li className="p-4 text-sm text-muted-foreground text-center">No members found</li>}
       {items.map((m) => {
         const active = selected.has(m.id);
-        const name = m.full_name || m.email || "Member";
+        const name = m.full_name || "Member";
         return (
           <li key={m.id}>
             <button
               onClick={() => onToggle(m.id)}
               className={cn("flex items-center gap-3 w-full p-3 hover:bg-accent text-left", active && "bg-accent")}
             >
-              <Avatar className="size-9"><AvatarImage src={m.avatar_url || undefined} /><AvatarFallback>{initials(m.full_name, m.email)}</AvatarFallback></Avatar>
+              <Avatar className="size-9"><AvatarImage src={m.avatar_url || undefined} /><AvatarFallback>{initials(m.full_name, null)}</AvatarFallback></Avatar>
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-medium truncate">{name}</p>
-                {m.email && <p className="text-xs text-muted-foreground truncate">{m.email}</p>}
+                {m.headline && <p className="text-xs text-muted-foreground truncate">{m.headline}</p>}
               </div>
               {active && <Check className="size-4 text-primary" />}
             </button>

@@ -75,7 +75,7 @@ function Page() {
       } else if (action?.id === "reengage") {
         const at = await fetchAtRiskMembers();
         title = "Inactive members to re-engage";
-        const names = at.slice(0, 5).map((m) => m.full_name ?? m.email ?? m.id).join(", ") || "no at-risk members detected";
+        const names = at.slice(0, 5).map((m) => m.full_name ?? "Member").join(", ") || "no at-risk members detected";
         body = `Suggested outreach for: ${names}.\n\nSuggested message:\n"Hi! We miss you in the community. Here's a quick highlight of what you missed — we'd love to see you back."`;
       } else {
         const r = buildMockResponse(text, action?.contentType ?? "post");

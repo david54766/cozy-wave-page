@@ -84,10 +84,12 @@ export async function searchAll(query: string, type: SearchType = "all", limit =
   }
   if (type === "all" || type === "members") {
     buckets.push(
-      db.from("profiles").select("id,full_name,bio,status").eq("status", "active")
-        .or(`full_name.ilike.${pattern},email.ilike.${pattern},bio.ilike.${pattern}`).limit(limit)
+      // Do NOT filter on `email`: authenticated users lack SELECT on that column,
+      // so including it 403s the whole query and member search returns nothing.
+      db.from("profiles").select("id,full_name,headline,bio,status").eq("status", "active")
+        .or(`full_name.ilike.${pattern},headline.ilike.${pattern},bio.ilike.${pattern}`).limit(limit)
         .then(({ data }: any) => (data ?? []).map((r: any) => ({
-          id: r.id, type: "members" as const, title: r.full_name || r.email || "Member",
+          id: r.id, type: "members" as const, title: r.full_name || "Member",
           description: r.bio, href: `/members/${r.id}`,
         })))
     );

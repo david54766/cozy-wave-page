@@ -225,7 +225,9 @@ export interface MemberOption { id: string; full_name: string | null; email: str
 
 export async function searchMembers(query: string, limit = 10): Promise<MemberOption[]> {
   let q = db.from("profiles").select("id, full_name").limit(limit);
-  if (query && query.trim()) q = q.or(`full_name.ilike.%${query}%,email.ilike.%${query}%`);
+  // `email` is not SELECT-able by authenticated users — filtering on it 403s the
+  // whole query and the picker returns no members.
+  if (query && query.trim()) q = q.ilike("full_name", `%${query}%`);
   const { data } = await q;
   return (data ?? []) as MemberOption[];
 }

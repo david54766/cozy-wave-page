@@ -316,9 +316,11 @@ export async function fetchActivitySummary(): Promise<ActivitySummary> {
   };
 }
 
-export async function fetchAtRiskMembers(): Promise<{ id: string; full_name: string | null; email: string | null }[]> {
+export async function fetchAtRiskMembers(): Promise<{ full_name: string | null }[]> {
   try {
-    const { data } = await db.from("at_risk_members").select("id,full_name,email").limit(10);
+    // The view has no `id` column, and `email` isn't SELECT-able by authenticated
+    // users — requesting either fails the whole query.
+    const { data } = await db.from("at_risk_members").select("full_name").limit(10);
     return (data ?? []) as any;
   } catch {
     return [];
