@@ -19,11 +19,22 @@ export function SuggestedMembersCard({ limit = 4 }: { limit?: number }) {
     const [members, following] = await Promise.all([fetchMembers(), fetchFollowing(user.id)]);
     const followSet = new Set(following);
     const filtered = members
-      .filter((m) => m.id !== user.id && m.status === "active" && !followSet.has(m.id))
+      .filter((m) =>
+        m.id !== user.id &&
+        m.status === "active" &&
+        !followSet.has(m.id) &&
+        // Skip accounts that haven't finished onboarding — they'd render as
+        // "Unnamed member" with nothing useful to show.
+        !!(m.full_name && m.full_name.trim()),
+      )
       .slice(0, limit);
     setSuggestions(filtered);
     setLoaded(true);
   };
+  // Only reload on mount/user change. Deliberately NOT on follow: refreshing
+  // there filters the person you just followed straight out of the list, so the
+  // row vanishes with no confirmation and the click reads as "nothing happened".
+  // Leaving the row in place lets the button show its "Following" state.
   useEffect(() => { reload(); }, [user, limit]);
 
   return (
@@ -42,7 +53,7 @@ export function SuggestedMembersCard({ limit = 4 }: { limit?: number }) {
               <Link to="/members/$userId" params={{ userId: m.id }}>
                 <Avatar className="size-9">
                   <AvatarImage src={m.avatar_url || undefined} />
-                  <AvatarFallback>{memberInitials(m.full_name, m.email)}</AvatarFallback>
+                  <AvatarFallback>{memberInitials(m.full_name)}</AvatarFallback>
                 </Avatar>
               </Link>
               <div className="flex-1 min-w-0">
@@ -51,7 +62,7 @@ export function SuggestedMembersCard({ limit = 4 }: { limit?: number }) {
                 </Link>
                 {m.headline && <p className="text-xs text-muted-foreground truncate">{m.headline}</p>}
               </div>
-              <FollowButton userId={m.id} onChange={() => reload()} />
+              <FollowButton userId={m.id} />
             </div>
           ))
         )}
