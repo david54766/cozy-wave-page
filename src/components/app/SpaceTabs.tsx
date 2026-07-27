@@ -1,7 +1,7 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { DashboardCard } from "./DashboardCard";
 import { SpaceMemberList, type SpaceMemberRow } from "./SpaceMemberList";
-import { Compass, Newspaper, GraduationCap, Calendar, Users, BookOpen, Sparkles, MessageSquare } from "lucide-react";
+import { Compass, Newspaper, GraduationCap, Calendar, Users, BookOpen, MessageSquare } from "lucide-react";
+import { SpaceDiscoveryTab } from "./SpaceDiscoveryTab";
 import type { Space } from "@/lib/spaces";
 import { FeedList } from "@/components/feed/FeedList";
 import { SpaceCoursesTab } from "./SpaceCoursesTab";
@@ -22,26 +22,8 @@ export function SpaceTabs({ space, members, isMember }: { space: Space; members:
         <TabsTrigger value="resources"><BookOpen className="size-4 mr-1.5" />Resources</TabsTrigger>
       </TabsList>
 
-      <TabsContent value="discovery" className="space-y-4">
-        <DashboardCard title={`Welcome to ${space.name}`} icon={<Sparkles className="size-4" />}>
-          <p className="text-sm text-muted-foreground">
-            Start here to find the most important conversations, lessons, events, and resources in this Space.
-          </p>
-        </DashboardCard>
-        <div className="grid gap-4 sm:grid-cols-2">
-          <DashboardCard title="Featured discussion" icon={<Newspaper className="size-4" />} comingSoon>
-            <p className="text-sm text-muted-foreground">Top conversations will appear here.</p>
-          </DashboardCard>
-          <DashboardCard title="Featured course" icon={<GraduationCap className="size-4" />} comingSoon>
-            <p className="text-sm text-muted-foreground">Highlighted lessons will appear here.</p>
-          </DashboardCard>
-          <DashboardCard title="Upcoming event" icon={<Calendar className="size-4" />} comingSoon>
-            <p className="text-sm text-muted-foreground">Live sessions and meetups will appear here.</p>
-          </DashboardCard>
-          <DashboardCard title="Resources" icon={<BookOpen className="size-4" />} comingSoon>
-            <p className="text-sm text-muted-foreground">Templates and downloads will appear here.</p>
-          </DashboardCard>
-        </div>
+      <TabsContent value="discovery">
+        <SpaceDiscoveryTab spaceId={space.id} spaceName={space.name} />
       </TabsContent>
 
       <TabsContent value="feed">
