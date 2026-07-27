@@ -29,17 +29,17 @@ function AdminPage() {
       const monthAgo = new Date(Date.now() - 30 * 86400_000).toISOString();
       const nowIso = new Date().toISOString();
       const [{ count: total }, { count: newWeek }, { count: active }, { count: spacesCount }, { count: collectionsCount }, { data: recentSpaces }, { count: eventsCount }, { count: upcomingCount }, { count: rsvpCount }, { count: suspended }, { count: newMonth }, { count: openReports }, { data: plansData }, { data: billingData }, { count: totalAutomations }, { count: activeAutomations }, { count: failedLogs }, { count: activeSegments }, { count: sentAnnouncements }, { count: draftAnnouncements }, { count: aiOutlines }, { count: aiLessons }, { count: aiConverted }, { count: pendingInvites }, { count: inviteLinks }, { count: certsIssued }] = await Promise.all([
-        supabase.from("profiles").select("*", { count: "exact", head: true }),
-        supabase.from("profiles").select("*", { count: "exact", head: true }).gte("created_at", weekAgo),
-        supabase.from("profiles").select("*", { count: "exact", head: true }).gte("last_active_at", weekAgo),
+        supabase.from("profiles").select("id", { count: "exact", head: true }),
+        supabase.from("profiles").select("id", { count: "exact", head: true }).gte("created_at", weekAgo),
+        supabase.from("profiles").select("id", { count: "exact", head: true }).gte("last_active_at", weekAgo),
         supabase.from("spaces").select("*", { count: "exact", head: true }).eq("is_archived", false),
         supabase.from("collections").select("*", { count: "exact", head: true }),
         supabase.from("spaces").select("*").order("created_at", { ascending: false }).limit(5),
         (supabase as any).from("events").select("*", { count: "exact", head: true }),
         (supabase as any).from("events").select("*", { count: "exact", head: true }).gte("end_time", nowIso),
         (supabase as any).from("event_rsvps").select("*", { count: "exact", head: true }),
-        supabase.from("profiles").select("*", { count: "exact", head: true }).eq("status", "suspended"),
-        supabase.from("profiles").select("*", { count: "exact", head: true }).gte("created_at", monthAgo),
+        supabase.from("profiles").select("id", { count: "exact", head: true }).eq("status", "suspended"),
+        supabase.from("profiles").select("id", { count: "exact", head: true }).gte("created_at", monthAgo),
         supabase.from("reports").select("*", { count: "exact", head: true }).in("status", ["open", "under_review", "pending"]),
         (supabase as any).from("plans").select("name,active,featured"),
         (supabase as any).from("billing_settings").select("stripe_publishable_key").limit(1).maybeSingle(),

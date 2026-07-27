@@ -301,7 +301,7 @@ export async function fetchActivitySummary(): Promise<ActivitySummary> {
   const weekAgo = new Date(Date.now() - 7 * 86400_000).toISOString();
   const nowIso = new Date().toISOString();
   const [{ count: members }, { count: posts }, { count: spaces }, { count: events }, { count: reports }] = await Promise.all([
-    db.from("profiles").select("*", { count: "exact", head: true }).gte("created_at", weekAgo),
+    db.from("profiles").select("id", { count: "exact", head: true }).gte("created_at", weekAgo),
     db.from("posts").select("*", { count: "exact", head: true }).gte("created_at", weekAgo),
     db.from("spaces").select("*", { count: "exact", head: true }).eq("is_archived", false),
     db.from("events").select("*", { count: "exact", head: true }).gte("end_time", nowIso),

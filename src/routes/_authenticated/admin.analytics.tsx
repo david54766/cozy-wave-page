@@ -61,8 +61,8 @@ function AnalyticsPage() {
         spacesAll, postsForTop, reactionsForTop, commentsForTop,
         activeMembers,
       ] = await Promise.all([
-        supabase.from("profiles").select("*", head),
-        supabase.from("profiles").select("*", head).gte("created_at", monthAgo),
+        supabase.from("profiles").select("id", head),
+        supabase.from("profiles").select("id", head).gte("created_at", monthAgo),
         supabase.from("spaces").select("*", head).eq("is_archived", false),
         supabase.from("posts").select("*", head).eq("status", "active"),
         supabase.from("comments").select("*", head).eq("status", "active"),

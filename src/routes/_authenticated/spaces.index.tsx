@@ -1,4 +1,5 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { Button } from "@/components/ui/button";
 import { useEffect, useState, useMemo } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
@@ -6,14 +7,14 @@ import type { Collection, Space } from "@/lib/spaces";
 import { SpaceCard } from "@/components/app/SpaceCard";
 import { EmptyState } from "@/components/app/DashboardCard";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Users2 } from "lucide-react";
+import { Users2, Settings } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/spaces/")({
   component: SpacesDirectory,
 });
 
 function SpacesDirectory() {
-  const { user } = useAuth();
+  const { user, isAdmin } = useAuth();
   const [loading, setLoading] = useState(true);
   const [spaces, setSpaces] = useState<Space[]>([]);
   const [collections, setCollections] = useState<Collection[]>([]);
@@ -55,11 +56,18 @@ function SpacesDirectory() {
 
   return (
     <div className="space-y-8">
-      <header>
-        <h1 className="text-3xl font-semibold tracking-tight">Explore Spaces</h1>
-        <p className="text-muted-foreground mt-1">
-          Join focused areas of the community based on your interests, courses, events, or membership level.
-        </p>
+      <header className="flex flex-wrap items-start justify-between gap-3">
+        <div>
+          <h1 className="text-3xl font-semibold tracking-tight">Explore Spaces</h1>
+          <p className="text-muted-foreground mt-1">
+            Join focused areas of the community based on your interests, courses, events, or membership level.
+          </p>
+        </div>
+        {isAdmin && (
+          <Button asChild variant="outline">
+            <Link to="/admin/spaces"><Settings className="size-4 mr-1.5" />Manage Spaces</Link>
+          </Button>
+        )}
       </header>
 
       {loading ? (
@@ -73,17 +81,40 @@ function SpacesDirectory() {
           description="Check back soon."
         />
       ) : (
-        collections
-          .filter((c) => grouped.has(c.id))
-          .map((c) => (
-            <section key={c.id} className="space-y-3">
-              <h2 className="text-lg font-semibold">{c.name}</h2>
+        <>
+          {collections
+            .filter((c) => grouped.has(c.id))
+            .map((c) => (
+              <section key={c.id} className="space-y-3">
+                <h2 className="text-lg font-semibold">{c.name}</h2>
+                <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                  {grouped.get(c.id)!.map((s) => (
+                    <SpaceCard
+                      key={s.id}
+                      space={s}
+                      collectionName={collectionsById.get(s.collection_id ?? "")?.name}
+                      memberCount={counts.get(s.id) ?? 0}
+                      isMember={mySpaces.has(s.id)}
+                      onJoinChange={load}
+                    />
+                  ))}
+                </div>
+              </section>
+            ))}
+
+          {/* Spaces with no collection. Without this they'd be grouped under the
+              "__none" key and never rendered — i.e. invisible in Explore Spaces
+              even though they exist and the empty state doesn't show either. */}
+          {grouped.has("__none") && (
+            <section className="space-y-3">
+              {collections.some((c) => grouped.has(c.id)) && (
+                <h2 className="text-lg font-semibold">All Spaces</h2>
+              )}
               <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                {grouped.get(c.id)!.map((s) => (
+                {grouped.get("__none")!.map((s) => (
                   <SpaceCard
                     key={s.id}
                     space={s}
-                    collectionName={collectionsById.get(s.collection_id ?? "")?.name}
                     memberCount={counts.get(s.id) ?? 0}
                     isMember={mySpaces.has(s.id)}
                     onJoinChange={load}
@@ -91,7 +122,8 @@ function SpacesDirectory() {
                 ))}
               </div>
             </section>
-          ))
+          )}
+        </>
       )}
     </div>
   );

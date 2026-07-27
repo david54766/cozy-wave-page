@@ -1,4 +1,7 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { useAuth } from "@/hooks/useAuth";
+import { Button } from "@/components/ui/button";
+import { Settings } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { fetchEvents, isPast, type EventRow } from "@/lib/events";
@@ -14,6 +17,7 @@ export const Route = createFileRoute("/_authenticated/events")({
 });
 
 function EventsPage() {
+  const { isAdmin } = useAuth();
   const [loading, setLoading] = useState(true);
   const [events, setEvents] = useState<EventRow[]>([]);
   const [spaces, setSpaces] = useState<Space[]>([]);
@@ -62,11 +66,18 @@ function EventsPage() {
 
   return (
     <div className="space-y-6">
-      <header>
-        <h1 className="text-3xl font-semibold tracking-tight">Live Events</h1>
-        <p className="text-muted-foreground mt-1">
-          Join upcoming live sessions, workshops, community calls, and special events.
-        </p>
+      <header className="flex flex-wrap items-start justify-between gap-3">
+        <div>
+          <h1 className="text-3xl font-semibold tracking-tight">Live Events</h1>
+          <p className="text-muted-foreground mt-1">
+            Join upcoming live sessions, workshops, community calls, and special events.
+          </p>
+        </div>
+        {isAdmin && (
+          <Button asChild variant="outline">
+            <Link to="/admin/events"><Settings className="size-4 mr-1.5" />Manage events</Link>
+          </Button>
+        )}
       </header>
 
       <EventFilters
