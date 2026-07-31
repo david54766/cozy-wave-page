@@ -47,6 +47,7 @@ import { Route as AuthenticatedAchievementsRouteImport } from './routes/_authent
 import { Route as AuthenticatedSpacesIndexRouteImport } from './routes/_authenticated/spaces.index'
 import { Route as AuthenticatedResourcesIndexRouteImport } from './routes/_authenticated/resources.index'
 import { Route as AuthenticatedMembersIndexRouteImport } from './routes/_authenticated/members.index'
+import { Route as AuthenticatedEventsIndexRouteImport } from './routes/_authenticated/events.index'
 import { Route as AuthenticatedCoursesIndexRouteImport } from './routes/_authenticated/courses.index'
 import { Route as AuthenticatedCertificatesIndexRouteImport } from './routes/_authenticated/certificates.index'
 import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin.index'
@@ -317,6 +318,12 @@ const AuthenticatedMembersIndexRoute =
     id: '/members/',
     path: '/members/',
     getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedEventsIndexRoute =
+  AuthenticatedEventsIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => AuthenticatedEventsRoute,
   } as any)
 const AuthenticatedCoursesIndexRoute =
   AuthenticatedCoursesIndexRouteImport.update({
@@ -839,6 +846,7 @@ export interface FileRoutesByFullPath {
   '/admin/': typeof AuthenticatedAdminIndexRoute
   '/certificates/': typeof AuthenticatedCertificatesIndexRoute
   '/courses/': typeof AuthenticatedCoursesIndexRoute
+  '/events/': typeof AuthenticatedEventsIndexRoute
   '/members/': typeof AuthenticatedMembersIndexRoute
   '/resources/': typeof AuthenticatedResourcesIndexRoute
   '/spaces/': typeof AuthenticatedSpacesIndexRoute
@@ -888,7 +896,6 @@ export interface FileRoutesByTo {
   '/billing': typeof AuthenticatedBillingRoute
   '/chat': typeof AuthenticatedChatRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
-  '/events': typeof AuthenticatedEventsRouteWithChildren
   '/feed': typeof AuthenticatedFeedRoute
   '/following': typeof AuthenticatedFollowingRoute
   '/getting-started': typeof AuthenticatedGettingStartedRoute
@@ -951,6 +958,7 @@ export interface FileRoutesByTo {
   '/admin': typeof AuthenticatedAdminIndexRoute
   '/certificates': typeof AuthenticatedCertificatesIndexRoute
   '/courses': typeof AuthenticatedCoursesIndexRoute
+  '/events': typeof AuthenticatedEventsIndexRoute
   '/members': typeof AuthenticatedMembersIndexRoute
   '/resources': typeof AuthenticatedResourcesIndexRoute
   '/spaces': typeof AuthenticatedSpacesIndexRoute
@@ -1066,6 +1074,7 @@ export interface FileRoutesById {
   '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
   '/_authenticated/certificates/': typeof AuthenticatedCertificatesIndexRoute
   '/_authenticated/courses/': typeof AuthenticatedCoursesIndexRoute
+  '/_authenticated/events/': typeof AuthenticatedEventsIndexRoute
   '/_authenticated/members/': typeof AuthenticatedMembersIndexRoute
   '/_authenticated/resources/': typeof AuthenticatedResourcesIndexRoute
   '/_authenticated/spaces/': typeof AuthenticatedSpacesIndexRoute
@@ -1181,6 +1190,7 @@ export interface FileRouteTypes {
     | '/admin/'
     | '/certificates/'
     | '/courses/'
+    | '/events/'
     | '/members/'
     | '/resources/'
     | '/spaces/'
@@ -1230,7 +1240,6 @@ export interface FileRouteTypes {
     | '/billing'
     | '/chat'
     | '/dashboard'
-    | '/events'
     | '/feed'
     | '/following'
     | '/getting-started'
@@ -1293,6 +1302,7 @@ export interface FileRouteTypes {
     | '/admin'
     | '/certificates'
     | '/courses'
+    | '/events'
     | '/members'
     | '/resources'
     | '/spaces'
@@ -1407,6 +1417,7 @@ export interface FileRouteTypes {
     | '/_authenticated/admin/'
     | '/_authenticated/certificates/'
     | '/_authenticated/courses/'
+    | '/_authenticated/events/'
     | '/_authenticated/members/'
     | '/_authenticated/resources/'
     | '/_authenticated/spaces/'
@@ -1730,6 +1741,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/members/'
       preLoaderRoute: typeof AuthenticatedMembersIndexRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/events/': {
+      id: '/_authenticated/events/'
+      path: '/'
+      fullPath: '/events/'
+      preLoaderRoute: typeof AuthenticatedEventsIndexRouteImport
+      parentRoute: typeof AuthenticatedEventsRoute
     }
     '/_authenticated/courses/': {
       id: '/_authenticated/courses/'
@@ -2433,10 +2451,12 @@ const AuthenticatedAdminRouteWithChildren =
 
 interface AuthenticatedEventsRouteChildren {
   AuthenticatedEventsEventIdRoute: typeof AuthenticatedEventsEventIdRoute
+  AuthenticatedEventsIndexRoute: typeof AuthenticatedEventsIndexRoute
 }
 
 const AuthenticatedEventsRouteChildren: AuthenticatedEventsRouteChildren = {
   AuthenticatedEventsEventIdRoute: AuthenticatedEventsEventIdRoute,
+  AuthenticatedEventsIndexRoute: AuthenticatedEventsIndexRoute,
 }
 
 const AuthenticatedEventsRouteWithChildren =
@@ -2572,3 +2592,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
