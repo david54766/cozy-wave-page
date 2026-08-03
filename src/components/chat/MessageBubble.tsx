@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Smile, MoreHorizontal, Trash2, Flag, EyeOff, RotateCcw } from "lucide-react";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { isVideoUrl, VIDEO_THUMB_PROPS, VIDEO_THUMB_BG } from "@/lib/media";
 import {
   initials,
   REACTION_EMOJI,
@@ -96,11 +97,20 @@ export function MessageBubble({
             )}
             {message.media_urls?.length > 0 && (
               <div className={cn("flex flex-col gap-1", message.body && "mt-1", isMe && "items-end")}>
-                {message.media_urls.map((url, i) => (
-                  <a key={i} href={url} target="_blank" rel="noreferrer">
-                    <img src={url} alt="Shared image" loading="lazy" className="max-w-[220px] max-h-72 rounded-xl border object-cover" />
-                  </a>
-                ))}
+                {message.media_urls.map((url, i) =>
+                  isVideoUrl(url) ? (
+                    <video
+                      key={i}
+                      src={url}
+                      {...VIDEO_THUMB_PROPS}
+                      className={`max-w-[220px] max-h-72 rounded-xl border object-cover ${VIDEO_THUMB_BG}`}
+                    />
+                  ) : (
+                    <a key={i} href={url} target="_blank" rel="noreferrer">
+                      <img src={url} alt="Shared image" loading="lazy" className="max-w-[220px] max-h-72 rounded-xl border object-cover" />
+                    </a>
+                  ),
+                )}
               </div>
             )}
           </>

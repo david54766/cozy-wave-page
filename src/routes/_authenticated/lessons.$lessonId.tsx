@@ -162,7 +162,7 @@ function LessonPage() {
           description="You need access to this course to view this lesson."
         />
       ) : (
-        <LessonViewer lesson={lesson} />
+        <LessonViewer lesson={lesson} posterUrl={course?.thumbnail_url} />
       )}
 
       {!isLocked && lesson.completion_required && (

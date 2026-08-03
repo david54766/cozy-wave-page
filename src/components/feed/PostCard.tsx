@@ -15,6 +15,7 @@ import { HashtagList } from "./HashtagPill";
 import { AnsweredBadge } from "./BestAnswerBadge";
 import { SaveButton } from "@/components/onboarding/SaveButton";
 import { timeAgo, type Post, type Reaction } from "@/lib/feed";
+import { isVideoUrl, VIDEO_THUMB_PROPS, VIDEO_THUMB_BG } from "@/lib/media";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { toast } from "sonner";
@@ -178,11 +179,22 @@ export function PostCard({
 
         {post.media_urls.length > 0 && (
           <div className={`grid gap-2 ${post.media_urls.length === 1 ? "grid-cols-1" : "grid-cols-2"}`}>
-            {post.media_urls.map((url, i) => (
-              <a key={`${url}-${i}`} href={url} target="_blank" rel="noopener noreferrer" className="block overflow-hidden rounded-lg border">
-                <img src={url} alt="" loading="lazy" className="w-full max-h-96 object-cover" />
-              </a>
-            ))}
+            {post.media_urls.map((url, i) =>
+              // Videos must render in a <video>; an <img> would show a broken
+              // icon with no thumbnail. preload="metadata" paints the first frame.
+              isVideoUrl(url) ? (
+                <video
+                  key={`${url}-${i}`}
+                  src={url}
+                  {...VIDEO_THUMB_PROPS}
+                  className={`w-full max-h-96 rounded-lg border object-cover ${VIDEO_THUMB_BG}`}
+                />
+              ) : (
+                <a key={`${url}-${i}`} href={url} target="_blank" rel="noopener noreferrer" className="block overflow-hidden rounded-lg border">
+                  <img src={url} alt="" loading="lazy" className="w-full max-h-96 object-cover" />
+                </a>
+              ),
+            )}
           </div>
         )}
 

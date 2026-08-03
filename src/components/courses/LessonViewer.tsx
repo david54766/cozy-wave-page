@@ -1,5 +1,6 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Paperclip, Video } from "lucide-react";
+import { VIDEO_THUMB_PROPS, VIDEO_THUMB_BG } from "@/lib/media";
 import type { Lesson } from "@/lib/courses";
 
 function getEmbedUrl(url: string): string | null {
@@ -22,7 +23,7 @@ function getEmbedUrl(url: string): string | null {
   }
 }
 
-export function LessonViewer({ lesson }: { lesson: Lesson }) {
+export function LessonViewer({ lesson, posterUrl }: { lesson: Lesson; posterUrl?: string | null }) {
   const url = lesson.video_url || null;
   const isDirectFile = url ? /\.(mp4|webm|ogg|mov|m4v)(\?.*)?$/i.test(url) : false;
   const embed = url && !isDirectFile ? getEmbedUrl(url) : null;
@@ -30,7 +31,15 @@ export function LessonViewer({ lesson }: { lesson: Lesson }) {
     <div className="space-y-6">
       <div className="aspect-video rounded-2xl overflow-hidden bg-muted grid place-items-center">
         {isDirectFile && url ? (
-          <video src={url} controls className="size-full" />
+          // preload="metadata" paints the first frame so there's always a
+          // thumbnail instead of a black box; posterUrl (the course thumbnail)
+          // covers the moment before that frame decodes.
+          <video
+            src={url}
+            poster={posterUrl ?? undefined}
+            {...VIDEO_THUMB_PROPS}
+            className={`size-full object-cover ${VIDEO_THUMB_BG}`}
+          />
         ) : embed ? (
           <iframe
             src={embed}
