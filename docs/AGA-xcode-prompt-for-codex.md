@@ -172,3 +172,51 @@ Report anything broken with the exact error before archiving.
   touch web hosting.
 
 ---
+
+---
+
+# ADDENDUM — Capture App Store screenshots (do this after §7 smoke-test passes)
+
+Apple requires **6.9" iPhone** screenshots: **1290 × 2796** portrait.
+Uploading one 6.9" set is enough — Apple scales it for other sizes.
+
+## Simulator to use
+`iPhone 16 Pro Max` (or the newest "Pro Max" available) — it renders natively at
+1290×2796, so no resizing is needed.
+
+```bash
+xcrun simctl list devices | grep -i "Pro Max"        # find the device
+open -a Simulator                                     # boot it, then run the app from Xcode
+```
+
+## Capture
+With the app running and signed in as `appreview@agatester.dev / AgaReview!2026`:
+
+```bash
+mkdir -p ~/Desktop/aga-ios-screenshots
+shot() { xcrun simctl io booted screenshot ~/Desktop/aga-ios-screenshots/$1; }
+```
+Navigate to each screen in the simulator, then run the matching command:
+
+| # | Screen | Command |
+|---|--------|---------|
+| 1 | Dashboard (Home tab) | `shot 01-dashboard.png` |
+| 2 | Spaces (shows cover images) | `shot 02-spaces.png` |
+| 3 | Feed | `shot 03-feed.png` |
+| 4 | Events (upcoming list) | `shot 04-events.png` |
+| 5 | A lesson with the video visible | `shot 05-course-lesson.png` |
+| 6 | Chat (Messages list or a thread) | `shot 06-chat.png` |
+| 7 | Members directory | `shot 07-members.png` |
+
+## Verify before uploading
+```bash
+cd ~/Desktop/aga-ios-screenshots && sips -g pixelWidth -g pixelHeight *.png
+```
+Every file must read **1290 × 2796**. If the simulator produced a different size,
+re-run on a Pro Max device rather than scaling the images.
+
+## Rules
+- Do **not** upscale Android screenshots — they have Android status bars and will
+  look wrong. Capture on the iOS simulator.
+- No purchase/upgrade UI may appear in any screenshot.
+- Avoid capturing anything still labelled with test/debug text.
