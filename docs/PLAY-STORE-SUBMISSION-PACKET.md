@@ -1,7 +1,7 @@
 # AGA — Google Play Store submission packet
 
 **App:** Alpha Gamma Alpha · **Package:** `com.aga.community`
-**Developer / operating entity:** Classroom Panda LLC · **Contact:** info@easyfill.ai
+**Developer / operating entity:** Classroom Panda LLC · **Contact:** info@classroompanda.com
 **Website:** https://joinagalink.com
 **Packet generated:** 2026-07-31 — every asset in this folder was regenerated on this date.
 
@@ -48,7 +48,7 @@ Alpha Gamma Alpha is a private community platform. Your account gives you access
 SAFETY AND CONTROL
 We have zero tolerance for abusive content or behavior. You can report any post or message, and block any member — blocked members' content disappears from your feed and they can't message you. You can permanently delete your account and data at any time from Settings.
 
-Questions or feedback? Reach us at info@easyfill.ai.
+Questions or feedback? Reach us at info@classroompanda.com.
 ```
 
 ### Graphics — all in this folder, regenerated 2026-07-31
@@ -67,7 +67,7 @@ Screenshots: 01 Dashboard · 02 Spaces · 03 Feed · 04 Events · 05 Courses · 
 - **Tags:** Community, Social Networking, Education, Groups, Messaging
 
 ### Contact details
-- **Email:** info@easyfill.ai  ← required, shown publicly
+- **Email:** info@classroompanda.com  ← required, shown publicly
 - **Website:** https://joinagalink.com
 - **Phone:** optional — leave blank unless you want it public
 

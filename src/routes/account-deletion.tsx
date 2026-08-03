@@ -35,7 +35,7 @@ function AccountDeletionPage() {
           This page explains how to delete your Alpha Gamma Alpha account and the
           data associated with it. It applies to the Alpha Gamma Alpha mobile apps
           and website, operated by Classroom Panda LLC (developer contact:{" "}
-          <a href="mailto:info@easyfill.ai" className="text-primary hover:underline">info@easyfill.ai</a>).
+          <a href="mailto:info@classroompanda.com" className="text-primary hover:underline">info@classroompanda.com</a>).
         </p>
 
         <h2 className="text-lg font-semibold pt-2">Delete your account from inside the app</h2>
@@ -50,7 +50,7 @@ function AccountDeletionPage() {
         <h2 className="text-lg font-semibold pt-2">Request deletion without the app</h2>
         <p>
           If you can't access the app, email{" "}
-          <a href="mailto:info@easyfill.ai?subject=Account%20deletion%20request" className="text-primary hover:underline">info@easyfill.ai</a>{" "}
+          <a href="mailto:info@classroompanda.com?subject=Account%20deletion%20request" className="text-primary hover:underline">info@classroompanda.com</a>{" "}
           from the email address on your account with the subject
           "Account deletion request." We verify ownership of the email address and
           complete the deletion, then confirm by reply — normally within 30 days.
@@ -81,7 +81,7 @@ function AccountDeletionPage() {
         <h2 className="text-lg font-semibold pt-2">Questions</h2>
         <p>
           Contact{" "}
-          <a href="mailto:info@easyfill.ai" className="text-primary hover:underline">info@easyfill.ai</a>{" "}
+          <a href="mailto:info@classroompanda.com" className="text-primary hover:underline">info@classroompanda.com</a>{" "}
           with any questions about deleting your account or data.
         </p>
 

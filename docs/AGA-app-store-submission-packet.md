@@ -1,7 +1,7 @@
 # AGA — App Store Connect submission packet
 
 **App:** Alpha Gamma Alpha · **Bundle ID:** `com.aga.community`
-**Seller / operating entity:** Classroom Panda LLC · **Support:** info@easyfill.ai
+**Seller / operating entity:** Classroom Panda LLC · **Support:** info@classroompanda.com
 **Marketing URL:** https://joinagalink.com
 **Generated:** 2026-08-02 — mirrors the Play packet in `aga-play-store/`.
 
@@ -58,7 +58,7 @@ Alpha Gamma Alpha is a private community platform. Your account gives you access
 SAFETY AND CONTROL
 We have zero tolerance for objectionable content or abusive behavior. You can report any post or message, and block any member — blocked members' content disappears from your feed and they can't contact you. You can permanently delete your account and all associated data at any time from Settings.
 
-Questions or feedback? Reach us at info@easyfill.ai.
+Questions or feedback? Reach us at info@classroompanda.com.
 ```
 
 ### Keywords (100 char max, comma-separated, no spaces)
@@ -94,7 +94,7 @@ Apple requires UGC apps to have all four of these — **all are implemented**:
 2. A mechanism to report offensive content → Report on posts and messages
 3. The ability to block abusive users → Block on member profiles; managed in
    Settings → Blocked members
-4. Published contact information → info@easyfill.ai (in-app and in the Terms)
+4. Published contact information → info@classroompanda.com (in-app and in the Terms)
 
 # 5. App Privacy ("nutrition label")
 
@@ -132,7 +132,7 @@ publicly at `https://joinagalink.com/account-deletion` (satisfies Guideline
 - **Demo account:**
   - Username: `appreview@agatester.dev`
   - Password: `AgaReview!2026`
-- **Contact:** your name / phone / info@easyfill.ai ← YOU
+- **Contact:** your name / phone / info@classroompanda.com ← YOU
 
 ### Notes for the reviewer (paste this)
 ```
@@ -142,7 +142,7 @@ Sign in with the demo account above to reach all functionality: Spaces, communit
 
 PAYMENTS: The app contains no in-app purchases and no purchase UI. Memberships are sold only on our website (joinagalink.com) and are not referenced or linked from inside the app. The app simply reflects the access a member already has.
 
-USER-GENERATED CONTENT (Guideline 1.2): Members can report any post or message, and block any member (member profile → Block; managed in Settings → Blocked members). Blocked members' content is hidden and they cannot contact the user. Our Terms include a zero-tolerance policy for objectionable content, and we act on reports within 24 hours. Contact: info@easyfill.ai
+USER-GENERATED CONTENT (Guideline 1.2): Members can report any post or message, and block any member (member profile → Block; managed in Settings → Blocked members). Blocked members' content is hidden and they cannot contact the user. Our Terms include a zero-tolerance policy for objectionable content, and we act on reports within 24 hours. Contact: info@classroompanda.com
 
 ACCOUNT DELETION (Guideline 5.1.1(v)): Settings → Danger zone → Delete account permanently deletes the account and associated data. Also available publicly at https://joinagalink.com/account-deletion
 

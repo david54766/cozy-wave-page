@@ -51,7 +51,7 @@ function PrivacyPage() {
         <p>We may update this policy; material changes will be posted here with an updated date.</p>
 
         <h2 className="text-lg font-semibold pt-2">Contact</h2>
-        <p>Questions about this policy: <a href="mailto:info@easyfill.ai" className="text-primary hover:underline">info@easyfill.ai</a>.</p>
+        <p>Questions about this policy: <a href="mailto:info@classroompanda.com" className="text-primary hover:underline">info@classroompanda.com</a>.</p>
 
         <p className="pt-4 flex gap-4"><Link to="/terms" className="text-primary hover:underline">Terms of Use →</Link><Link to="/account-deletion" className="text-primary hover:underline">Account &amp; Data Deletion →</Link></p>
       </article>

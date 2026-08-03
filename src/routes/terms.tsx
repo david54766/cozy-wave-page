@@ -29,7 +29,7 @@ function TermsPage() {
 
         <h2 className="text-lg font-semibold pt-2">3. Membership and payments</h2>
         <p>Some features require a paid membership, purchased and managed on our website. Fees and renewal terms are shown at the point of purchase. Paid memberships renew automatically until cancelled. Payments are processed by Stripe; we do not store full card details.</p>
-        <p>You can cancel a recurring membership at any time from your billing settings on the website, or by contacting <a href="mailto:info@easyfill.ai" className="text-primary hover:underline">info@easyfill.ai</a>. Cancellation stops future renewals; unless required by law, payments already made are non-refundable, and you keep access until the end of the paid period.</p>
+        <p>You can cancel a recurring membership at any time from your billing settings on the website, or by contacting <a href="mailto:info@classroompanda.com" className="text-primary hover:underline">info@classroompanda.com</a>. Cancellation stops future renewals; unless required by law, payments already made are non-refundable, and you keep access until the end of the paid period.</p>
 
         <h2 className="text-lg font-semibold pt-2">4. Your content</h2>
         <p>You retain ownership of content you post. You grant us a non-exclusive, worldwide, royalty-free license to host and display that content within the Service to operate it. You are responsible for content you post and must have the right to post it.</p>
@@ -54,7 +54,7 @@ function TermsPage() {
         <p>We may update these Terms; material changes will be posted here with an updated date. Continued use after changes means you accept them.</p>
 
         <h2 className="text-lg font-semibold pt-2">11. Contact</h2>
-        <p>Questions about these Terms: <a href="mailto:info@easyfill.ai" className="text-primary hover:underline">info@easyfill.ai</a>.</p>
+        <p>Questions about these Terms: <a href="mailto:info@classroompanda.com" className="text-primary hover:underline">info@classroompanda.com</a>.</p>
 
         <p className="pt-4 flex gap-4"><Link to="/privacy" className="text-primary hover:underline">Privacy Policy →</Link><Link to="/account-deletion" className="text-primary hover:underline">Account &amp; Data Deletion →</Link></p>
       </article>

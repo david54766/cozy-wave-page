@@ -3,7 +3,7 @@
 Everything Google Play requires in the way of legal pages, disclosures, and
 Console fields, and where each one lives. Public URLs assume the production
 domain **https://joinagalink.com**. Operating entity / developer of record:
-**Classroom Panda LLC** (contact `info@easyfill.ai`).
+**Classroom Panda LLC** (contact `info@classroompanda.com`).
 
 ## Public legal pages (all live in the app + web, no login required)
 
@@ -61,7 +61,7 @@ must go through Google Play Billing.
   `delete_own_account` RPC — immediate, permanent).
 - Report + Block for UGC safety; blocked users' content hidden.
 - Terms consent checkbox required at signup; cookie/essential-storage notice on web.
-- Contact address published in all three legal pages: `info@easyfill.ai`.
+- Contact address published in all three legal pages: `info@classroompanda.com`.
 
 ## Owner to-do before submit
 

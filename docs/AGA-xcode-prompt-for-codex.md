@@ -12,7 +12,7 @@ web bundle. **Do not change app features, logic, or styling.**
 ## Project facts
 - **Repo:** https://github.com/david54766/cozy-wave-page — branch `main`
 - **App name:** `AGA` · **Bundle ID:** `com.aga.community`
-- **Operating entity:** Classroom Panda LLC · **Support:** info@easyfill.ai
+- **Operating entity:** Classroom Panda LLC · **Support:** info@classroompanda.com
 - **Backend:** Supabase (client keys below are publishable — safe in the bundle)
 - **Website:** https://joinagalink.com
 
