@@ -28,7 +28,7 @@ function Page() {
           <p className="text-muted-foreground mt-1">Create simple rules that help manage engagement, onboarding, access, and member activity automatically.</p>
         </div>
         <div className="flex gap-2">
-          <Button variant="outline" asChild><Link to="/admin/automation-logs">View logs</Link></Button>
+          <Button variant="outline" asChild><Link to="/admin/automation-logs" search={{ automationId: "" }}>View logs</Link></Button>
           <Button asChild><Link to="/admin/automations/new"><Plus className="size-4 mr-1.5" />New automation</Link></Button>
         </div>
       </header>

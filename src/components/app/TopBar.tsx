@@ -49,6 +49,7 @@ export function TopBar() {
       <div className="flex-1 sm:hidden" />
       <Link
         to="/search"
+        search={{ q: "", type: "all" as const }}
         aria-label="Search"
         className="sm:hidden inline-flex size-11 items-center justify-center rounded-full text-muted-foreground hover:text-foreground"
       >

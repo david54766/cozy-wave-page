@@ -9,7 +9,10 @@ import { cn } from "@/lib/utils";
 import { UnreadChatBadge } from "@/components/chat/UnreadChatBadge";
 import { BrandLogo } from "@/components/app/BrandLogo";
 
-type NavItem = { label: string; to: string; icon: LucideIcon; comingSoon?: boolean; adminOnly?: boolean };
+type NavItem = { label: string; to: string; icon: LucideIcon; comingSoon?: boolean; adminOnly?: boolean; hidden?: boolean };
+
+/** Set true once a real AI provider is configured in ai_settings. */
+const AI_HELPER_ENABLED = false;
 
 const items: NavItem[] = [
   { label: "Dashboard", to: "/dashboard", icon: LayoutDashboard },
@@ -30,7 +33,12 @@ const items: NavItem[] = [
   { label: "Resources", to: "/resources", icon: BookOpen },
   { label: "Certificates", to: "/certificates", icon: Award },
   { label: "AI Assistant", to: "/admin/ai-assistant", icon: Sparkles, adminOnly: true },
-  { label: "AI Helper", to: "/ai-helper", icon: Sparkles },
+  // Member-facing AI Helper is hidden until an AI provider is actually connected
+  // (ai_settings is empty, so it runs in mock mode and the page only says "not
+  // available"). Showing a dead feature invites store-review questions. Flip
+  // AI_HELPER_ENABLED once a provider + key are configured — and update the
+  // Data safety / privacy declarations, since prompts would leave our systems.
+  { label: "AI Helper", to: "/ai-helper", icon: Sparkles, hidden: !AI_HELPER_ENABLED },
 ];
 
 const footerItems: NavItem[] = [
@@ -51,7 +59,7 @@ export function Sidebar() {
         </Link>
       </div>
       <nav className="flex-1 overflow-y-auto px-3 py-4 space-y-1">
-        {items.filter((it) => !it.adminOnly || isAdmin).map((it) => (
+        {items.filter((it) => !it.hidden && (!it.adminOnly || isAdmin)).map((it) => (
           <NavLink key={it.to} item={it} active={pathname === it.to || pathname.startsWith(it.to + "/")} />
         ))}
         {isAdmin && (
