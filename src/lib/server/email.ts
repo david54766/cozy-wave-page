@@ -4,15 +4,32 @@
 // joinagalink.com sender — the domain must be verified in Resend). Used for
 // invitation emails and email notifications.
 
-/** Read the Resend key under any of the common secret names. */
+/**
+ * Read the Resend key.
+ *
+ * Checks the common names first, then falls back to scanning env for any var
+ * whose name mentions RESEND and whose value looks like a Resend key (`re_…`).
+ * Hosting UIs vary in what they let you name a secret, and a name mismatch
+ * silently disables email — the scan removes that failure mode entirely.
+ */
 function resendKey(): string | undefined {
-  return (
+  const direct =
     process.env.RESEND_API_KEY ||
     process.env.RESEND_KEY ||
     process.env.RESEND_TOKEN ||
-    process.env.RESEND_API_TOKEN ||
-    undefined
-  );
+    process.env.RESEND_API_TOKEN;
+  if (direct) return direct;
+
+  for (const [name, value] of Object.entries(process.env)) {
+    if (/resend/i.test(name) && typeof value === "string" && value.startsWith("re_")) {
+      return value;
+    }
+  }
+  // Last resort: any env value that looks like a Resend key.
+  for (const value of Object.values(process.env)) {
+    if (typeof value === "string" && /^re_[A-Za-z0-9_-]{10,}$/.test(value)) return value;
+  }
+  return undefined;
 }
 
 export function emailConfigured(): boolean {
