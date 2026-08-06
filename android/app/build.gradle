@@ -15,7 +15,10 @@ android {
         applicationId "com.aga.community"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 1
+        // Play rejects a re-upload with an existing versionCode, so this must
+        // increase for every bundle sent to any track (even internal testing).
+        // versionName stays "1.0" — this is the same release, re-uploaded.
+        versionCode 2
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         aaptOptions {
