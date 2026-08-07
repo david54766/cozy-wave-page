@@ -15,6 +15,13 @@ web bundle. **Do not change app features, logic, or styling.**
 - **Operating entity:** Classroom Panda LLC · **Support:** info@classroompanda.com
 - **Backend:** Supabase (client keys below are publishable — safe in the bundle)
 - **Website:** https://joinagalink.com
+- **Live legal URLs** (all return 200; needed for the App Store listing):
+  - Privacy — https://joinagalink.com/privacy
+  - Terms — https://joinagalink.com/terms
+  - Account & data deletion — https://joinagalink.com/account-deletion
+  - Child safety (CSAE) standards — https://joinagalink.com/child-safety
+- **Android status:** live build is versionCode 2 / versionName 1.0, submitted to
+  Google Play. iOS must reuse the same web bundle so both stores match.
 
 ## GUARDRAILS — do not violate
 1. **No in-app purchases and no purchase UI.** Payments are web-only by design and
@@ -32,6 +39,42 @@ web bundle. **Do not change app features, logic, or styling.**
 5. **Do not commit secrets** — `.env`, `GoogleService-Info.plist`, signing assets.
 6. If a step needs an Apple Developer account, certificate, or an asset you don't
    have, STOP and list exactly what you need. Do not fabricate credentials.
+
+## 0. FIRST — audit what already exists, then only apply what's missing
+
+A previous attempt at this build may or may not have completed. **Do not blindly
+redo it, and do not assume it's done.** Check each item below, report the state,
+then perform only the steps that are missing. Everything in this prompt is
+written to be safe to re-run.
+
+Run these checks and report the results before changing anything:
+
+```bash
+cd cozy-wave-page && git pull            # make sure you're on latest main
+ls -d ios 2>/dev/null || echo "NO ios/ FOLDER"
+ls ios/App/App/Info.plist 2>/dev/null || echo "NO Info.plist"
+ls ios/App/App/GoogleService-Info.plist 2>/dev/null || echo "no Firebase plist (push not configured)"
+grep -c "NSPhotoLibraryUsageDescription" ios/App/App/Info.plist 2>/dev/null
+grep -c "NSCameraUsageDescription"       ios/App/App/Info.plist 2>/dev/null
+grep -c "ITSAppUsesNonExemptEncryption"  ios/App/App/Info.plist 2>/dev/null
+```
+
+Then check the account side:
+1. **App Store Connect** — does an app record exist for `com.aga.community`?
+2. **TestFlight** — is there an uploaded build? What Version / Build number?
+3. If a build exists, is it **submitted for review**, or just sitting in TestFlight?
+
+### Decide from the audit
+| Finding | What to do |
+|---|---|
+| No `ios/` folder | Do the whole prompt from §1. |
+| `ios/` exists but doesn't build | Run `npm install`, `MOBILE_BUILD=1 npm run build`, `npx cap sync ios`, `cd ios/App && pod install`, then rebuild. |
+| Builds, but Info.plist keys missing | Add just the missing keys (§4), rebuild. |
+| Builds and keys present, no upload in App Store Connect | Skip to §7 smoke-test, then §8 archive & upload. |
+| A build IS already uploaded | **Increment the Build number** before uploading again — App Store Connect rejects a duplicate Version+Build pair. Bump **Build** (e.g. 1 → 2), keep **Version** `1.0`. |
+| A build is already submitted for review | STOP and report that. Don't submit a second one. |
+
+**Report what you found** before proceeding, so the owner knows the real state.
 
 ## 1. Environment
 ```bash
