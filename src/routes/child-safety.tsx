@@ -86,8 +86,8 @@ function ChildSafetyPage() {
           </li>
           <li>
             <strong>By email:</strong> contact our child safety point of contact at{" "}
-            <a href="mailto:info@classroompanda.com?subject=Child%20Safety%20Report" className="text-primary hover:underline">
-              info@classroompanda.com
+            <a href="mailto:david@classroompanda.com?subject=Child%20Safety%20Report" className="text-primary hover:underline">
+              david@classroompanda.com
             </a>{" "}
             with the subject "Child Safety Report."
           </li>
@@ -134,8 +134,8 @@ function ChildSafetyPage() {
         </p>
         <p>
           Classroom Panda LLC —{" "}
-          <a href="mailto:info@classroompanda.com" className="text-primary hover:underline">
-            info@classroompanda.com
+          <a href="mailto:david@classroompanda.com" className="text-primary hover:underline">
+            david@classroompanda.com
           </a>
         </p>
 
