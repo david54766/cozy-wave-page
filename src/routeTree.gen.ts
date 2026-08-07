@@ -15,6 +15,7 @@ import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as PricingRouteImport } from './routes/pricing'
 import { Route as OnboardingRouteImport } from './routes/onboarding'
 import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
+import { Route as ChildSafetyRouteImport } from './routes/child-safety'
 import { Route as BundlesRouteImport } from './routes/bundles'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AccountDeletionRouteImport } from './routes/account-deletion'
@@ -151,6 +152,11 @@ const OnboardingRoute = OnboardingRouteImport.update({
 const ForgotPasswordRoute = ForgotPasswordRouteImport.update({
   id: '/forgot-password',
   path: '/forgot-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ChildSafetyRoute = ChildSafetyRouteImport.update({
+  id: '/child-safety',
+  path: '/child-safety',
   getParentRoute: () => rootRouteImport,
 } as any)
 const BundlesRoute = BundlesRouteImport.update({
@@ -771,6 +777,7 @@ export interface FileRoutesByFullPath {
   '/account-deletion': typeof AccountDeletionRoute
   '/auth': typeof AuthRoute
   '/bundles': typeof BundlesRoute
+  '/child-safety': typeof ChildSafetyRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/onboarding': typeof OnboardingRoute
   '/pricing': typeof PricingRoute
@@ -885,6 +892,7 @@ export interface FileRoutesByTo {
   '/account-deletion': typeof AccountDeletionRoute
   '/auth': typeof AuthRoute
   '/bundles': typeof BundlesRoute
+  '/child-safety': typeof ChildSafetyRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/onboarding': typeof OnboardingRoute
   '/pricing': typeof PricingRoute
@@ -999,6 +1007,7 @@ export interface FileRoutesById {
   '/account-deletion': typeof AccountDeletionRoute
   '/auth': typeof AuthRoute
   '/bundles': typeof BundlesRoute
+  '/child-safety': typeof ChildSafetyRoute
   '/forgot-password': typeof ForgotPasswordRoute
   '/onboarding': typeof OnboardingRoute
   '/pricing': typeof PricingRoute
@@ -1115,6 +1124,7 @@ export interface FileRouteTypes {
     | '/account-deletion'
     | '/auth'
     | '/bundles'
+    | '/child-safety'
     | '/forgot-password'
     | '/onboarding'
     | '/pricing'
@@ -1229,6 +1239,7 @@ export interface FileRouteTypes {
     | '/account-deletion'
     | '/auth'
     | '/bundles'
+    | '/child-safety'
     | '/forgot-password'
     | '/onboarding'
     | '/pricing'
@@ -1342,6 +1353,7 @@ export interface FileRouteTypes {
     | '/account-deletion'
     | '/auth'
     | '/bundles'
+    | '/child-safety'
     | '/forgot-password'
     | '/onboarding'
     | '/pricing'
@@ -1458,6 +1470,7 @@ export interface RootRouteChildren {
   AccountDeletionRoute: typeof AccountDeletionRoute
   AuthRoute: typeof AuthRoute
   BundlesRoute: typeof BundlesRoute
+  ChildSafetyRoute: typeof ChildSafetyRoute
   ForgotPasswordRoute: typeof ForgotPasswordRoute
   OnboardingRoute: typeof OnboardingRoute
   PricingRoute: typeof PricingRoute
@@ -1516,6 +1529,13 @@ declare module '@tanstack/react-router' {
       path: '/forgot-password'
       fullPath: '/forgot-password'
       preLoaderRoute: typeof ForgotPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/child-safety': {
+      id: '/child-safety'
+      path: '/child-safety'
+      fullPath: '/child-safety'
+      preLoaderRoute: typeof ChildSafetyRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/bundles': {
@@ -2574,6 +2594,7 @@ const rootRouteChildren: RootRouteChildren = {
   AccountDeletionRoute: AccountDeletionRoute,
   AuthRoute: AuthRoute,
   BundlesRoute: BundlesRoute,
+  ChildSafetyRoute: ChildSafetyRoute,
   ForgotPasswordRoute: ForgotPasswordRoute,
   OnboardingRoute: OnboardingRoute,
   PricingRoute: PricingRoute,

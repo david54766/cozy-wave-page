@@ -187,6 +187,9 @@ function SettingsPage() {
           <Link to="/account-deletion" className="flex items-center justify-between rounded-xl border px-4 py-3 hover:bg-accent transition-colors text-sm font-medium">
             Account &amp; data deletion <ChevronRight className="size-4 text-muted-foreground" />
           </Link>
+          <Link to="/child-safety" className="flex items-center justify-between rounded-xl border px-4 py-3 hover:bg-accent transition-colors text-sm font-medium">
+            Child safety standards <ChevronRight className="size-4 text-muted-foreground" />
+          </Link>
         </CardContent>
       </Card>
 

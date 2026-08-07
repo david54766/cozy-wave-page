@@ -123,6 +123,7 @@ function Landing() {
             <Link to="/terms" className="hover:text-foreground">Terms</Link>
             <Link to="/privacy" className="hover:text-foreground">Privacy</Link>
             <Link to="/account-deletion" className="hover:text-foreground">Delete account</Link>
+            <Link to="/child-safety" className="hover:text-foreground">Child safety</Link>
             <Link to="/auth" className="hover:text-foreground">Sign in</Link>
           </div>
         </div>
