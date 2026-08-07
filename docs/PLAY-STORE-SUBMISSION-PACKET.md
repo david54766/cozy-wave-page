@@ -131,6 +131,12 @@ deletion URL: `https://joinagalink.com/account-deletion`
 | Other user-generated content | Yes | No | Optional | App functionality (posts, comments) |
 | App interactions | Yes | No | Optional | Analytics, App functionality |
 | Crash logs / diagnostics | Yes | No | Optional | Analytics |
+| **Device or other IDs** | Yes | No | Optional | App functionality (push notification delivery) |
+
+> **Device or other IDs** covers the Firebase Cloud Messaging registration token
+> stored in `device_push_tokens`. It is only created if the member turns push
+> notifications on, so it is **Optional**, and it is used solely to deliver
+> notifications — never for advertising or tracking.
 
 **Notes for the form**
 - **Data is NOT sold** and **not shared** with third parties for advertising.
