@@ -130,6 +130,7 @@ deletion URL: `https://joinagalink.com/account-deletion`
 | Messages (in-app) | Yes | No | Optional | App functionality |
 | Other user-generated content | Yes | No | Optional | App functionality (posts, comments) |
 | App interactions | Yes | No | Optional | Analytics, App functionality |
+| **In-app search history** | Yes | No | Optional | App functionality (recent searches) |
 | Crash logs / diagnostics | Yes | No | Optional | Analytics |
 | **Device or other IDs** | Yes | No | Optional | App functionality (push notification delivery) |
 
@@ -137,6 +138,15 @@ deletion URL: `https://joinagalink.com/account-deletion`
 > stored in `device_push_tokens`. It is only created if the member turns push
 > notifications on, so it is **Optional**, and it is used solely to deliver
 > notifications — never for advertising or tracking.
+>
+> **In-app search history** covers `search_events`: search queries are stored
+> against the user and replayed as "Recent searches".
+>
+> **Financial info / Purchase history — leave UNCHECKED.** The Billing screen
+> *displays* subscription, purchase, and invoice records, but that data is
+> transmitted *to* the device, not collected off it, and all payment handling
+> happens on the website via Stripe. The app never sees card details. (Ticking it
+> anyway is harmless if you prefer to be conservative.)
 
 **Notes for the form**
 - **Data is NOT sold** and **not shared** with third parties for advertising.
